@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-MySQL连接错误解决方法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/28/MySQL%E8%BF%9E%E6%8E%A5%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" class="article-date">
+  <time datetime="2020-03-28T12:32:48.038Z" itemprop="datePublished">2020-03-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/28/MySQL%E8%BF%9E%E6%8E%A5%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">MySQL连接错误解决方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##软件环境</p>
+<ul>
+<li>操作系统：Ubuntu16.04-server</li>
+<li>MySQL版本：5.7.25<br>##故障一<br>只能通过localhost登录MySQL</li>
+</ul>
+<ol>
+<li>报错如下<blockquote>
+<p>$mysql -h172.16.0.1 -uroot -p123456<br>mysql: [Warning] Using a password on the command line interface can be insecure.<br>ERROR 1130 (HY000): Host ‘172.16.0.1’ is not allowed to connect to this MySQL server</p>
+</blockquote>
+</li>
+<li>解决方法<br>此处参考自：<a href="https://stackoverflow.com/questions/19101243/error-1130-hy000-host-is-not-allowed-to-connect-to-this-mysql-server" target="_blank" rel="noopener">https://stackoverflow.com/questions/19101243/error-1130-hy000-host-is-not-allowed-to-connect-to-this-mysql-server</a></li>
+</ol>
+<ul>
+<li>首先查看你的root用户允许的主机ip<blockquote>
+<p>mysql&gt;SELECT host FROM mysql.user WHERE User = ‘root’;</p>
+</blockquote>
+</li>
+</ul>
+<p>+———–+<br>| host      |<br>+———–+<br>| localhost |<br>+———–+<br>1 row in set (0.24 sec)<br>一般结果中只有localhost或同时有localhost和127.0.0.1；</p>
+<ul>
+<li>然后如果你想指定允许某个ip可访问可执行如下命令<blockquote>
+<p><code>CREATE USER &#39;root&#39;@&#39;ip_address&#39; IDENTIFIED BY &#39;some_pass&#39;;</code><br><code>GRANT ALL PRIVILEGES ON *.* TO &#39;root&#39;@&#39;ip_address&#39;;</code></p>
+</blockquote>
+</li>
+<li>如果想要允许所有ip执行如下命令<blockquote>
+<p><code>CREATE USER &#39;root&#39;@&#39;%&#39; IDENTIFIED BY &#39;some_pass&#39;;</code><br><code>GRANT ALL PRIVILEGES ON *.* TO &#39;root&#39;@&#39;%&#39;;</code></p>
+</blockquote>
+</li>
+<li>上面两种最后都要flush启用更改<blockquote>
+<p><code>FLUSH PRIVILEGES;</code></p>
+</blockquote>
+</li>
+<li>然后在执行一次查询会发现结果多了一行“%”，说明更改成功</li>
+</ul>
+<p>+———–+<br>| host      |<br>+———–+<br>| %         |<br>+———–+<br>| localhost |<br>+———–+<br>1 row in set (0.24 sec)<br>再次登录如果仍旧失败，请看故障2</p>
+<h2 id="故障二"><a href="#故障二" class="headerlink" title="故障二"></a>故障二</h2><ol>
+<li>报错如下<blockquote>
+<p>$mysql -h172.16.0.1 -uroot -p123456<br>mysql: [Warning] Using a password on the command line interface can be insecure.<br>ERROR 2003 (HY000): Can’t connect to MySQL server on ‘172.16.0.1’ (111)</p>
+</blockquote>
+</li>
+<li>解决方法</li>
+</ol>
+<ul>
+<li>查看mysql的配置文件<blockquote>
+<p>$vim /etc/mysql/mysql.conf.d/mysqld.cnf</p>
+</blockquote>
+</li>
+<li>将下面一行注释或者修改<blockquote>
+<p><code>注释</code><br><code>#bind-address            = 127.0.0.1</code><br><code>修改</code><br><code>bind-address            = 0.0.0.0</code></p>
+</blockquote>
+</li>
+<li>重启mysql启用更改<blockquote>
+<p>$service mysql restart</p>
+</blockquote>
+</li>
+</ul>
+<p>再次尝试登录即可成功登录！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/03/28/MySQL%E8%BF%9E%E6%8E%A5%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" data-id="ck8blkc8i0001ekt63gr94akc" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/28/hello-world/" class="article-date">
+  <time datetime="2020-03-28T12:14:29.799Z" itemprop="datePublished">2020-03-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/28/hello-world/">Hello World</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/03/28/hello-world/" data-id="ck8blkc8c0000ekt6gdu09ewv" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/03/28/MySQL%E8%BF%9E%E6%8E%A5%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">MySQL连接错误解决方法</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/28/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
