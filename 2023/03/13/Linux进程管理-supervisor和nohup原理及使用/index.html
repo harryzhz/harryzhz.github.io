@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="原理守护进程（daemon）守护进程是一类在后台运行的特殊进程，用于执行特定的系统任务。他独立于控制终端并且周期性的执行某种任务或等待处理某些发生的事件。Linux系统的大多数服务器就是通过守护进程实现的。常见的守护进程包括：  系统日志进程syslogd Web服务器httpd 邮件服务器sendmail 数据库服务器mysqld等  守护进程一般在系统启动时开始运行，除非强行终止，否则会持续运">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux进程管理:supervisor和nohup原理及使用">
+<meta property="og:url" content="https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Harry 的个人空间">
+<meta property="og:description" content="原理守护进程（daemon）守护进程是一类在后台运行的特殊进程，用于执行特定的系统任务。他独立于控制终端并且周期性的执行某种任务或等待处理某些发生的事件。Linux系统的大多数服务器就是通过守护进程实现的。常见的守护进程包括：  系统日志进程syslogd Web服务器httpd 邮件服务器sendmail 数据库服务器mysqld等  守护进程一般在系统启动时开始运行，除非强行终止，否则会持续运">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14151453-ec0b4b889fe10808.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14151453-35d2076e46e71ac5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14151453-a2bafec78cb93512.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2023-03-13T00:49:37.000Z">
+<meta property="article:modified_time" content="2023-03-13T00:50:36.099Z">
+<meta property="article:author" content="harry zhang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14151453-ec0b4b889fe10808.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Linux进程管理:supervisor和nohup原理及使用</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2023/03/12/hello-world/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/&text=Linux进程管理:supervisor和nohup原理及使用"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/&title=Linux进程管理:supervisor和nohup原理及使用"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/&is_video=false&description=Linux进程管理:supervisor和nohup原理及使用"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Linux进程管理:supervisor和nohup原理及使用&body=Check out this article: https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/&title=Linux进程管理:supervisor和nohup原理及使用"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/&title=Linux进程管理:supervisor和nohup原理及使用"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/&title=Linux进程管理:supervisor和nohup原理及使用"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/&title=Linux进程管理:supervisor和nohup原理及使用"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/&name=Linux进程管理:supervisor和nohup原理及使用&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/&t=Linux进程管理:supervisor和nohup原理及使用"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%EF%BC%88daemon%EF%BC%89"><span class="toc-number">1.1.</span> <span class="toc-text">守护进程（daemon）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E5%8F%B0%E4%BB%BB%E5%8A%A1%E4%B8%8E%E5%90%8E%E5%8F%B0%E4%BB%BB%E5%8A%A1"><span class="toc-number">1.2.</span> <span class="toc-text">前台任务与后台任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SIGHUP%E4%BF%A1%E5%8F%B7"><span class="toc-number">1.3.</span> <span class="toc-text">SIGHUP信号</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nohup"><span class="toc-number">2.</span> <span class="toc-text">nohup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#supervisor"><span class="toc-number">3.</span> <span class="toc-text">supervisor</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%84"><span class="toc-number">3.1.</span> <span class="toc-text">结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#macOS%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8"><span class="toc-number">3.2.</span> <span class="toc-text">macOS环境安装使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%B9%B6%E5%90%AF%E5%8A%A8"><span class="toc-number">3.2.1.</span> <span class="toc-text">安装并启动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E9%85%8D%E7%BD%AE%E7%9B%AE%E5%BD%95%E5%92%8C%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">3.2.2.</span> <span class="toc-text">创建配置目录和配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8D%E5%90%AFsupervisor"><span class="toc-number">3.2.3.</span> <span class="toc-text">重启supervisor</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Linux进程管理:supervisor和nohup原理及使用
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">harry zhang</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-03-13T00:49:37.000Z" itemprop="datePublished">2023-03-13</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><h3 id="守护进程（daemon）"><a href="#守护进程（daemon）" class="headerlink" title="守护进程（daemon）"></a>守护进程（daemon）</h3><p>守护进程是一类在后台运行的特殊进程，用于执行特定的系统任务。他独立于控制终端并且周期性的执行某种任务或等待处理某些发生的事件。Linux系统的大多数服务器就是通过守护进程实现的。<br>常见的守护进程包括：</p>
+<ul>
+<li>系统日志进程syslogd</li>
+<li>Web服务器httpd</li>
+<li>邮件服务器sendmail</li>
+<li>数据库服务器mysqld等</li>
+</ul>
+<p>守护进程一般在系统启动时开始运行，除非强行终止，否则会持续运行知道系统关机，通常以超级用户（root）权限运行。</p>
+<h3 id="前台任务与后台任务"><a href="#前台任务与后台任务" class="headerlink" title="前台任务与后台任务"></a>前台任务与后台任务</h3><p>假如有个简单的go的web服务器程序，使用如下方式启动，称为前台任务。独占了命令窗口，只有运行完了或手动终止（Ctrl+C），才能执行其他命令。<br><img src="https://upload-images.jianshu.io/upload_images/14151453-ec0b4b889fe10808.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>如果以如下方式，在命令结尾加上符号<code>&amp;</code>，启动的进程就会称为后台任务。<br><img src="https://upload-images.jianshu.io/upload_images/14151453-35d2076e46e71ac5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"><br>后台任务又如下特点：</p>
+<ul>
+<li>继承当前session的标准输出(stdout)和标准错误(stderr)，因此如上图所示，后台任务的所有输出仍会同步的在命令行显示</li>
+<li>不再继承当前session的标准输入(stdin)，无法向这个任务输入指令，如果它试图读取标准输入，就会暂停执行（halt）</li>
+</ul>
+<h3 id="SIGHUP信号"><a href="#SIGHUP信号" class="headerlink" title="SIGHUP信号"></a>SIGHUP信号</h3><p>变为后台任务并不代表进程成为了守护进程，因为当session关闭后，后台任务就会终止。Linux系统终端session退出流程如下：</p>
+<ol>
+<li>用户准备退出session</li>
+<li>系统向改session发送<code>SIGHUP</code>信号</li>
+<li>session将<code>SIGHUP</code>信号发送给所有子进程</li>
+<li>子进程收到<code>SIGHUP</code>信号后会自动退出</li>
+</ol>
+<h2 id="nohup"><a href="#nohup" class="headerlink" title="nohup"></a>nohup</h2><p>nohup 是后台作业的意思， nohup运行的进程将会忽略终端信号运行。即后台运行一个命令。nohup COMMAND &amp; 用nohup运行命令可以使命令永久的执行下去，和用户终端没有关系，例如我们断开SSH连接都不会影响它的运行。</p>
+<p>使用nohup命令的方式可以启动一个守护进程，如下图所示：<br><img src="https://upload-images.jianshu.io/upload_images/14151453-a2bafec78cb93512.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>nohup命令对进程做了如下操作：</p>
+<ul>
+<li>忽略<code>SIGHUP</code>信号，因此当session关闭进程就不会退出</li>
+<li>关闭标准输入，该进程不再接收任何输入，即使运行在前台</li>
+<li>重定向标准输出和标准错误到文件nohup.out（默认情况，可以指定输出的文件）</li>
+</ul>
+<p>nohup不会自动把进程变为后台任务，所以必须加上<code>&amp;</code>。</p>
+<h2 id="supervisor"><a href="#supervisor" class="headerlink" title="supervisor"></a>supervisor</h2><p>supervisor是用Python开发的一套通用的进程管理程序，能将一个普通的命令行进程变为后台daemon，并监控进程状态，异常退出时能自动重启。<br>supervisor管理进程是通过fork&#x2F;exec的方式把被管理的进程当做子进程来启动，用户只需要在配置文件中将要管理的进程进行配置。</p>
+<h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><p>supervisor主要由Supervisord、Supervisorctl、Web server和XML-RPC interface组成：</p>
+<ul>
+<li>supervisord：主进程，负责管理进程的server，它会根据配置文件创建指定数量的应用程序的子进程，管理子进程的整个生命周期，对crash的进程重启，对进程变化发送事件通知等。同时通过内置web server和XML-RPC Interface可以轻松实现进程管理。</li>
+<li>supervisorctl：管理client，用户通过命令行发送消息给supervisord，可以查看进程状态，加载配置文件，启停进程，查看进程标准输出和错误输出，远程操作等。</li>
+<li>Web server：superviosr提供了web server功能，可通过web控制进程。</li>
+<li>XML-RPC interface： XML-RPC接口，提供XML-RPC服务来对子进程进行管理和监控。</li>
+</ul>
+<h3 id="macOS环境安装使用"><a href="#macOS环境安装使用" class="headerlink" title="macOS环境安装使用"></a>macOS环境安装使用</h3><h4 id="安装并启动"><a href="#安装并启动" class="headerlink" title="安装并启动"></a>安装并启动</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">brew install supervisor</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">brew services start supervisor</span></span><br></pre></td></tr></table></figure>
+<h4 id="创建配置目录和配置文件"><a href="#创建配置目录和配置文件" class="headerlink" title="创建配置目录和配置文件"></a>创建配置目录和配置文件</h4><p>默认的配置文件路径为<code>/usr/local/etc/supervisord.conf</code>，查看该文件可以看到如下内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">tail</span> -n2 /usr/local/etc/supervisord.conf</span></span><br><span class="line">[include]</span><br><span class="line">files = /usr/local/etc/supervisor.d/*.ini</span><br></pre></td></tr></table></figure>
+<p>可以看到include了<code>/usr/local/etc/supervisor.d/</code>目录下的<code>.ini</code>文件，因此我们需要创建改目录，然后对要管理的进程或进程组创建对应的<code>.ini</code>格式的配置文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> -pv /usr/local/etc/supervisor.d</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vim /usr/local/etc/supervisor.d/myserver.ini</span></span><br></pre></td></tr></table></figure>
+<p>编辑配置文件内容如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[program:server]</span><br><span class="line">process_name=%(program_name)s_%(process_num)02d</span><br><span class="line">command=/usr/local/go/bin/go run /Users/harryzhang/go/src/server/server.go # 要执行的命令</span><br><span class="line">autostart=true # 系统开机自动启动</span><br><span class="line">autorestart=true # 进程终止自动重启</span><br><span class="line">user=harryzhang # 用户</span><br><span class="line">numprocs=1 # 启动进程数</span><br><span class="line">redirect_stderr=true # 是否将标准错误重定向到标准输出</span><br><span class="line">stdout_logfile=/Users/harryzhang/go/src/server/server.log # 指定标准输出保存的文件路径</span><br></pre></td></tr></table></figure>
+
+<h4 id="重启supervisor"><a href="#重启supervisor" class="headerlink" title="重启supervisor"></a>重启supervisor</h4><p>编辑好配置文件后重启supervisor就可以生效，可以使用supervisorctl命令查看和管理进程状态。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">brew services restart supervisor</span></span><br><span class="line">Stopping `supervisor`... (might take a while)</span><br><span class="line">==&gt; Successfully stopped `supervisor` (label: homebrew.mxcl.supervisor)</span><br><span class="line">==&gt; Successfully started `supervisor` (label: homebrew.mxcl.supervisor)</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">supervisorctl status</span></span><br><span class="line">server:server_00                 RUNNING   pid 41382, uptime 0:00:04</span><br></pre></td></tr></table></figure>
+<p>如果指定的命令执行没有异常，会看到进程已处于运行状态，如果没有处于运行状态，可以查看日志文件，可能为命令执行出错直接退出了。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>【1】<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2016/02/linux-daemon.html">Linux 守护进程的启动方法</a><br>【2】<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000017370468">进程管理工具supervisor 和 nohup</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B%EF%BC%88daemon%EF%BC%89"><span class="toc-number">1.1.</span> <span class="toc-text">守护进程（daemon）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E5%8F%B0%E4%BB%BB%E5%8A%A1%E4%B8%8E%E5%90%8E%E5%8F%B0%E4%BB%BB%E5%8A%A1"><span class="toc-number">1.2.</span> <span class="toc-text">前台任务与后台任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SIGHUP%E4%BF%A1%E5%8F%B7"><span class="toc-number">1.3.</span> <span class="toc-text">SIGHUP信号</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nohup"><span class="toc-number">2.</span> <span class="toc-text">nohup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#supervisor"><span class="toc-number">3.</span> <span class="toc-text">supervisor</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E6%9E%84"><span class="toc-number">3.1.</span> <span class="toc-text">结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#macOS%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8"><span class="toc-number">3.2.</span> <span class="toc-text">macOS环境安装使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%B9%B6%E5%90%AF%E5%8A%A8"><span class="toc-number">3.2.1.</span> <span class="toc-text">安装并启动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E9%85%8D%E7%BD%AE%E7%9B%AE%E5%BD%95%E5%92%8C%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">3.2.2.</span> <span class="toc-text">创建配置目录和配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8D%E5%90%AFsupervisor"><span class="toc-number">3.2.3.</span> <span class="toc-text">重启supervisor</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/&text=Linux进程管理:supervisor和nohup原理及使用"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/&title=Linux进程管理:supervisor和nohup原理及使用"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/&is_video=false&description=Linux进程管理:supervisor和nohup原理及使用"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Linux进程管理:supervisor和nohup原理及使用&body=Check out this article: https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/&title=Linux进程管理:supervisor和nohup原理及使用"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/&title=Linux进程管理:supervisor和nohup原理及使用"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/&title=Linux进程管理:supervisor和nohup原理及使用"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/&title=Linux进程管理:supervisor和nohup原理及使用"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/&name=Linux进程管理:supervisor和nohup原理及使用&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://harryzhz.github.io/2023/03/13/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86-supervisor%E5%92%8Cnohup%E5%8E%9F%E7%90%86%E5%8F%8A%E4%BD%BF%E7%94%A8/&t=Linux进程管理:supervisor和nohup原理及使用"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    harry zhang
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
