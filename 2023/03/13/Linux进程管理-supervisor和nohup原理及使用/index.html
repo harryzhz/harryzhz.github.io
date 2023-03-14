@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="referrer" content="no-referrer" />
     <meta name="description" content="原理守护进程（daemon）守护进程是一类在后台运行的特殊进程，用于执行特定的系统任务。他独立于控制终端并且周期性的执行某种任务或等待处理某些发生的事件。Linux系统的大多数服务器就是通过守护进程实现的。常见的守护进程包括：  系统日志进程syslogd Web服务器httpd 邮件服务器sendmail 数据库服务器mysqld等  守护进程一般在系统启动时开始运行，除非强行终止，否则会持续运">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux进程管理:supervisor和nohup原理及使用">
@@ -17,7 +18,7 @@
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14151453-35d2076e46e71ac5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/14151453-a2bafec78cb93512.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="article:published_time" content="2023-03-13T00:49:37.000Z">
-<meta property="article:modified_time" content="2023-03-13T00:50:36.099Z">
+<meta property="article:modified_time" content="2023-03-13T00:56:11.063Z">
 <meta property="article:author" content="harry zhang">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/14151453-ec0b4b889fe10808.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
@@ -195,7 +196,8 @@
 <h4 id="重启supervisor"><a href="#重启supervisor" class="headerlink" title="重启supervisor"></a>重启supervisor</h4><p>编辑好配置文件后重启supervisor就可以生效，可以使用supervisorctl命令查看和管理进程状态。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">brew services restart supervisor</span></span><br><span class="line">Stopping `supervisor`... (might take a while)</span><br><span class="line">==&gt; Successfully stopped `supervisor` (label: homebrew.mxcl.supervisor)</span><br><span class="line">==&gt; Successfully started `supervisor` (label: homebrew.mxcl.supervisor)</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">supervisorctl status</span></span><br><span class="line">server:server_00                 RUNNING   pid 41382, uptime 0:00:04</span><br></pre></td></tr></table></figure>
 <p>如果指定的命令执行没有异常，会看到进程已处于运行状态，如果没有处于运行状态，可以查看日志文件，可能为命令执行出错直接退出了。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>【1】<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2016/02/linux-daemon.html">Linux 守护进程的启动方法</a><br>【2】<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000017370468">进程管理工具supervisor 和 nohup</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>【1】<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2016/02/linux-daemon.html">Linux 守护进程的启动方法</a></p>
+<p>【2】<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000017370468">进程管理工具supervisor 和 nohup</a></p>
 
   </div>
 </article>
