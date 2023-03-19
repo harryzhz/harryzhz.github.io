@@ -1,5 +1,5 @@
-/node_modules/
-/.github/
+.github/
 .idea/
 public/
 .deploy_git/
+node_modules/
