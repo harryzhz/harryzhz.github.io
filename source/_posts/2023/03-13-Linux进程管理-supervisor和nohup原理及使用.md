@@ -5,7 +5,9 @@ categories:
 - 操作系统
 tags:
 - Linux
+- 守护进程
 ---
+
 ## 原理
 
 ### 守护进程（daemon）

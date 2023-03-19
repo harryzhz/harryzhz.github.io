@@ -5,11 +5,12 @@
 # Site
 title: Harry 的个人空间
 subtitle: ''
-description: ''
-keywords:
+description: '一个后端开发工程师的技术博客'
+keywords: ['技术博客', '后端开发']
 author: harry zhang
 language: zh-CN
 timezone: ''
+favicon: "https://upload.jianshu.io/users/upload_avatars/14151453/0f03d78b-5b29-466c-8b21-e61b0a356aa7.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/20/h/20"
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
@@ -31,7 +32,7 @@ i18n_dir: :lang
 skip_render:
 
 # Writing
-new_post_name: :year-:month-:day-:title.md # File name of new posts
+new_post_name: :year/:month-:day-:title.md # File name of new posts
 default_layout: post
 auto_spacing: true
 titlecase: false # Transform title into titlecase

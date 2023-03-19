@@ -85,7 +85,7 @@ navbar:
   logo: # choose [img] or [icon + title]
     img: # https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png
     icon: 
-    title: Harry's Space
+    title: Harry's Blog
   menu:
     - name: 博客
       icon: fa-solid fa-rss
@@ -136,9 +136,9 @@ cover:
     - name: 归档
       icon: fa-solid fa-archive
       url: archives/
-    - name: 友链
-      icon: fa-solid fa-link
-      url: friends/
+    # - name: 友链
+    #   icon: fa-solid fa-link
+    #   url: friends/
     - name: 关于
       icon: fa-solid fa-info-circle
       url: about/
@@ -197,7 +197,7 @@ article:
   body:
     # 文章顶部信息
     # 从 meta_library 中取
-    top_meta: [author, category, date, counter] #启用评论数量需在此添加
+    top_meta: [author, category, date] #启用评论数量需在此添加 counter
     # 文章底部信息
     # 从 meta_library 中取
     bottom_meta: [updated, tags, share]
@@ -795,25 +795,25 @@ plugins:
     position: cover       # cover: sticky on the cover.   fixed: Fixed as background for the site.
     shuffle: true         # shuffle playlist
     duration: 120000       # Duration (ms)
-    fade: 15000            # fade duration (ms) (Not more than 1500)
+    fade: 1000            # fade duration (ms) (Not more than 1500)
     images:               # For personal use only. At your own risk if used for commercial purposes !!!
       - volantis-static/media/wallpaper/minimalist/2020/001.webp
-      - volantis-static/media/wallpaper/minimalist/2020/002.webp
+      - volantis-static/media/wallpaper/minimalist/2020/056.webp
       - volantis-static/media/wallpaper/minimalist/2020/003.webp
-      - volantis-static/media/wallpaper/minimalist/2020/004.webp
-      # - volantis-static/media/wallpaper/minimalist/2020/005.webp
       - volantis-static/media/wallpaper/minimalist/2020/006.webp
-      # - volantis-static/media/wallpaper/minimalist/2020/012.webp
       - volantis-static/media/wallpaper/minimalist/2020/016.webp
+      # - volantis-static/media/wallpaper/minimalist/2020/025.webp
+      # - volantis-static/media/wallpaper/minimalist/2020/002.webp
+      # - volantis-static/media/wallpaper/minimalist/2020/004.webp
+      # - volantis-static/media/wallpaper/minimalist/2020/005.webp
+      # - volantis-static/media/wallpaper/minimalist/2020/012.webp
       # - volantis-static/media/wallpaper/minimalist/2020/019.webp
-      - volantis-static/media/wallpaper/minimalist/2020/025.webp
       # - volantis-static/media/wallpaper/minimalist/2020/033.webp
       # - volantis-static/media/wallpaper/minimalist/2020/034.webp
       # - volantis-static/media/wallpaper/minimalist/2020/035.webp
       # - volantis-static/media/wallpaper/minimalist/2020/038.webp
-      - volantis-static/media/wallpaper/minimalist/2020/039.webp
+      # - volantis-static/media/wallpaper/minimalist/2020/039.webp
       # - volantis-static/media/wallpaper/minimalist/2020/054.webp
-      - volantis-static/media/wallpaper/minimalist/2020/056.webp
 
   # APlayer is only available in mainland China.
   # APlayer config: https://github.com/metowolf/MetingJS
@@ -1224,7 +1224,7 @@ color_scheme:
 ############################### Custom css ############################### > start
 custom_css:
   cursor:
-    enable: #true
+    enable: # true
     text: volantis-static/media/cursor/text.png # https://cdn.jsdelivr.net/gh/inkss/common@1/cursor/text.png
     pointer: volantis-static/media/cursor/pointer.png # https://cdn.jsdelivr.net/gh/inkss/common@1/cursor/pointer.png
     default: volantis-static/media/cursor/left_ptr.png # https://cdn.jsdelivr.net/gh/inkss/common@1/cursor/left_ptr.png
@@ -1233,14 +1233,14 @@ custom_css:
     zoom-in: volantis-static/media/cursor/zoom-in.png # https://cdn.jsdelivr.net/gh/inkss/common@1/cursor/zoom-in.png
     grab: volantis-static/media/cursor/openhand.png # https://cdn.jsdelivr.net/gh/inkss/common@1/cursor/openhand.png
   font_smoothing: true # font-smoothing for webkit
-  max_width: 1080px # Sum of body width and sidebar width (This limit will be exceeded when the device width is greater than 2000px, reaching 75% of the total width)
+  max_width: 1280px # Sum of body width and sidebar width (This limit will be exceeded when the device width is greater than 2000px, reaching 75% of the total width)
   scrollbar:
     size: 4px
     border: 2px
   navbar:
     height: 64px
-    width: max # auto, max
-    effect: [shadow, floatable, blur] # [shadow, floatable, blur]
+    width: auto # auto, max
+    effect: [shadow, blur] # [shadow, floatable, blur]
   sidebar:
     effect: [shadow, floatable, blur] # [shadow, floatable, blur]
   body:
@@ -1316,10 +1316,10 @@ seo:
   use_excerpt_as_description: true
   robots:
     home_first_page: index,follow
-    home_other_pages: noindex,follow
-    archive: noindex,follow
-    category: noindex,follow
-    tag: noindex,follow
+    home_other_pages: index,follow
+    archive: index,follow
+    category: index,follow
+    tag: index,follow
     # robots can be written in front-matter
 ############################### SEO ############################### > end
 
