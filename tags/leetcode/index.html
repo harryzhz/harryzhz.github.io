@@ -1592,7 +1592,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     debug: "env",
     cdn: {"js":{"app":"/js/app.js","parallax":"/js/plugins/parallax.js","rightMenu":"/js/plugins/rightMenu.js","rightMenus":"/js/plugins/rightMenus.js","sites":"/js/plugins/tags/sites.js","friends":"/js/plugins/tags/friends.js","contributors":"/js/plugins/tags/contributors.js","search":"/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
     default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
-    lastupdate: new Date(1679235084265),
+    lastupdate: new Date(1679235112487),
     sidebar: {
       for_page: ["blogger","category","tagcloud","donate"],
       for_post: ["toc"],
@@ -2392,6 +2392,10 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
         
           
         
+          
+        
+          
+        
       
     
     
@@ -2871,7 +2875,7 @@ PUT操作
         
           <div class='post-wrapper'>
             <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
-  <link itemprop="mainEntityOfPage" href="https://harryzhz.github.io/2023/03/19/数据结构-1-字符串/">
+  <link itemprop="mainEntityOfPage" href="https://harryzhz.github.io/2023/03/19/数据结构-5-栈-队列-堆/">
   <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
     <meta itemprop="name" content="Harry 的个人空间">
   </span>
@@ -2889,20 +2893,22 @@ PUT操作
   
     
     <h2 class="article-title"  itemprop="name headline">
-      <a href="/2023/03/19/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-1-%E5%AD%97%E7%AC%A6%E4%B8%B2/"  itemprop="url">
-        数据结构(1): 字符串
+      <a href="/2023/03/19/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-5-%E6%A0%88-%E9%98%9F%E5%88%97-%E5%A0%86/"  itemprop="url">
+        数据结构(5): 栈|队列|堆
       </a>
     </h2>
   
   <div class='md article-desc' itemprop="articleBody">
     
       
-        1.1 字符串移位
-问题：将字符的前k个字符移到字符串结尾。Input：“abcde”，2Output：“cdeab”
+        6.1 栈6.1.1用两个栈实现一个队列LeetCode No.232
 
-三步翻转法： 将字符串分为前k位和后（n-k）位两部分，将两部分分别翻转，最后再整体翻转即可。时间复杂度：T &#x3D; O(n)参考原文
- 示例代码：
-1234567891011121314151617// 反转字符串func reverse(s string) st...
+题目描述：请你仅使用两个栈实现先入先出队列。队列应当支持一般队列的支持的所有操作（push、pop、peek、empty）：
+
+思路： 两个栈一个栈做队头（出元素），另一个栈做队尾（入元素）
+
+每次push只需要push到尾栈
+pop时如果头栈为空则将尾栈全部“倒入”头栈，如果头栈不为空取出栈顶元素返回，否则返回失败（...
       
     
   </div>
@@ -2910,7 +2916,7 @@ PUT操作
     <div class='meta-v3' line_style='solid'>
       <div>
         
-        <time itemprop="dateCreated datePublished" datetime="2023-03-19T21:04:01+08:00">2023-03-19</time>
+        <time itemprop="dateCreated datePublished" datetime="2023-03-19T21:39:14+08:00">2023-03-19</time>
         
           <span class="dot"></span>
           <a class="category-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
@@ -2923,7 +2929,143 @@ PUT操作
       </div>
       
         <div>
-          <a class='readmore' href='/2023/03/19/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-1-%E5%AD%97%E7%AC%A6%E4%B8%B2/' itemprop="url">
+          <a class='readmore' href='/2023/03/19/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-5-%E6%A0%88-%E9%98%9F%E5%88%97-%E5%A0%86/' itemprop="url">
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
+  <link itemprop="mainEntityOfPage" href="https://harryzhz.github.io/2023/03/19/数据结构-4-树/">
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Harry 的个人空间">
+  </span>
+  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
+    <meta itemprop="name" content="Harry 的个人空间">
+    <meta itemprop="description" content="">
+  </span>
+  
+  
+  
+    <span hidden>
+      <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
+    </span>
+  
+  
+    
+    <h2 class="article-title"  itemprop="name headline">
+      <a href="/2023/03/19/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-4-%E6%A0%91/"  itemprop="url">
+        数据结构(4): 树
+      </a>
+    </h2>
+  
+  <div class='md article-desc' itemprop="articleBody">
+    
+      
+        4.1 根据前序与中序序列构造二叉树LeetCode No.105
+
+问题描述：根据一棵树的前序遍历与中序遍历构造二叉树。
+
+思路：根据二叉树的前序和中序（或后序和中序）的序列可唯一构造一棵二叉树，必须要有中序。前序遍历的第一个为根节点，找到根节点在中序中的位置，中序左边的节点都是根节点的左子树，右边的同理，然后可以用递归的方式求解。
+示例代码：
+1234567891011121314151...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time itemprop="dateCreated datePublished" datetime="2023-03-19T21:36:55+08:00">2023-03-19</time>
+        
+          <span class="dot"></span>
+          <a class="category-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+          
+            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
+              <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url"><span itemprop="name">数据结构</span></a>
+            </span>
+          
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2023/03/19/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-4-%E6%A0%91/' itemprop="url">
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
+  <link itemprop="mainEntityOfPage" href="https://harryzhz.github.io/2023/03/19/数据结构-3-链表/">
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Harry 的个人空间">
+  </span>
+  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
+    <meta itemprop="name" content="Harry 的个人空间">
+    <meta itemprop="description" content="">
+  </span>
+  
+  
+  
+    <span hidden>
+      <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
+    </span>
+  
+  
+    
+    <h2 class="article-title"  itemprop="name headline">
+      <a href="/2023/03/19/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-3-%E9%93%BE%E8%A1%A8/"  itemprop="url">
+        数据结构(3): 链表
+      </a>
+    </h2>
+  
+  <div class='md article-desc' itemprop="articleBody">
+    
+      
+        3.1 删除单向链表倒数第n个节点LeetCode No.19
+
+问题描述：删除单向链表倒数第n个节点（只遍历一次）Input: head &#x3D; [1,2,3,4,5], n &#x3D; 2Output: [1,2,3,5]
+
+思路：两个指针，p1先走n步，然后p1和p2再一起走，当p1到链表结尾，p2就是要删除的节点。注意处理可能删除的是头结点（n&#x3D;length）或者不...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time itemprop="dateCreated datePublished" datetime="2023-03-19T21:35:07+08:00">2023-03-19</time>
+        
+          <span class="dot"></span>
+          <a class="category-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+          
+            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
+              <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url"><span itemprop="name">数据结构</span></a>
+            </span>
+          
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2023/03/19/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-3-%E9%93%BE%E8%A1%A8/' itemprop="url">
             阅读全文
           </a>
         </div>
@@ -2939,6 +3081,21 @@ PUT操作
     
   </section>
   
+    
+      <br>
+      <div class="prev-next">
+        
+        <p class="current">
+          1 / 2
+        </p>
+        
+          <a class="next" rel="next" href="/tags/leetcode/page/2/">
+            <section class="post next white-box shadow floatable blur">
+              &nbsp;下一页&nbsp;<i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+            </section>
+          </a>
+        
+      </div>
     
   
 
@@ -3430,7 +3587,7 @@ PUT操作
 
 
   <script>
-  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp"];
+  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp"];
   let index = 0;
   let IntervalParallax = null;
 
