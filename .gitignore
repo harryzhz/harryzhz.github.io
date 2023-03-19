@@ -2,3 +2,4 @@
 /.github/
 .idea/
 public/
+.deploy_git/
