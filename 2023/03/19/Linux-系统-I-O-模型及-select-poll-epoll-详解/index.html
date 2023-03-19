@@ -6,8 +6,8 @@
   <meta name="Volantis" content="5.7.7">
   <meta charset="utf-8">
   <!-- SEO相关 -->
-  <meta name="robots" content="noindex,follow">
-  <link rel="canonical" href="https://harryzhz.github.io/tags/"/>
+  
+  <link rel="canonical" href="https://harryzhz.github.io/2023/03/19/linux-系统-i-o-模型及-select-poll-epoll-详解/"/>
   <!-- 渲染优化 -->
     <meta http-equiv='x-dns-prefetch-control' content='on' />
       <link rel='dns-prefetch' href='https://unpkg.com'>
@@ -33,18 +33,23 @@
 
   <!-- feed -->
   <!-- 页面元数据 -->
-  <title>全部标签 - Harry 的个人空间</title>
-  <meta name="keywords" content="null">
+  <title>Linux 系统 I/O 模型及 select/poll/epoll 详解 - Harry 的个人空间</title>
+  <meta name="keywords" content="Linux,I/O模型,select/poll/epoll,null">
   <meta desc name="description" content="Harry 的个人空间 - harry zhang - Harry 的个人空间">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="全部标签">
-<meta property="og:url" content="https://harryzhz.github.io/tags/index.html">
+  
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 系统 I&#x2F;O 模型及 select&#x2F;poll&#x2F;epoll 详解">
+<meta property="og:url" content="https://harryzhz.github.io/2023/03/19/Linux-%E7%B3%BB%E7%BB%9F-I-O-%E6%A8%A1%E5%9E%8B%E5%8F%8A-select-poll-epoll-%E8%AF%A6%E8%A7%A3/index.html">
 <meta property="og:site_name" content="Harry 的个人空间">
+<meta property="og:description" content="基本概念说明理解Linux的IO模型之前，首先要了解一些基本概念，才能理解这些IO模型设计的依据 用户空间和内核空间操作系统使用虚拟内存来映射物理内存，对于32位的操作系统来说，虚拟地址空间为4G（2^32）。操作系统的核心是内核，为了保护用户进程不能直接操作内核，保证内核安全，操作系统将虚拟地址空间划分为内核空间和用户空间。内核可以访问全部的地址空间，拥有访问底层硬件设备的权限，普通的应用程序需">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
-<meta property="article:published_time" content="2023-03-19T05:57:02.000Z">
-<meta property="article:modified_time" content="2023-03-19T06:45:08.655Z">
+<meta property="article:published_time" content="2023-03-19T14:06:15.000Z">
+<meta property="article:modified_time" content="2023-03-19T14:07:53.184Z">
 <meta property="article:author" content="harry zhang">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="I&#x2F;O模型">
+<meta property="article:tag" content="select&#x2F;poll&#x2F;epoll">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
   <style>
@@ -2287,7 +2292,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
       <!-- see: /layout/_partial/scripts/_ctrl/coverCtrl.ejs -->
-      <div id="half" class='cover-wrapper tag search' style="display: ;">
+      <div id="half" class='cover-wrapper post search' style="display: ;">
         
   <div id="parallax-window"></div>
 
@@ -2369,23 +2374,270 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       <div id="safearea">
         <div class="body-wrapper">
           
-
 <div id="l_main" class=''>
+  <article itemscope itemtype="http://schema.org/Article" class="article post white-box reveal md shadow floatable blur article-type-post" id="post" itemscope itemprop="blogPost">
+  <link itemprop="mainEntityOfPage" href="https://harryzhz.github.io/2023/03/19/Linux-系统-I-O-模型及-select-poll-epoll-详解/">
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Harry 的个人空间">
+  </span>
+  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
+    <meta itemprop="name" content="Harry 的个人空间">
+    <meta itemprop="description" content="">
+  </span>
   
+
+
+  
+    <span hidden>
+      <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
+    </span>
+  
+  <div class="article-meta" id="top">
     
-      <div class='post-wrapper'>
-        <article id="tag" class="post article white-box reveal shadow floatable blur">
-          <h2>全部标签</h2>
-          <div class="all-tags">
-            
-            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/I-O%E6%A8%A1%E5%9E%8B/" rel="tag">I/O模型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LRU/" rel="tag">LRU</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/select-poll-epoll/" rel="tag">select/poll/epoll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/" rel="tag">二分查找</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/" rel="tag">二叉搜索树</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag">二叉树</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag">动态规划</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A0%86/" rel="tag">堆</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag">字符串</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/" rel="tag">守护进程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2/" rel="tag">广度优先搜索</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" rel="tag">快速排序</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E7%BB%84/" rel="tag">数组</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%88/" rel="tag">栈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%91/" rel="tag">树</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2/" rel="tag">深度优先搜索</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B4%AA%E5%BF%83/" rel="tag">贪心</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%93%BE%E8%A1%A8/" rel="tag">链表</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%9F%E5%88%97/" rel="tag">队列</a><span class="tag-list-count">1</span></li></ul>
-          </div>
-          <br>
+    
+    
+      <h1 class="title" itemprop="name headline">
+        Linux 系统 I/O 模型及 select/poll/epoll 详解
+      </h1>
+      <div class='new-meta-box'>
+        
           
-        </article>
+            
+<div class='new-meta-item author' itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <a itemprop="url" class='author' href="/" rel="nofollow">
+    <img itemprop="image" src="https://upload.jianshu.io/users/upload_avatars/14151453/0f03d78b-5b29-466c-8b21-e61b0a356aa7.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240" class="lazyload" data-srcset="https://upload.jianshu.io/users/upload_avatars/14151453/0f03d78b-5b29-466c-8b21-e61b0a356aa7.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+    <p itemprop="name">harry zhang</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  <div class='new-meta-item category'>
+    <i class="fa-solid fa-folder-open fa-fw" aria-hidden="true"></i>
+    <a class="category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+    
+      <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
+        <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url"><span itemprop="name">操作系统</span></a>
+      </span>
+    
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date" itemprop="dateCreated datePublished" datetime="2023-03-19T22:06:15+08:00">
+  <a class='notlink'>
+    <i class="fa-solid fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2023年3月19日</p>
+  </a>
+</div>
+
+          
+        
+        <!-- Custom Files topMeta begin-->
+        
+        <!-- Custom Files topMeta end-->
       </div>
     
+  </div>
+
+
+  <div id="layoutHelper-page-plugins"></div>
+  <div id="post-body" itemprop="articleBody">
+    <h2 id="基本概念说明"><a href="#基本概念说明" class="headerlink" title="基本概念说明"></a>基本概念说明</h2><p>理解Linux的IO模型之前，首先要了解一些基本概念，才能理解这些IO模型设计的依据</p>
+<h3 id="用户空间和内核空间"><a href="#用户空间和内核空间" class="headerlink" title="用户空间和内核空间"></a>用户空间和内核空间</h3><p>操作系统使用虚拟内存来映射物理内存，对于32位的操作系统来说，虚拟地址空间为4G（2^32）。操作系统的核心是内核，为了保护用户进程不能直接操作内核，保证内核安全，操作系统将虚拟地址空间划分为内核空间和用户空间。内核可以访问全部的地址空间，拥有访问底层硬件设备的权限，普通的应用程序需要访问硬件设备必须通过<strong>系统调用</strong>来实现。</p>
+<p>对于Linux系统来说，将虚拟内存的最高1G字节的空间作为内核空间仅供内核使用，低3G字节的空间供用户进程使用，称为用户空间。</p>
+<h3 id="进程的状态"><a href="#进程的状态" class="headerlink" title="进程的状态"></a>进程的状态</h3><ul>
+<li>就绪</li>
+<li>阻塞</li>
+<li>运行</li>
+</ul>
+<h3 id="进程切换"><a href="#进程切换" class="headerlink" title="进程切换"></a>进程切换</h3><h3 id="文件描述符fd"><a href="#文件描述符fd" class="headerlink" title="文件描述符fd"></a>文件描述符fd</h3><h3 id="缓存I-x2F-O"><a href="#缓存I-x2F-O" class="headerlink" title="缓存I&#x2F;O"></a>缓存I&#x2F;O</h3><p>又被称为标准I&#x2F;O，大多数文件系统的默认I&#x2F;O都是缓存I&#x2F;O。在Linux系统的缓存I&#x2F;O机制中，操作系统会将I&#x2F;O的数据缓存在页缓存（内存）中，也就是数据先被拷贝到内核的缓冲区（内核地址空间），然后才会从内核缓冲区拷贝到应用程序的缓冲区（用户地址空间）。</p>
+<p>这种方式很明显的缺点就是数据传输过程中需要再应用程序地址空间和内核空间进行多次数据拷贝操作，这些操作带来的CPU以及内存的开销是非常大的。</p>
+<h3 id="二I-x2F-O模式"><a href="#二I-x2F-O模式" class="headerlink" title="二I&#x2F;O模式"></a>二I&#x2F;O模式</h3><p>由于Linux系统采用的缓存I&#x2F;O模式，对于一次I&#x2F;O访问，以读操作举例，数据先会被拷贝到内核缓冲区，然后才会从内核缓冲区拷贝到应用程序的缓存区，当一个read系统调用发生的时候，会经历两个阶段：</p>
+<ul>
+<li>等待数据到来，进程处于阻塞状态</li>
+<li>当数据准备就绪后，将数据从内核拷贝到用户进程，进程处于运行状态</li>
+</ul>
+<p>正是因为这两个状态，Linux系统才产生了多种不同的网络I&#x2F;O模式的方案</p>
+<h2 id="Linux系统I-x2F-O模型"><a href="#Linux系统I-x2F-O模型" class="headerlink" title="Linux系统I&#x2F;O模型"></a>Linux系统I&#x2F;O模型</h2><h3 id="阻塞IO（blocking-IO）"><a href="#阻塞IO（blocking-IO）" class="headerlink" title="阻塞IO（blocking IO）"></a>阻塞IO（blocking IO）</h3><p>Linux系统默认情况下所有socke都是blocking的，一个读操作流程如下：<br><img src="https://upload-images.jianshu.io/upload_images/14151453-5b4abb97fad3f18d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" class="lazyload" data-srcset="https://upload-images.jianshu.io/upload_images/14151453-5b4abb97fad3f18d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p>
+<p>以UDP socket为例，当用户进程调用了recvfrom系统调用，如果数据还没准备好，应用进程被阻塞，内核直到数据到来且将数据从内核缓冲区拷贝到了应用进程缓冲区，然后向用户进程返回结果，用户进程才解除block状态，重新运行起来。</p>
+<p>阻塞模行下只是阻塞了当前的应用进程，其他进程还可以执行，不消耗CPU时间，CPU的利用率较高。</p>
+<h3 id="非阻塞IO（nonblocking-IO）"><a href="#非阻塞IO（nonblocking-IO）" class="headerlink" title="非阻塞IO（nonblocking IO）"></a>非阻塞IO（nonblocking IO）</h3><p>Linux可以设置socket为非阻塞的，非阻塞模式下执行一个读操作流程如下：<br><img src="https://upload-images.jianshu.io/upload_images/14151453-485bfdc370909781.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" class="lazyload" data-srcset="https://upload-images.jianshu.io/upload_images/14151453-485bfdc370909781.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p>
+<p>当用户进程发出recvfrom系统调用时，如果kernel中的数据还没准备好，recvfrom会立即返回一个error结果，不会阻塞用户进程，用户进程收到error时知道数据还没准备好，过一会再调用recvfrom，直到kernel中的数据准备好了，内核就立即将数据拷贝到用户内存然后返回ok，这个过程需要用户进程去轮询内核数据是否准备好。</p>
+<p>非阻塞模型下由于要处理更多的系统调用，因此CPU利用率比较低。</p>
+<h3 id="信号驱动IO"><a href="#信号驱动IO" class="headerlink" title="信号驱动IO"></a>信号驱动IO</h3><p>应用进程使用sigaction系统调用，内核立即返回，等到kernel数据准备好时会给用户进程发送一个信号，告诉用户进程可以进行IO操作了，然后用户进程再调用IO系统调用如recvfrom，将数据从内核缓冲区拷贝到应用进程。流程如下：<br><img src="https://upload-images.jianshu.io/upload_images/14151453-1f14b7a7da55a2bc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" class="lazyload" data-srcset="https://upload-images.jianshu.io/upload_images/14151453-1f14b7a7da55a2bc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p>
+<p>相比于轮询的方式，不需要多次系统调用轮询，信号驱动IO的CPU利用率更高。</p>
+<h3 id="异步IO"><a href="#异步IO" class="headerlink" title="异步IO"></a>异步IO</h3><p>异步IO模型与其他模型最大的区别是，异步IO在系统调用返回的时候所有操作都已经完成，应用进程既不需要等待数据准备，也不需要在数据到来后等待数据从内核缓冲区拷贝到用户缓冲区，流程如下：<br><img src="https://upload-images.jianshu.io/upload_images/14151453-95971297cce5bd98.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" class="lazyload" data-srcset="https://upload-images.jianshu.io/upload_images/14151453-95971297cce5bd98.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="><br>在数据拷贝完成后，kernel会给用户进程发送一个信号告诉其read操作完成了。</p>
+<h3 id="IO多路复用"><a href="#IO多路复用" class="headerlink" title="IO多路复用"></a>IO多路复用</h3><p>是用select、poll等待数据，可以等待多个socket中的任一个变为可读，这一过程会被阻塞，当某个套接字数据到来时返回，之后再用recvfrom系统调用把数据从内核缓存区复制到用户进程，流程如下：<br><img src="https://upload-images.jianshu.io/upload_images/14151453-8845990e0d75eb9a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" class="lazyload" data-srcset="https://upload-images.jianshu.io/upload_images/14151453-8845990e0d75eb9a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p>
+<p>流程类似阻塞IO，甚至比阻塞IO更差，多使用了一个系统调用，但是IO多路复用最大的特点是让单个进程能同时处理多个IO事件的能力，又被称为事件驱动IO，相比于多线程模型，IO复用模型不需要线程的创建、切换、销毁，系统开销更小，适合高并发的场景。</p>
+<h4 id="select"><a href="#select" class="headerlink" title="select"></a>select</h4><p>select是IO多路复用模型的一种实现，当select函数返回后可以通过轮询fdset来找到就绪的socket。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">select</span><span class="params">(<span class="type">int</span> n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, <span class="keyword">struct</span> timeval *timeout)</span></span><br></pre></td></tr></table></figure>
+
+<p>优点是几乎所有平台都支持，缺点在于能够监听的fd数量有限，Linux系统上一般为1024，是写死在宏定义中的，要修改需要重新编译内核。而且每次都要把所有的fd在用户空间和内核空间拷贝，这个操作是比较耗时的。</p>
+<h4 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h4><p>poll和select基本相同，不同的是poll没有最大fd数量限制（实际也会受到物理资源的限制，因为系统的fd数量是有限的），而且提供了更多的时间类型。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">poll</span><span class="params">(<span class="keyword">struct</span> pollfd *fds, <span class="type">unsigned</span> <span class="type">int</span> nfds, <span class="type">int</span> timeout)</span></span><br></pre></td></tr></table></figure>
+
+<p>总结：select和poll都需要在返回后通过轮询的方式检查就绪的socket，事实上同时连的大量socket在一个时刻只有很少的处于就绪状态，因此随着监视的描述符数量的变多，其性能也会逐渐下降。</p>
+<h4 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h4><p>epoll是select和poll的改进版本，更加灵活，没有描述符限制。epoll使用一个文件描述符管理多个描述符，将用户关系的文件描述符的事件存放到内核的一个事件表中，这样在用户空间和内核空间的copy只需一次。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">epoll_create</span><span class="params">(<span class="type">int</span> size)</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">epoll_ctl</span><span class="params">(<span class="type">int</span> epfd, <span class="type">int</span> op, <span class="type">int</span> fd, <span class="keyword">struct</span> epoll_event *event)</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">epoll_wait</span><span class="params">(<span class="type">int</span> epfd, <span class="keyword">struct</span> epoll_event * events, <span class="type">int</span> maxevents, <span class="type">int</span> timeout)</span></span><br></pre></td></tr></table></figure>
+<p>epoll_create()用来创建一个epoll句柄。<br>epoll_ctl() 用于向内核注册新的描述符或者是改变某个文件描述符的状态。已注册的描述符在内核中会被维护在一棵红黑树上，通过回调函数内核会将 I&#x2F;O 准备好的描述符加入到一个就绪链表中管理。<br> epoll_wait() 可以从就绪链表中得到事件完成的描述符，因此进程不需要通过轮询来获得事件完成的描述符。</p>
+<h5 id="LT模式（水平触发，默认）"><a href="#LT模式（水平触发，默认）" class="headerlink" title="LT模式（水平触发，默认）"></a>LT模式（水平触发，默认）</h5><p>当epoll_wait检测到描述符IO事件发生并且通知给应用程序时，应用程序可以不立即处理该事件，下次调用epoll_wait还会再次通知该事件，支持block和nonblocking socket。</p>
+<h5 id="ET模式（边缘触发）"><a href="#ET模式（边缘触发）" class="headerlink" title="ET模式（边缘触发）"></a>ET模式（边缘触发）</h5><p>当epoll_wait检测到描述符IO事件发生并且通知给应用程序时，应用程序需要立即处理该事件，如果不立即处理，下次调用epoll_wait不会再次通知该事件。</p>
+<p>ET模式在很大程度上减少了epoll事件被重复触发的次数，因此效率要比LT模式高。epoll工作在ET模式的时候，必须使用nonblocking socket，以避免由于一个文件句柄的阻塞读&#x2F;阻塞写操作把处理多个文件描述符的任务饿死。</p>
+<h4 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h4><ul>
+<li><p>select的timeout参数精度为微妙，而poll和epoll都是毫秒，会因此select更加适合对实时性要求比较高的场景</p>
+</li>
+<li><p>poll 没有最大描述符数量的限制，如果平台支持并且对实时性要求不高，应该使用 poll 而不是 select。</p>
+</li>
+<li><p>epoll适合高并发的场景，有大量描述符需要同时监听，并且最好是长连接。<br>不适合监控的描述符状态变化频繁且短暂，因为epoll的描述符都存在内核中，每次对其状态修改都要通过epoll_ctl系统调用来实现，频繁的系统调用导致频繁在内核态和用户态切换，会大大降低性能。</p>
+</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>【segmentfault】<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000003063859">Linux IO模式及 select、poll、epoll详解</a><br>【GitHub】<a target="_blank" rel="noopener" href="https://github.com/CyC2018/CS-Notes/blob/master/notes/Socket.md#%E4%B8%80io-%E6%A8%A1%E5%9E%8B">CyC2018&#x2F;CS-Notes</a></p>
+
+  </div>
   
+  
+    
+    <div class='footer'>
+       <!-- 参考资料、相关资料等 -->
+      
+       <!-- 相关文章 -->
+      
+      <!-- 版权声明组件 -->
+      
+      <!-- 打赏组件 -->
+      
+    </div>
+  
+  
+    
+
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateModified" datetime="2023-03-19T22:07:53+08:00">
+  <a class='notlink'>
+    <i class="fa-solid fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2023年3月19日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Linux/" rel="nofollow"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i><p>Linux</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/I-O%E6%A8%A1%E5%9E%8B/" rel="nofollow"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i><p>I/O模型</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/select-poll-epoll/" rel="nofollow"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i><p>select/poll/epoll</p></a></div>
+  <span hidden itemprop="keywords">Linux I/O模型 select/poll/epoll</span>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://harryzhz.github.io/2023/03/19/Linux-%E7%B3%BB%E7%BB%9F-I-O-%E6%A8%A1%E5%9E%8B%E5%8F%8A-select-poll-epoll-%E8%AF%A6%E8%A7%A3/&title=Linux 系统 I/O 模型及 select/poll/epoll 详解 - Harry 的个人空间&summary="
+          
+          >
+          
+            <img src="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/logo/128/qq.png" class="lazyload" data-srcset="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/logo/128/qq.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://harryzhz.github.io/2023/03/19/Linux-%E7%B3%BB%E7%BB%9F-I-O-%E6%A8%A1%E5%9E%8B%E5%8F%8A-select-poll-epoll-%E8%AF%A6%E8%A7%A3/&title=Linux 系统 I/O 模型及 select/poll/epoll 详解 - Harry 的个人空间&summary="
+          
+          >
+          
+            <img src="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/logo/128/qzone.png" class="lazyload" data-srcset="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/logo/128/qzone.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=https://harryzhz.github.io/2023/03/19/Linux-%E7%B3%BB%E7%BB%9F-I-O-%E6%A8%A1%E5%9E%8B%E5%8F%8A-select-poll-epoll-%E8%AF%A6%E8%A7%A3/&title=Linux 系统 I/O 模型及 select/poll/epoll 详解 - Harry 的个人空间&summary="
+          
+          >
+          
+            <img src="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/logo/128/weibo.png" class="lazyload" data-srcset="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/logo/128/weibo.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+          
+        </a>
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+    <!-- Custom Files bottomMeta begin -->
+    
+    <!-- Custom Files bottomMeta end -->
+  </div>
+
+
+  
+  
+
+  
+    <div class="prev-next">
+      
+      
+        <a class='next' href='/2023/03/19/%E7%AE%97%E6%B3%95-8-LRU-%E7%AD%96%E7%95%A5/'>
+          <p class='title'>算法(8): LRU 策略<i class="fa-solid fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>LeetCode No.146 LRU缓存机制
+LRU（Least Recent Used）策略：优先淘汰最近最少使用的数据，常用于缓存淘汰机制，如Linux系统的内存淘汰、Redis的缓存淘汰...</p>
+        </a>
+      
+    </div>
+  
+  <!-- Custom Files postEnd begin-->
+  
+  <!-- Custom Files postEnd end-->
+</article>
+
+
+  
+
+
+  <article class="post white-box shadow floatable blur" id="comments">
+    <span hidden>
+      <meta itemprop="discussionUrl" content="/2023/03/19/Linux-%E7%B3%BB%E7%BB%9F-I-O-%E6%A8%A1%E5%9E%8B%E5%8F%8A-select-poll-epoll-%E8%AF%A6%E8%A7%A3/index.html#comments">
+    </span>
+    <p ct><i class='fa-solid fa-comments'></i> 评论</p>
+    
+
+    <div id="layoutHelper-comments"></div>
+
+  </article>
+
+
+
+
+
+
 </div>
 <aside id='l_side' itemscope itemtype="http://schema.org/WPSideBar">
   
@@ -2404,9 +2656,19 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
 
 
-  <div class="">
-    <!-- pjax占位 -->
-  </div>
+  <section class="widget toc-wrapper desktop mobile " id="toc-div" >
+    
+  <header>
+    
+      <i class="fa-solid fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E8%AF%B4%E6%98%8E"><span class="toc-text">基本概念说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4%E5%92%8C%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4"><span class="toc-text">用户空间和内核空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E7%8A%B6%E6%80%81"><span class="toc-text">进程的状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2"><span class="toc-text">进程切换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6fd"><span class="toc-text">文件描述符fd</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98I-x2F-O"><span class="toc-text">缓存I&#x2F;O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8CI-x2F-O%E6%A8%A1%E5%BC%8F"><span class="toc-text">二I&#x2F;O模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux%E7%B3%BB%E7%BB%9FI-x2F-O%E6%A8%A1%E5%9E%8B"><span class="toc-text">Linux系统I&#x2F;O模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%BB%E5%A1%9EIO%EF%BC%88blocking-IO%EF%BC%89"><span class="toc-text">阻塞IO（blocking IO）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%9E%E9%98%BB%E5%A1%9EIO%EF%BC%88nonblocking-IO%EF%BC%89"><span class="toc-text">非阻塞IO（nonblocking IO）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%A9%B1%E5%8A%A8IO"><span class="toc-text">信号驱动IO</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E6%AD%A5IO"><span class="toc-text">异步IO</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="toc-text">IO多路复用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#select"><span class="toc-text">select</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#poll"><span class="toc-text">poll</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#epoll"><span class="toc-text">epoll</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#LT%E6%A8%A1%E5%BC%8F%EF%BC%88%E6%B0%B4%E5%B9%B3%E8%A7%A6%E5%8F%91%EF%BC%8C%E9%BB%98%E8%AE%A4%EF%BC%89"><span class="toc-text">LT模式（水平触发，默认）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ET%E6%A8%A1%E5%BC%8F%EF%BC%88%E8%BE%B9%E7%BC%98%E8%A7%A6%E5%8F%91%EF%BC%89"><span class="toc-text">ET模式（边缘触发）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">应用场景</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol>
+    </div>
+  </section>
 
   
 
@@ -2453,13 +2715,14 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </aside>
 
 
+
           <!--此文件用来存放一些不方便取值的变量-->
 <!--思路大概是将值藏到重加载的区域内-->
 
 <pjax>
 <script>
   window.pdata={}
-  pdata.ispage=false;
+  pdata.ispage=true;
   pdata.commentPath="";
   pdata.commentPlaceholder="";
   pdata.commentConfig={};
@@ -2994,7 +3257,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </script>
 
 
-  <script type="application/ld+json">[{"@context":"http://schema.org","@type":"Organization","name":"Harry 的个人空间","url":"https://harryzhz.github.io/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},{"@context":"http://schema.org","@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhz.github.io/","sameAs":["https://github.com/harryzhz"],"description":""},{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https://harryzhz.github.io/","name":"Harry 的个人空间"}}]},{"@context":"http://schema.org","@type":"WebSite","name":"Harry 的个人空间","url":"https://harryzhz.github.io/","keywords":null,"description":"","author":{"@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhz.github.io/","description":""},"publisher":{"@type":"Organization","name":"Harry 的个人空间","url":"https://harryzhz.github.io/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"potentialAction":{"@type":"SearchAction","name":"Site Search","target":{"@type":"EntryPoint","urlTemplate":"https://harryzhz.github.io?s={search_term_string}"},"query-input":"required name=search_term_string"}},{"@context":"http://schema.org","@type":"BlogPosting","headline":"全部标签","description":"","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https://harryzhz.github.io/tags/index.html"},"author":{"@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhz.github.io/"},"publisher":{"@type":"Organization","name":"Harry 的个人空间","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"url":"https://harryzhz.github.io/tags/index.html","wordCount":0,"datePublished":"2023-03-19T05:57:02.000Z","dateModified":"2023-03-19T06:45:08.655Z","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}}]</script>
+  <script type="application/ld+json">[{"@context":"http://schema.org","@type":"Organization","name":"Harry 的个人空间","url":"https://harryzhz.github.io/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},{"@context":"http://schema.org","@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhz.github.io/","sameAs":["https://github.com/harryzhz"],"description":""},{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https://harryzhz.github.io/","name":"Harry 的个人空间"}},{"@type":"ListItem","position":2,"item":{"@id":"https://harryzhz.github.io/categories/操作系统/","name":"操作系统"}},{"@type":"ListItem","position":3,"item":{"@id":"https://harryzhz.github.io/2023/03/19/Linux-系统-I-O-模型及-select-poll-epoll-详解/","name":"Linux 系统 I/O 模型及 select/poll/epoll 详解"}}]},{"@context":"http://schema.org","@type":"WebSite","name":"Harry 的个人空间","url":"https://harryzhz.github.io/","keywords":null,"description":"","author":{"@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhz.github.io/","description":""},"publisher":{"@type":"Organization","name":"Harry 的个人空间","url":"https://harryzhz.github.io/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"potentialAction":{"@type":"SearchAction","name":"Site Search","target":{"@type":"EntryPoint","urlTemplate":"https://harryzhz.github.io?s={search_term_string}"},"query-input":"required name=search_term_string"}},{"@context":"http://schema.org","@type":"BlogPosting","headline":"Linux 系统 I/O 模型及 select/poll/epoll 详解","description":"","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https://harryzhz.github.io/2023/03/19/Linux-%E7%B3%BB%E7%BB%9F-I-O-%E6%A8%A1%E5%9E%8B%E5%8F%8A-select-poll-epoll-%E8%AF%A6%E8%A7%A3/"},"author":{"@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhz.github.io/"},"publisher":{"@type":"Organization","name":"Harry 的个人空间","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"url":"https://harryzhz.github.io/2023/03/19/Linux-%E7%B3%BB%E7%BB%9F-I-O-%E6%A8%A1%E5%9E%8B%E5%8F%8A-select-poll-epoll-%E8%AF%A6%E8%A7%A3/","wordCount":0,"datePublished":"2023-03-19T14:06:15.000Z","dateModified":"2023-03-19T14:07:53.184Z","articleSection":"操作系统","keywords":"Linux,I/O模型,select/poll/epoll","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}}]</script>
 
 
 

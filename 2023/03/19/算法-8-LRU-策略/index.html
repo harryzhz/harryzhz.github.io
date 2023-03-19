@@ -36,14 +36,16 @@
   <title>算法(8): LRU 策略 - Harry 的个人空间</title>
   <meta name="keywords" content="leetcode,LRU,缓存,null">
   <meta desc name="description" content="Harry 的个人空间 - harry zhang - Harry 的个人空间">
-  <meta property="og:type" content="article">
+  
+<meta property="og:type" content="article">
 <meta property="og:title" content="算法(8): LRU 策略">
 <meta property="og:url" content="https://harryzhz.github.io/2023/03/19/%E7%AE%97%E6%B3%95-8-LRU-%E7%AD%96%E7%95%A5/index.html">
 <meta property="og:site_name" content="Harry 的个人空间">
+<meta property="og:description" content="LeetCode No.146 LRU缓存机制 LRU（Least Recent Used）策略：优先淘汰最近最少使用的数据，常用于缓存淘汰机制，如Linux系统的内存淘汰、Redis的缓存淘汰等。 基于哈希表和双向链表实现LRU核心思路是，利用双向链表存储键值对，哈希表存储键在链表中对应的节点指针，如下图所示 这样的好处是使访问和更新操作时间复杂度都在O(1)。 PUT操作 判断哈希表中key是">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
 <meta property="article:published_time" content="2023-03-19T13:58:05.000Z">
-<meta property="article:modified_time" content="2023-03-19T13:58:39.681Z">
+<meta property="article:modified_time" content="2023-03-19T14:00:33.583Z">
 <meta property="article:author" content="harry zhang">
 <meta property="article:tag" content="leetcode">
 <meta property="article:tag" content="LRU">
@@ -1597,7 +1599,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     debug: "env",
     cdn: {"js":{"app":"/js/app.js","parallax":"/js/plugins/parallax.js","rightMenu":"/js/plugins/rightMenu.js","rightMenus":"/js/plugins/rightMenus.js","sites":"/js/plugins/tags/sites.js","friends":"/js/plugins/tags/friends.js","contributors":"/js/plugins/tags/contributors.js","search":"/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
     default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
-    lastupdate: new Date(1679234371548),
+    lastupdate: new Date(1679234895275),
     sidebar: {
       for_page: ["blogger","category","tagcloud","donate"],
       for_post: ["toc"],
@@ -2445,7 +2447,32 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
   <div id="layoutHelper-page-plugins"></div>
   <div id="post-body" itemprop="articleBody">
-    
+    <p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/lru-cache/">LeetCode No.146 LRU缓存机制</a></p>
+<p>LRU（Least Recent Used）策略：优先淘汰最近最少使用的数据，常用于缓存淘汰机制，如Linux系统的内存淘汰、Redis的缓存淘汰等。</p>
+<h2 id="基于哈希表和双向链表实现LRU"><a href="#基于哈希表和双向链表实现LRU" class="headerlink" title="基于哈希表和双向链表实现LRU"></a>基于哈希表和双向链表实现LRU</h2><p>核心思路是，利用双向链表存储键值对，哈希表存储键在链表中对应的节点指针，如下图所示<br><img src="https://upload-images.jianshu.io/upload_images/14151453-0372ff8cff5afd07.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" class="lazyload" data-srcset="https://upload-images.jianshu.io/upload_images/14151453-0372ff8cff5afd07.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p>
+<p>这样的好处是使访问和更新操作时间复杂度都在O(1)。</p>
+<h3 id="PUT操作"><a href="#PUT操作" class="headerlink" title="PUT操作"></a>PUT操作</h3><ul>
+<li>判断哈希表中key是否已存在，如果存在为修改操作：<ol>
+<li>将链表节点修改为新的键值对</li>
+<li>将节点移到头部</li>
+</ol>
+</li>
+<li>如果不存在为新增操作，此时如果容量已满，需要淘汰数据<ol>
+<li>取出链表尾节点，删除哈希表中对应key</li>
+<li>删除链表尾节点</li>
+<li>在链表头部添加新的节点</li>
+<li>将新的链表头节点加到哈希表</li>
+</ol>
+</li>
+<li>如果容量没有满，直接添加节点，执行上述步骤3、4即可</li>
+</ul>
+<h3 id="GET操作"><a href="#GET操作" class="headerlink" title="GET操作"></a>GET操作</h3><ul>
+<li>判断哈希表中key是否存在，如果存在将节点移动到链表头部，返回对应的值</li>
+<li>如果不存在直接返回nil值</li>
+</ul>
+<h3 id="Go语言实现"><a href="#Go语言实现" class="headerlink" title="Go语言实现"></a>Go语言实现</h3><p>使用Go内建map类型和container包的list（双向链表）</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;container/list&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Pair <span class="keyword">struct</span> &#123;</span><br><span class="line">	key <span class="type">int</span></span><br><span class="line">	val <span class="type">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> LRUCache <span class="keyword">struct</span> &#123;</span><br><span class="line">	<span class="built_in">cap</span> <span class="type">int</span></span><br><span class="line">	list *list.List</span><br><span class="line">	kv <span class="keyword">map</span>[<span class="type">int</span>]*list.Element</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Constructor</span><span class="params">(capacity <span class="type">int</span>)</span></span> LRUCache &#123;</span><br><span class="line">	<span class="keyword">return</span> LRUCache&#123;</span><br><span class="line">		<span class="built_in">cap</span>: capacity,</span><br><span class="line">		list: list.New(),</span><br><span class="line">		kv: <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">int</span>]*list.Element),</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(this *LRUCache)</span></span> Get(key <span class="type">int</span>) <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> v, ok := this.kv[key]; ok == <span class="literal">true</span> &#123;</span><br><span class="line">		this.list.MoveToFront(v)</span><br><span class="line">		<span class="keyword">return</span> v.Value.(Pair).val</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(this *LRUCache)</span></span> Put(key <span class="type">int</span>, value <span class="type">int</span>)  &#123;</span><br><span class="line">	<span class="keyword">if</span> elem, ok := this.kv[key]; ok == <span class="literal">true</span> &#123;</span><br><span class="line">		elem.Value = Pair&#123;key: key, val: value&#125;</span><br><span class="line">		this.list.MoveToFront(elem)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> this.list.Len() &gt;= this.<span class="built_in">cap</span> &#123;</span><br><span class="line">		<span class="built_in">delete</span>(this.kv, this.list.Back().Value.(Pair).key)</span><br><span class="line">		this.list.Remove(this.list.Back())</span><br><span class="line">	&#125;</span><br><span class="line">	this.list.PushFront(Pair&#123;key: key, val: value&#125;)</span><br><span class="line">	this.kv[key] = this.list.Front()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
   </div>
   
   
@@ -2469,7 +2496,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateModified" datetime="2023-03-19T21:58:39+08:00">
+          <div class="new-meta-item date" itemprop="dateModified" datetime="2023-03-19T22:00:33+08:00">
   <a class='notlink'>
     <i class="fa-solid fa-edit fa-fw" aria-hidden="true"></i>
     <p>更新于：2023年3月19日</p>
@@ -2552,6 +2579,12 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     <div class="prev-next">
       
+        <a class='prev' href='/2023/03/19/Linux-%E7%B3%BB%E7%BB%9F-I-O-%E6%A8%A1%E5%9E%8B%E5%8F%8A-select-poll-epoll-%E8%AF%A6%E8%A7%A3/'>
+          <p class='title'><i class="fa-solid fa-chevron-left" aria-hidden="true"></i>Linux 系统 I/O 模型及 select/poll/epoll 详解</p>
+          <p class='content'>基本概念说明理解Linux的IO模型之前，首先要了解一些基本概念，才能理解这些IO模型设计的依据
+用户空间和内核空间操作系统使用虚拟内存来映射物理内存，对于32位的操作系统来说，虚拟地址空间为4...</p>
+        </a>
+      
       
         <a class='next' href='/2023/03/19/%E7%AE%97%E6%B3%95-7-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/'>
           <p class='title'>算法(7): 动态规划<i class="fa-solid fa-chevron-right" aria-hidden="true"></i></p>
@@ -2608,9 +2641,19 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
 
 
-  <div class="">
-    <!-- pjax占位 -->
-  </div>
+  <section class="widget toc-wrapper desktop mobile " id="toc-div" >
+    
+  <header>
+    
+      <i class="fa-solid fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%93%88%E5%B8%8C%E8%A1%A8%E5%92%8C%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8%E5%AE%9E%E7%8E%B0LRU"><span class="toc-text">基于哈希表和双向链表实现LRU</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#PUT%E6%93%8D%E4%BD%9C"><span class="toc-text">PUT操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GET%E6%93%8D%E4%BD%9C"><span class="toc-text">GET操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0"><span class="toc-text">Go语言实现</span></a></li></ol></li></ol>
+    </div>
+  </section>
 
   
 
@@ -2970,7 +3013,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
 
   <script>
-  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp"];
+  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp"];
   let index = 0;
   let IntervalParallax = null;
 
@@ -3199,7 +3242,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </script>
 
 
-  <script type="application/ld+json">[{"@context":"http://schema.org","@type":"Organization","name":"Harry 的个人空间","url":"https://harryzhz.github.io/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},{"@context":"http://schema.org","@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhz.github.io/","sameAs":["https://github.com/harryzhz"],"description":""},{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https://harryzhz.github.io/","name":"Harry 的个人空间"}},{"@type":"ListItem","position":2,"item":{"@id":"https://harryzhz.github.io/categories/算法/","name":"算法"}},{"@type":"ListItem","position":3,"item":{"@id":"https://harryzhz.github.io/2023/03/19/算法-8-LRU-策略/","name":"算法(8): LRU 策略"}}]},{"@context":"http://schema.org","@type":"WebSite","name":"Harry 的个人空间","url":"https://harryzhz.github.io/","keywords":null,"description":"","author":{"@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhz.github.io/","description":""},"publisher":{"@type":"Organization","name":"Harry 的个人空间","url":"https://harryzhz.github.io/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"potentialAction":{"@type":"SearchAction","name":"Site Search","target":{"@type":"EntryPoint","urlTemplate":"https://harryzhz.github.io?s={search_term_string}"},"query-input":"required name=search_term_string"}},{"@context":"http://schema.org","@type":"BlogPosting","headline":"算法(8): LRU 策略","description":"","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https://harryzhz.github.io/2023/03/19/%E7%AE%97%E6%B3%95-8-LRU-%E7%AD%96%E7%95%A5/"},"author":{"@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhz.github.io/"},"publisher":{"@type":"Organization","name":"Harry 的个人空间","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"url":"https://harryzhz.github.io/2023/03/19/%E7%AE%97%E6%B3%95-8-LRU-%E7%AD%96%E7%95%A5/","wordCount":0,"datePublished":"2023-03-19T13:58:05.000Z","dateModified":"2023-03-19T13:58:39.681Z","articleSection":"算法","keywords":"leetcode,LRU,缓存","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}}]</script>
+  <script type="application/ld+json">[{"@context":"http://schema.org","@type":"Organization","name":"Harry 的个人空间","url":"https://harryzhz.github.io/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},{"@context":"http://schema.org","@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhz.github.io/","sameAs":["https://github.com/harryzhz"],"description":""},{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https://harryzhz.github.io/","name":"Harry 的个人空间"}},{"@type":"ListItem","position":2,"item":{"@id":"https://harryzhz.github.io/categories/算法/","name":"算法"}},{"@type":"ListItem","position":3,"item":{"@id":"https://harryzhz.github.io/2023/03/19/算法-8-LRU-策略/","name":"算法(8): LRU 策略"}}]},{"@context":"http://schema.org","@type":"WebSite","name":"Harry 的个人空间","url":"https://harryzhz.github.io/","keywords":null,"description":"","author":{"@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhz.github.io/","description":""},"publisher":{"@type":"Organization","name":"Harry 的个人空间","url":"https://harryzhz.github.io/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"potentialAction":{"@type":"SearchAction","name":"Site Search","target":{"@type":"EntryPoint","urlTemplate":"https://harryzhz.github.io?s={search_term_string}"},"query-input":"required name=search_term_string"}},{"@context":"http://schema.org","@type":"BlogPosting","headline":"算法(8): LRU 策略","description":"","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https://harryzhz.github.io/2023/03/19/%E7%AE%97%E6%B3%95-8-LRU-%E7%AD%96%E7%95%A5/"},"author":{"@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhz.github.io/"},"publisher":{"@type":"Organization","name":"Harry 的个人空间","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"url":"https://harryzhz.github.io/2023/03/19/%E7%AE%97%E6%B3%95-8-LRU-%E7%AD%96%E7%95%A5/","wordCount":0,"datePublished":"2023-03-19T13:58:05.000Z","dateModified":"2023-03-19T14:00:33.583Z","articleSection":"算法","keywords":"leetcode,LRU,缓存","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}}]</script>
 
 
 
