@@ -31,7 +31,7 @@ i18n_dir: :lang
 skip_render:
 
 # Writing
-new_post_name: :title.md # File name of new posts
+new_post_name: :year-:month-:day-:title.md # File name of new posts
 default_layout: post
 auto_spacing: true
 titlecase: false # Transform title into titlecase
@@ -69,7 +69,36 @@ index_generator:
 # Category & Tag
 default_category: uncategorized
 category_map:
+  # - name: 数据结构
+  #   directory: data_struct
+  # - name: 算法
+  #   directory: algorithm
+  # - name: 操作系统
+  #   directory: os
+  # - name: 计算机网络
+  #   directory: net
+  # - name: 编程语言
+  #   directory: program_lang
+  # - name: 设计模式
+  #   directory: design_pattern
+  # - name: 数据库
+  #   directory: db
+  # - name: 分布式系统
+  #   directory: distributed
+  # - name: 微服务
+  #   directory: micro_service
+  # - name: 云原生
+  #   directory: cloud_native
+
 tag_map:
+  # - name: Golang
+  #   directory: go
+  # - name: Redis
+  #   directory: redis
+  # - name: MySQL
+  #   directory: mysql
+  # - name: Linux
+  #   directory: linux
 
 # Metadata elements
 ## https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
@@ -98,11 +127,12 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: volantis
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: https://github.com/harryzhz/harryzhz.github.io
+  repo: https://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@github.com/harryzhz/harryzhz.github.io
   branch: gh-pages
+  token: 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
