@@ -238,6 +238,20 @@
   </url>
   
   <url>
+    <loc>https://harryzhang.cn/tags/%E6%A0%91/</loc>
+    <lastmod>2023-03-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://harryzhang.cn/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/</loc>
+    <lastmod>2023-03-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://harryzhang.cn/tags/%E6%A0%88/</loc>
     <lastmod>2023-03-20</lastmod>
     <changefreq>weekly</changefreq>
@@ -253,20 +267,6 @@
   
   <url>
     <loc>https://harryzhang.cn/tags/%E5%A0%86/</loc>
-    <lastmod>2023-03-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://harryzhang.cn/tags/%E6%A0%91/</loc>
-    <lastmod>2023-03-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://harryzhang.cn/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/</loc>
     <lastmod>2023-03-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -301,14 +301,14 @@
   </url>
   
   <url>
-    <loc>https://harryzhang.cn/tags/%E8%B4%AA%E5%BF%83/</loc>
+    <loc>https://harryzhang.cn/tags/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/</loc>
     <lastmod>2023-03-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://harryzhang.cn/tags/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/</loc>
+    <loc>https://harryzhang.cn/tags/%E8%B4%AA%E5%BF%83/</loc>
     <lastmod>2023-03-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
