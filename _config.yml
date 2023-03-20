@@ -134,6 +134,5 @@ theme: volantis
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: https://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@github.com/harryzhz/harryzhz.github.io
+  repo: git@github.com:harryzhz/harryzhz.github.io.git
   branch: gh-pages
-  token: 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
