@@ -14,7 +14,7 @@ favicon: "https://upload.jianshu.io/users/upload_avatars/14151453/0f03d78b-5b29-
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://harryzhz.github.io
+url: https://harryzhang.cn
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
@@ -134,6 +134,6 @@ theme: volantis
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: https://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@github.com/harryzhz/harryzhz.github.io
+  repo: https://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@github.com/harryzhz/harryzhz.github.io
   branch: gh-pages
-  token: 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
+  token: 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
