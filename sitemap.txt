@@ -1,3 +1,6 @@
+https://harryzhang.cn/2023/03/25/Go-%E5%8D%8F%E7%A8%8B%E8%B0%83%E5%BA%A6%E5%8E%9F%E7%90%86%E5%8F%8A%E5%BA%94%E7%94%A8/
+https://harryzhang.cn/2023/03/25/Go-%E5%AE%9E%E6%88%98-%E5%9F%BA%E4%BA%8EThrift%E6%A1%86%E6%9E%B6%E7%9A%84-RPC-%E6%9C%8D%E5%8A%A1-Demo/
+https://harryzhang.cn/2023/03/25/Go-%E5%AE%9E%E6%88%98-Socket-%E7%BC%96%E7%A8%8B/
 https://harryzhang.cn/2023/03/25/%E6%97%A0%E5%A4%84%E4%B8%8D%E5%9C%A8%E7%9A%84%E5%BE%AE%E6%9C%8D%E5%8A%A1/
 https://harryzhang.cn/2023/03/25/%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86/
 https://harryzhang.cn/2023/03/25/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E7%BC%93%E5%AD%98%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3/
@@ -59,9 +62,15 @@ https://harryzhang.cn/tags/%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A
 https://harryzhang.cn/tags/%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2/
 https://harryzhang.cn/tags/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/
 https://harryzhang.cn/tags/%E8%B4%AA%E5%BF%83/
+https://harryzhang.cn/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/
 https://harryzhang.cn/tags/LRU/
 https://harryzhang.cn/tags/%E7%BC%93%E5%AD%98/
-https://harryzhang.cn/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/
+https://harryzhang.cn/tags/Goroutine/
+https://harryzhang.cn/tags/GMP/
+https://harryzhang.cn/tags/Socket/
+https://harryzhang.cn/tags/Go/
+https://harryzhang.cn/tags/Thrift/
+https://harryzhang.cn/tags/RPC/
 https://harryzhang.cn/tags/HTTPS/
 https://harryzhang.cn/tags/MySQL/
 https://harryzhang.cn/tags/%E6%8E%92%E5%BA%8F/
@@ -97,6 +106,7 @@ https://harryzhang.cn/tags/%E4%BB%A4%E7%89%8C%E6%A1%B6/
 https://harryzhang.cn/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/
 https://harryzhang.cn/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/
 https://harryzhang.cn/categories/%E7%AE%97%E6%B3%95/
+https://harryzhang.cn/categories/Golang/
 https://harryzhang.cn/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/
 https://harryzhang.cn/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/
 https://harryzhang.cn/categories/%E7%BC%93%E5%AD%98/
