@@ -1599,7 +1599,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     debug: "env",
     cdn: {"js":{"app":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/app.js","parallax":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/parallax.js","rightMenu":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenu.js","rightMenus":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenus.js","sites":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/sites.js","friends":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/friends.js","contributors":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/contributors.js","search":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
     default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
-    lastupdate: new Date(1680429161732),
+    lastupdate: new Date(1680434952806),
     sidebar: {
       for_page: ["blogger","category","tagcloud","donate"],
       for_post: ["toc"],
@@ -2447,15 +2447,68 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </blockquote>
 <p><strong>思路</strong>：根据二叉搜索树的特点，左子树的所有节点值均小于根节点，右子树的所有节点值均大于根节点，同时对于每一个子树也要满足以上条件。1…n有序序列，假设对于每一个值i作为根节点，可以先求的[1，i - 1]构成的二叉搜索左子树，[i + 1, n]构成的二叉搜索右子树，然后从左右子树中各选一个作为当前根节点的左右子树。</p>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">generateTrees</span><span class="params">(n <span class="type">int</span>)</span></span> []*TreeNode &#123;</span><br><span class="line">	<span class="keyword">return</span> _generateTrees(<span class="number">1</span>, n)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> _<span class="title">generateTrees</span><span class="params">(start, end <span class="type">int</span>)</span></span> []*TreeNode &#123;</span><br><span class="line">	<span class="keyword">if</span> start &gt; end &#123;</span><br><span class="line">		<span class="keyword">return</span> []*TreeNode&#123;<span class="literal">nil</span>&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	res := []*TreeNode&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> i := start; i &lt;= end; i++ &#123;</span><br><span class="line">		left := _generateTrees(start, i - <span class="number">1</span>)</span><br><span class="line">		right := _generateTrees(i + <span class="number">1</span>, end)</span><br><span class="line">		<span class="keyword">for</span> _, l := <span class="keyword">range</span> left &#123;</span><br><span class="line">			<span class="keyword">for</span> _, r := <span class="keyword">range</span> right &#123;</span><br><span class="line">				tmp := &amp;TreeNode&#123;</span><br><span class="line">					Val: i,</span><br><span class="line">					Left: l,</span><br><span class="line">					Right: r,</span><br><span class="line">				&#125;</span><br><span class="line">				res = <span class="built_in">append</span>(res, tmp)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">func generateTrees(n int) []*TreeNode &#123;
+    return _generateTrees(1, n)
+&#125;
 
+func _generateTrees(start, end int) []*TreeNode &#123;
+    if start &gt; end &#123;
+        return []*TreeNode&#123;nil&#125;
+    &#125;
+    res := []*TreeNode&#123;&#125;
+    for i := start; i &lt;= end; i++ &#123;
+        left := _generateTrees(start, i - 1)
+        right := _generateTrees(i + 1, end)
+        for _, l := range left &#123;
+            for _, r := range right &#123;
+                tmp := &amp;TreeNode&#123;
+                    Val: i,
+                    Left: l,
+                    Right: r,
+                &#125;
+                res = append(res, tmp)
+            &#125;
+        &#125;
+    &#125;
+    return res
+&#125;
+</code></pre>
 <h2 id="5-2-为运算表达式设计优先级"><a href="#5-2-为运算表达式设计优先级" class="headerlink" title="5.2 为运算表达式设计优先级"></a>5.2 为运算表达式设计优先级</h2><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/different-ways-to-add-parentheses/">LeetCode No.241</a></p>
 <blockquote>
 <p>题目描述：给定一个含有数字和运算符的字符串，为表达式添加括号，改变其运算优先级以求出不同的结果。你需要给出所有可能的组合的结果。有效的运算符号包含 +, - 以及 * 。</p>
 </blockquote>
 <p><strong>思路</strong>：对于每个预算式形如x op y，其左右表达式也可以看做一个形如x op y的运算式，对左右两边的运算式的所有结果进行计算，就可以得到最终的结果。</p>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">diffWaysToCompute</span><span class="params">(expression <span class="type">string</span>)</span></span> []<span class="type">int</span> &#123;</span><br><span class="line">	num, err := strconv.Atoi(expression)</span><br><span class="line">	<span class="comment">// 如果为纯数字，直接返回数字</span></span><br><span class="line">	<span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> []<span class="type">int</span>&#123;num&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	res := []<span class="type">int</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> i, ch := <span class="keyword">range</span> expression &#123;</span><br><span class="line">		<span class="comment">// 跳过非运算符</span></span><br><span class="line">		<span class="keyword">if</span> ch != <span class="string">&#x27;+&#x27;</span> &amp;&amp; ch != <span class="string">&#x27;-&#x27;</span> &amp;&amp; ch != <span class="string">&#x27;*&#x27;</span> &#123;</span><br><span class="line">			<span class="keyword">continue</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 计算运算符左右两边子表达式的结果</span></span><br><span class="line">		left := diffWaysToCompute(expression[ : i])</span><br><span class="line">		right := diffWaysToCompute(expression[i + <span class="number">1</span> : ])</span><br><span class="line">		<span class="keyword">for</span> _, l := <span class="keyword">range</span> left &#123;</span><br><span class="line">			<span class="keyword">for</span> _, r := <span class="keyword">range</span> right &#123;</span><br><span class="line">				<span class="keyword">var</span> tmp <span class="type">int</span></span><br><span class="line">				<span class="keyword">switch</span> ch &#123;</span><br><span class="line">				<span class="keyword">case</span> <span class="string">&#x27;+&#x27;</span>: tmp = l + r</span><br><span class="line">				<span class="keyword">case</span> <span class="string">&#x27;-&#x27;</span>: tmp = l - r</span><br><span class="line">				<span class="keyword">case</span> <span class="string">&#x27;*&#x27;</span>: tmp = l * r</span><br><span class="line">				&#125;</span><br><span class="line">				res = <span class="built_in">append</span>(res, tmp)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">func diffWaysToCompute(expression string) []int &#123;
+    num, err := strconv.Atoi(expression)
+    // 如果为纯数字，直接返回数字
+    if err == nil &#123;
+        return []int&#123;num&#125;
+    &#125;
+    res := []int&#123;&#125;
+    for i, ch := range expression &#123;
+        // 跳过非运算符
+        if ch != &#39;+&#39; &amp;&amp; ch != &#39;-&#39; &amp;&amp; ch != &#39;*&#39; &#123;
+            continue
+        &#125;
+        // 计算运算符左右两边子表达式的结果
+        left := diffWaysToCompute(expression[ : i])
+        right := diffWaysToCompute(expression[i + 1 : ])
+        for _, l := range left &#123;
+            for _, r := range right &#123;
+                var tmp int
+                switch ch &#123;
+                case &#39;+&#39;: tmp = l + r
+                case &#39;-&#39;: tmp = l - r
+                case &#39;*&#39;: tmp = l * r
+                &#125;
+                res = append(res, tmp)
+            &#125;
+        &#125;
+    &#125;
+    return res
+&#125;
+</code></pre>
 
   </div>
   
@@ -2465,6 +2518,14 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
        <!-- 参考资料、相关资料等 -->
       
        <!-- 相关文章 -->
+      
+        
+  <div class="related_posts">
+    <section class='header'>
+      <i class="fa-solid fa-bookmark fa-fw" aria-hidden="true"></i><span>相关文章</span>
+    </section>
+    <section class='body'>
+      <div class="vlts-rps"><a class="item" href="/2023/03/19/数据结构-1-字符串/" title="数据结构(1): 字符串" rel="bookmark "><span class="title">数据结构(1): 字符串</span></a><a class="item" href="/2023/03/19/数据结构-2-数组/" title="数据结构(2): 数组" rel="bookmark "><span class="title">数据结构(2): 数组</span></a><a class="item" href="/2023/03/19/数据结构-4-树/" title="数据结构(4): 树" rel="bookmark "><span class="title">数据结构(4): 树</span></a><a class="item" href="/2023/03/19/数据结构-3-链表/" title="数据结构(3): 链表" rel="bookmark "><span class="title">数据结构(3): 链表</span></a><a class="item" href="/2023/03/19/算法-1-双指针/" title="算法(1): 双指针" rel="bookmark "><span class="title">算法(1): 双指针</span></a></div></section></div>
       
       <!-- 版权声明组件 -->
       
@@ -2973,6 +3034,17 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
   <script>
 
+  volantis.css("https://unpkg.com/highlight.js@11.7.0/styles/a11y-dark.css");
+
+
+  volantis.js("https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js").then(()=>{
+    volantis.requestAnimationFrame(hljs.highlightAll)
+  })
+  volantis.pjax.push(()=>{
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  },"highlightjs")
 
 
   function pjax_highlightjs_copyCode(){
@@ -2997,7 +3069,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
 
   <script>
-  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp"];
+  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp"];
   let index = 0;
   let IntervalParallax = null;
 

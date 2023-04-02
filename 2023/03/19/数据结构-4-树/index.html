@@ -42,7 +42,7 @@
 <meta property="og:title" content="数据结构(4): 树">
 <meta property="og:url" content="https://harryzhang.cn/2023/03/19/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-4-%E6%A0%91/index.html">
 <meta property="og:site_name" content="Harry 的个人空间">
-<meta property="og:description" content="4.1 根据前序与中序序列构造二叉树LeetCode No.105  问题描述：根据一棵树的前序遍历与中序遍历构造二叉树。  思路：根据二叉树的前序和中序（或后序和中序）的序列可唯一构造一棵二叉树，必须要有中序。前序遍历的第一个为根节点，找到根节点在中序中的位置，中序左边的节点都是根节点的左子树，右边的同理，然后可以用递归的方式求解。 示例代码： 1234567891011121314151617">
+<meta property="og:description" content="4.1 根据前序与中序序列构造二叉树LeetCode No.105  问题描述：根据一棵树的前序遍历与中序遍历构造二叉树。  思路：根据二叉树的前序和中序（或后序和中序）的序列可唯一构造一棵二叉树，必须要有中序。前序遍历的第一个为根节点，找到根节点在中序中的位置，中序左边的节点都是根节点的左子树，右边的同理，然后可以用递归的方式求解。 示例代码： type TreeNode struct &amp;#12">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
 <meta property="article:published_time" content="2023-03-19T13:36:55.000Z">
@@ -1600,7 +1600,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     debug: "env",
     cdn: {"js":{"app":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/app.js","parallax":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/parallax.js","rightMenu":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenu.js","rightMenus":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenus.js","sites":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/sites.js","friends":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/friends.js","contributors":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/contributors.js","search":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
     default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
-    lastupdate: new Date(1680429161732),
+    lastupdate: new Date(1680434952806),
     sidebar: {
       for_page: ["blogger","category","tagcloud","donate"],
       for_post: ["toc"],
@@ -2447,7 +2447,42 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </blockquote>
 <p><strong>思路</strong>：根据二叉树的前序和中序（或后序和中序）的序列可唯一构造一棵二叉树，必须要有中序。前序遍历的第一个为根节点，找到根节点在中序中的位置，中序左边的节点都是根节点的左子树，右边的同理，然后可以用递归的方式求解。</p>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> TreeNode <span class="keyword">struct</span> &#123;</span><br><span class="line">  Val <span class="type">int</span></span><br><span class="line">  Left *TreeNode</span><br><span class="line">  Right *TreeNode</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">index</span><span class="params">(nums []<span class="type">int</span>, val <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i, v := <span class="keyword">range</span> nums &#123;</span><br><span class="line">		<span class="keyword">if</span> v == val &#123;</span><br><span class="line">			<span class="keyword">return</span> i</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">buildTree</span><span class="params">(preorder []<span class="type">int</span>, inorder []<span class="type">int</span>)</span></span> *TreeNode &#123;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(preorder) == <span class="number">0</span> || <span class="built_in">len</span>(inorder) == <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(preorder) == <span class="number">1</span> || <span class="built_in">len</span>(inorder) == <span class="number">1</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> &amp;TreeNode&#123;</span><br><span class="line">			Val: preorder[<span class="number">0</span>],</span><br><span class="line">			Left: <span class="literal">nil</span>,</span><br><span class="line">			Right: <span class="literal">nil</span>,</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	val := preorder[<span class="number">0</span>]</span><br><span class="line">	pos := index(inorder, val)</span><br><span class="line">	root := &amp;TreeNode&#123;</span><br><span class="line">		Val: val,</span><br><span class="line">		Left: buildTree(preorder[<span class="number">1</span> : pos + <span class="number">1</span>], inorder[ : pos]),</span><br><span class="line">		Right: buildTree(preorder[pos + <span class="number">1</span> : ], inorder[pos + <span class="number">1</span>:]),</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> root</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">type TreeNode struct &#123;
+  Val int
+  Left *TreeNode
+  Right *TreeNode
+&#125;
+
+func index(nums []int, val int) int &#123;
+    for i, v := range nums &#123;
+        if v == val &#123;
+            return i
+        &#125;
+    &#125;
+    return -1
+&#125;
+
+func buildTree(preorder []int, inorder []int) *TreeNode &#123;
+    if len(preorder) == 0 || len(inorder) == 0 &#123;
+        return nil
+    &#125;
+    if len(preorder) == 1 || len(inorder) == 1 &#123;
+        return &amp;TreeNode&#123;
+            Val: preorder[0],
+            Left: nil,
+            Right: nil,
+        &#125;
+    &#125;
+    val := preorder[0]
+    pos := index(inorder, val)
+    root := &amp;TreeNode&#123;
+        Val: val,
+        Left: buildTree(preorder[1 : pos + 1], inorder[ : pos]),
+        Right: buildTree(preorder[pos + 1 : ], inorder[pos + 1:]),
+    &#125;
+    return root
+&#125;
+</code></pre>
 
   </div>
   
@@ -2457,6 +2492,14 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
        <!-- 参考资料、相关资料等 -->
       
        <!-- 相关文章 -->
+      
+        
+  <div class="related_posts">
+    <section class='header'>
+      <i class="fa-solid fa-bookmark fa-fw" aria-hidden="true"></i><span>相关文章</span>
+    </section>
+    <section class='body'>
+      <div class="vlts-rps"><a class="item" href="/2023/03/19/数据结构-1-字符串/" title="数据结构(1): 字符串" rel="bookmark "><span class="title">数据结构(1): 字符串</span></a><a class="item" href="/2023/03/19/数据结构-2-数组/" title="数据结构(2): 数组" rel="bookmark "><span class="title">数据结构(2): 数组</span></a><a class="item" href="/2023/03/19/数据结构-3-链表/" title="数据结构(3): 链表" rel="bookmark "><span class="title">数据结构(3): 链表</span></a><a class="item" href="/2023/03/19/数据结构-5-栈-队列-堆/" title="数据结构(5): 栈|队列|堆" rel="bookmark "><span class="title">数据结构(5): 栈|队列|堆</span></a><a class="item" href="/2023/04/02/数据结构-6-单调栈/" title="数据结构（6）: 单调栈" rel="bookmark "><span class="title">数据结构（6）: 单调栈</span></a></div></section></div>
       
       <!-- 版权声明组件 -->
       
@@ -2963,6 +3006,17 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
   <script>
 
+  volantis.css("https://unpkg.com/highlight.js@11.7.0/styles/a11y-dark.css");
+
+
+  volantis.js("https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js").then(()=>{
+    volantis.requestAnimationFrame(hljs.highlightAll)
+  })
+  volantis.pjax.push(()=>{
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  },"highlightjs")
 
 
   function pjax_highlightjs_copyCode(){
@@ -2987,7 +3041,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
 
   <script>
-  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp"];
+  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp"];
   let index = 0;
   let IntervalParallax = null;
 

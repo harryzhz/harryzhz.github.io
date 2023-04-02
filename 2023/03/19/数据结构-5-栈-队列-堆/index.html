@@ -1601,7 +1601,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     debug: "env",
     cdn: {"js":{"app":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/app.js","parallax":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/parallax.js","rightMenu":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenu.js","rightMenus":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenus.js","sites":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/sites.js","friends":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/friends.js","contributors":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/contributors.js","search":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
     default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
-    lastupdate: new Date(1680429161732),
+    lastupdate: new Date(1680434952806),
     sidebar: {
       for_page: ["blogger","category","tagcloud","donate"],
       for_post: ["toc"],
@@ -2452,32 +2452,254 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>pop时如果头栈为空则将尾栈全部“倒入”头栈，如果头栈不为空取出栈顶元素返回，否则返回失败（此时队列为空）。</li>
 </ul>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> MyQueue <span class="keyword">struct</span> &#123;</span><br><span class="line">	stack_head []<span class="type">int</span></span><br><span class="line">	stack_tail []<span class="type">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/** Initialize your data structure here. */</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Constructor</span><span class="params">()</span></span> MyQueue &#123;</span><br><span class="line">	<span class="keyword">return</span> MyQueue&#123;</span><br><span class="line">		stack_head: <span class="built_in">make</span>([]<span class="type">int</span>, <span class="number">0</span>),</span><br><span class="line">		stack_tail: <span class="built_in">make</span>([]<span class="type">int</span>, <span class="number">0</span>),</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/** Push element x to the back of queue. */</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(this *MyQueue)</span></span> Push(x <span class="type">int</span>)  &#123;</span><br><span class="line">	this.stack_tail = <span class="built_in">append</span>(this.stack_tail, x)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span><span class="params">(this *MyQueue)</span></span> tail2head()  &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="built_in">len</span>(this.stack_tail) - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i-- &#123;</span><br><span class="line">		this.stack_head = <span class="built_in">append</span>(this.stack_head, this.stack_tail[i])</span><br><span class="line">		this.stack_tail = this.stack_tail[:<span class="built_in">len</span>(this.stack_tail) - <span class="number">1</span>]</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Removes the element from in front of queue and returns that element. */</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(this *MyQueue)</span></span> Pop() <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(this.stack_head) == <span class="number">0</span> &#123;</span><br><span class="line">		this.tail2head()</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(this.stack_head) &gt; <span class="number">0</span> &#123;</span><br><span class="line">		r := this.stack_head[<span class="built_in">len</span>(this.stack_head) - <span class="number">1</span>]</span><br><span class="line">		this.stack_head = this.stack_head[:<span class="built_in">len</span>(this.stack_head) - <span class="number">1</span>]</span><br><span class="line">		<span class="keyword">return</span> r</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/** Get the front element. */</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(this *MyQueue)</span></span> Peek() <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(this.stack_head) == <span class="number">0</span> &#123;</span><br><span class="line">		this.tail2head()</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(this.stack_head) &gt; <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> this.stack_head[<span class="built_in">len</span>(this.stack_head) - <span class="number">1</span>]</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/** Returns whether the queue is empty. */</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(this *MyQueue)</span></span> Empty() <span class="type">bool</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">len</span>(this.stack_head) == <span class="number">0</span> &amp;&amp; <span class="built_in">len</span>(this.stack_tail) == <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">type MyQueue struct &#123;
+    stack_head []int
+    stack_tail []int
+&#125;
 
+
+/** Initialize your data structure here. */
+func Constructor() MyQueue &#123;
+    return MyQueue&#123;
+        stack_head: make([]int, 0),
+        stack_tail: make([]int, 0),
+    &#125;
+&#125;
+
+
+/** Push element x to the back of queue. */
+func (this *MyQueue) Push(x int)  &#123;
+    this.stack_tail = append(this.stack_tail, x)
+&#125;
+
+func(this *MyQueue) tail2head()  &#123;
+    for i := len(this.stack_tail) - 1; i &gt;= 0; i-- &#123;
+        this.stack_head = append(this.stack_head, this.stack_tail[i])
+        this.stack_tail = this.stack_tail[:len(this.stack_tail) - 1]
+    &#125;
+&#125;
+
+/** Removes the element from in front of queue and returns that element. */
+func (this *MyQueue) Pop() int &#123;
+    if len(this.stack_head) == 0 &#123;
+        this.tail2head()
+    &#125;
+    if len(this.stack_head) &gt; 0 &#123;
+        r := this.stack_head[len(this.stack_head) - 1]
+        this.stack_head = this.stack_head[:len(this.stack_head) - 1]
+        return r
+    &#125;
+    return -1
+&#125;
+
+
+/** Get the front element. */
+func (this *MyQueue) Peek() int &#123;
+    if len(this.stack_head) == 0 &#123;
+        this.tail2head()
+    &#125;
+    if len(this.stack_head) &gt; 0 &#123;
+        return this.stack_head[len(this.stack_head) - 1]
+    &#125;
+    return -1
+&#125;
+
+
+/** Returns whether the queue is empty. */
+func (this *MyQueue) Empty() bool &#123;
+    return len(this.stack_head) == 0 &amp;&amp; len(this.stack_tail) == 0
+&#125;
+</code></pre>
 <h3 id="6-1-2-逆波兰表达式求值"><a href="#6-1-2-逆波兰表达式求值" class="headerlink" title="6.1.2 逆波兰表达式求值"></a>6.1.2 逆波兰表达式求值</h3><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/evaluate-reverse-polish-notation/">LeetCode No.150</a></p>
 <blockquote>
 <p>问题描述：根据<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E9%80%86%E6%B3%A2%E5%85%B0%E5%BC%8F/128437"> 逆波兰表示法</a>，求表达式的值。<br>有效的运算符包括 <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code> 。每个运算对象可以是整数，也可以是另一个逆波兰表达式。<br>输入: [“2”, “1”, “+”, “3”, “*”]<br>输出: 9<br>解释: 该算式转化为常见的中缀算术表达式为：((2 + 1) * 3) &#x3D; 9</p>
 </blockquote>
 <p><strong>思路</strong>：借助一个栈，如果是数值就入栈，如果是运算符就从栈顶取出两个元素计算，然后将结果入栈，最后栈中只剩一个元素就是结果。</p>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">operate</span><span class="params">(x, y <span class="type">int</span>, op <span class="type">string</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">switch</span> op &#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="string">&quot;+&quot;</span>: <span class="keyword">return</span> x + y</span><br><span class="line">	<span class="keyword">case</span> <span class="string">&quot;-&quot;</span>: <span class="keyword">return</span> x - y</span><br><span class="line">	<span class="keyword">case</span> <span class="string">&quot;*&quot;</span>: <span class="keyword">return</span> x * y</span><br><span class="line">	<span class="keyword">case</span> <span class="string">&quot;/&quot;</span>: <span class="keyword">return</span> x / y</span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">evalRPN</span><span class="params">(tokens []<span class="type">string</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	stack := []<span class="type">int</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(tokens); i++ &#123;</span><br><span class="line">		<span class="keyword">switch</span> tokens[i] &#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="string">&quot;+&quot;</span>, <span class="string">&quot;-&quot;</span>, <span class="string">&quot;*&quot;</span>, <span class="string">&quot;/&quot;</span>:</span><br><span class="line">			cur := operate(stack[<span class="built_in">len</span>(stack) - <span class="number">2</span>], stack[<span class="built_in">len</span>(stack) - <span class="number">1</span>], tokens[i])</span><br><span class="line">			stack = stack[:<span class="built_in">len</span>(stack) - <span class="number">1</span>]</span><br><span class="line">			stack[<span class="built_in">len</span>(stack) - <span class="number">1</span>] = cur</span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			num, _ := strconv.Atoi(tokens[i])</span><br><span class="line">			stack = <span class="built_in">append</span>(stack, num)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> stack[<span class="number">0</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">func operate(x, y int, op string) int &#123;
+    switch op &#123;
+    case &quot;+&quot;: return x + y
+    case &quot;-&quot;: return x - y
+    case &quot;*&quot;: return x * y
+    case &quot;/&quot;: return x / y
+    default:
+        return 0
+    &#125;
+&#125;
 
+func evalRPN(tokens []string) int &#123;
+    stack := []int&#123;&#125;
+    for i := 0; i &lt; len(tokens); i++ &#123;
+        switch tokens[i] &#123;
+        case &quot;+&quot;, &quot;-&quot;, &quot;*&quot;, &quot;/&quot;:
+            cur := operate(stack[len(stack) - 2], stack[len(stack) - 1], tokens[i])
+            stack = stack[:len(stack) - 1]
+            stack[len(stack) - 1] = cur
+        default:
+            num, _ := strconv.Atoi(tokens[i])
+            stack = append(stack, num)
+        &#125;
+    &#125;
+    return stack[0]
+&#125;
+</code></pre>
 <h3 id="6-1-3-中缀表达式生成逆波兰表达式"><a href="#6-1-3-中缀表达式生成逆波兰表达式" class="headerlink" title="6.1.3 中缀表达式生成逆波兰表达式"></a>6.1.3 中缀表达式生成逆波兰表达式</h3><ul>
 <li>借助一个符号栈和结果队列，具体过程见代码注释</li>
 </ul>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">is_operation</span><span class="params">(b <span class="type">byte</span>)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> b == <span class="string">&#x27;+&#x27;</span> || b == <span class="string">&#x27;-&#x27;</span> || b == <span class="string">&#x27;*&#x27;</span> || b == <span class="string">&#x27;/&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">compare_priority</span><span class="params">(a, b <span class="type">byte</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> (a == <span class="string">&#x27;+&#x27;</span> || a == <span class="string">&#x27;-&#x27;</span>) &amp;&amp; (b == <span class="string">&#x27;*&#x27;</span> || b == <span class="string">&#x27;/&#x27;</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (b == <span class="string">&#x27;+&#x27;</span> || b == <span class="string">&#x27;-&#x27;</span>) &amp;&amp; (a == <span class="string">&#x27;*&#x27;</span> || a == <span class="string">&#x27;/&#x27;</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">toRPN</span><span class="params">(s <span class="type">string</span>)</span></span> []<span class="type">string</span> &#123;</span><br><span class="line">	<span class="comment">// 运算符栈</span></span><br><span class="line">	ops_stack := []<span class="type">byte</span>&#123;&#125;</span><br><span class="line">	<span class="comment">// 结果队列</span></span><br><span class="line">	res_queue := []<span class="type">string</span>&#123;&#125;</span><br><span class="line">	n := <span class="built_in">len</span>(s)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; n; i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> s[i] == <span class="string">&#x27;(&#x27;</span> &#123;</span><br><span class="line">			<span class="comment">// 遇到左括号直接入栈</span></span><br><span class="line">			ops_stack = <span class="built_in">append</span>(ops_stack, s[i])</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> s[i] == <span class="string">&#x27;)&#x27;</span> &#123;</span><br><span class="line">			<span class="comment">// 遇到右括号，则将栈中的运算符依次弹出加入到结果队列，直到碰到左括号，然后将这对括号丢弃</span></span><br><span class="line">			<span class="keyword">for</span> ops_stack[<span class="built_in">len</span>(ops_stack) - <span class="number">1</span>] != <span class="string">&#x27;(&#x27;</span> &#123;</span><br><span class="line">				res_queue = <span class="built_in">append</span>(res_queue, <span class="type">string</span>(ops_stack[<span class="built_in">len</span>(ops_stack) - <span class="number">1</span>]))</span><br><span class="line">				ops_stack = ops_stack[:<span class="built_in">len</span>(ops_stack) - <span class="number">1</span>]</span><br><span class="line">			&#125;</span><br><span class="line">			ops_stack = ops_stack[:<span class="built_in">len</span>(ops_stack) - <span class="number">1</span>]</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> is_operation(s[i]) &#123;</span><br><span class="line">			<span class="comment">// 遇到运算符，当前运算符的优先级小于等于栈顶运算符的优先级，则依次将栈顶弹出加入到结果队列</span></span><br><span class="line">			<span class="keyword">for</span> <span class="built_in">len</span>(ops_stack) &gt; <span class="number">0</span> &amp;&amp; is_operation(ops_stack[<span class="built_in">len</span>(ops_stack) - <span class="number">1</span>]) &amp;&amp;</span><br><span class="line">				compare_priority(s[i], ops_stack[<span class="built_in">len</span>(ops_stack) - <span class="number">1</span>]) &lt;= <span class="number">0</span> &#123;</span><br><span class="line">				res_queue = <span class="built_in">append</span>(res_queue, <span class="type">string</span>(ops_stack[<span class="built_in">len</span>(ops_stack) - <span class="number">1</span>]))</span><br><span class="line">				ops_stack = ops_stack[:<span class="built_in">len</span>(ops_stack) - <span class="number">1</span>]</span><br><span class="line">			&#125;</span><br><span class="line">			ops_stack = <span class="built_in">append</span>(ops_stack, s[i])</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> s[i] == <span class="string">&#x27; &#x27;</span> &#123;</span><br><span class="line">			<span class="comment">// 跳过空字符</span></span><br><span class="line">			<span class="keyword">continue</span></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="comment">// 遇到数字加入到结果队列</span></span><br><span class="line">			num := <span class="number">0</span></span><br><span class="line">			<span class="keyword">for</span> ; i &lt; n &amp;&amp; s[i] &gt;= <span class="string">&#x27;0&#x27;</span> &amp;&amp; s[i] &lt;= <span class="string">&#x27;9&#x27;</span>; i++ &#123;</span><br><span class="line">				num = num * <span class="number">10</span> + <span class="type">int</span>(s[i] - <span class="string">&#x27;0&#x27;</span>)</span><br><span class="line">			&#125;</span><br><span class="line">			i--</span><br><span class="line">			res_queue = <span class="built_in">append</span>(res_queue, strconv.Itoa(num))</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 运算符栈中剩余的元素弹出添加到结果队列</span></span><br><span class="line">	<span class="keyword">for</span> <span class="built_in">len</span>(ops_stack) &gt; <span class="number">0</span> &#123;</span><br><span class="line">		res_queue = <span class="built_in">append</span>(res_queue, <span class="type">string</span>(ops_stack[<span class="built_in">len</span>(ops_stack) - <span class="number">1</span>]))</span><br><span class="line">		ops_stack = ops_stack[:<span class="built_in">len</span>(ops_stack) - <span class="number">1</span>]</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res_queue</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">func is_operation(b byte) bool &#123;
+    return b == &#39;+&#39; || b == &#39;-&#39; || b == &#39;*&#39; || b == &#39;/&#39;
+&#125;
 
+func compare_priority(a, b byte) int &#123;
+    if (a == &#39;+&#39; || a == &#39;-&#39;) &amp;&amp; (b == &#39;*&#39; || b == &#39;/&#39;) &#123;
+        return -1
+    &#125; else if (b == &#39;+&#39; || b == &#39;-&#39;) &amp;&amp; (a == &#39;*&#39; || a == &#39;/&#39;) &#123;
+        return 1
+    &#125; else &#123;
+        return 0
+    &#125;
+&#125;
+
+func toRPN(s string) []string &#123;
+    // 运算符栈
+    ops_stack := []byte&#123;&#125;
+    // 结果队列
+    res_queue := []string&#123;&#125;
+    n := len(s)
+    for i := 0; i &lt; n; i++ &#123;
+        if s[i] == &#39;(&#39; &#123;
+            // 遇到左括号直接入栈
+            ops_stack = append(ops_stack, s[i])
+        &#125; else if s[i] == &#39;)&#39; &#123;
+            // 遇到右括号，则将栈中的运算符依次弹出加入到结果队列，直到碰到左括号，然后将这对括号丢弃
+            for ops_stack[len(ops_stack) - 1] != &#39;(&#39; &#123;
+                res_queue = append(res_queue, string(ops_stack[len(ops_stack) - 1]))
+                ops_stack = ops_stack[:len(ops_stack) - 1]
+            &#125;
+            ops_stack = ops_stack[:len(ops_stack) - 1]
+        &#125; else if is_operation(s[i]) &#123;
+            // 遇到运算符，当前运算符的优先级小于等于栈顶运算符的优先级，则依次将栈顶弹出加入到结果队列
+            for len(ops_stack) &gt; 0 &amp;&amp; is_operation(ops_stack[len(ops_stack) - 1]) &amp;&amp;
+                compare_priority(s[i], ops_stack[len(ops_stack) - 1]) &lt;= 0 &#123;
+                res_queue = append(res_queue, string(ops_stack[len(ops_stack) - 1]))
+                ops_stack = ops_stack[:len(ops_stack) - 1]
+            &#125;
+            ops_stack = append(ops_stack, s[i])
+        &#125; else if s[i] == &#39; &#39; &#123;
+            // 跳过空字符
+            continue
+        &#125; else &#123;
+            // 遇到数字加入到结果队列
+            num := 0
+            for ; i &lt; n &amp;&amp; s[i] &gt;= &#39;0&#39; &amp;&amp; s[i] &lt;= &#39;9&#39;; i++ &#123;
+                num = num * 10 + int(s[i] - &#39;0&#39;)
+            &#125;
+            i--
+            res_queue = append(res_queue, strconv.Itoa(num))
+        &#125;
+    &#125;
+    // 运算符栈中剩余的元素弹出添加到结果队列
+    for len(ops_stack) &gt; 0 &#123;
+        res_queue = append(res_queue, string(ops_stack[len(ops_stack) - 1]))
+        ops_stack = ops_stack[:len(ops_stack) - 1]
+    &#125;
+    return res_queue
+&#125;
+</code></pre>
 <h2 id="6-2-堆"><a href="#6-2-堆" class="headerlink" title="6.2 堆"></a>6.2 堆</h2><p><strong>定义：</strong>最大堆的堆顶为最大元素，最小堆同理</p>
 <h3 id="6-2-1-Golang实现堆类型"><a href="#6-2-1-Golang实现堆类型" class="headerlink" title="6.2.1 Golang实现堆类型"></a>6.2.1 Golang实现堆类型</h3><p>因为go本身没有实现堆类型，只提供了接口，使用时必须实现堆接口才能使用对应的堆方法，所以自己用golang的container&#x2F;heap接口实现一个通用的堆类型，创建堆需要一个比较函数作为参数<br><code>实现代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 比较函数类型</span></span><br><span class="line"><span class="keyword">type</span> Comparator <span class="function"><span class="keyword">func</span><span class="params">(a, b <span class="keyword">interface</span>&#123;&#125;)</span></span> <span class="type">bool</span></span><br><span class="line"><span class="comment">// 堆元素类型</span></span><br><span class="line"><span class="keyword">type</span> Elements <span class="keyword">struct</span> &#123;</span><br><span class="line">	es   []<span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">	cmp Comparator</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 堆类型</span></span><br><span class="line"><span class="keyword">type</span> Heap <span class="keyword">struct</span> &#123;</span><br><span class="line">	elements *Elements</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建堆</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewHeap</span><span class="params">(cmp Comparator)</span></span> *Heap &#123;</span><br><span class="line">	<span class="keyword">return</span> &amp;Heap&#123;</span><br><span class="line">		elements: &amp;Elements&#123;</span><br><span class="line">			es: <span class="built_in">make</span>([]<span class="keyword">interface</span>&#123;&#125;, <span class="number">0</span>),</span><br><span class="line">			cmp: cmp,</span><br><span class="line">		&#125;,</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 堆元素实现了container/heap接口</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e Elements)</span></span> Len() <span class="type">int</span> &#123; <span class="keyword">return</span> <span class="built_in">len</span>(e.es) &#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e Elements)</span></span> Less(i, j <span class="type">int</span>) <span class="type">bool</span> &#123; <span class="keyword">return</span> e.cmp(e.es[i], e.es[j]) &#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e Elements)</span></span> Swap(i, j <span class="type">int</span>)      &#123; e.es[i], e.es[j] = e.es[j], e.es[i] &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e *Elements)</span></span> Push(item <span class="keyword">interface</span>&#123;&#125;) &#123; e.es = <span class="built_in">append</span>(e.es, item) &#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e *Elements)</span></span> Pop() <span class="keyword">interface</span>&#123;&#125; &#123;</span><br><span class="line">	length := <span class="built_in">len</span>(e.es)</span><br><span class="line">	<span class="keyword">if</span> length == <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line">	top := e.es[length - <span class="number">1</span>]</span><br><span class="line">	e.es = e.es[:length - <span class="number">1</span>]</span><br><span class="line">	<span class="keyword">return</span> top</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 入堆</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(h *Heap)</span></span> Push(i <span class="keyword">interface</span>&#123;&#125;) &#123;</span><br><span class="line">	heap.Push(h.elements, i)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 堆顶元素出堆</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(h *Heap)</span></span> Pop() <span class="keyword">interface</span>&#123;&#125; &#123;</span><br><span class="line">	<span class="keyword">return</span> heap.Pop(h.elements)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 查看堆顶元素</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(h Heap)</span></span> Top() <span class="keyword">interface</span>&#123;&#125; &#123;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(h.elements.es) == <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> h.elements.es[<span class="number">0</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取堆大小</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(h Heap)</span></span> Len() <span class="type">int</span>  &#123;</span><br><span class="line">	<span class="keyword">return</span> h.elements.Len()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">CompareInt</span><span class="params">(a, b <span class="keyword">interface</span>&#123;&#125;)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> a.(<span class="type">int</span>) &gt; b.(<span class="type">int</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">// 比较函数类型
+type Comparator func(a, b interface&#123;&#125;) bool
+// 堆元素类型
+type Elements struct &#123;
+    es   []interface&#123;&#125;
+    cmp Comparator
+&#125;
+// 堆类型
+type Heap struct &#123;
+    elements *Elements
+&#125;
+
+// 创建堆
+func NewHeap(cmp Comparator) *Heap &#123;
+    return &amp;Heap&#123;
+        elements: &amp;Elements&#123;
+            es: make([]interface&#123;&#125;, 0),
+            cmp: cmp,
+        &#125;,
+    &#125;
+&#125;
+
+// 堆元素实现了container/heap接口
+func (e Elements) Len() int &#123; return len(e.es) &#125;
+func (e Elements) Less(i, j int) bool &#123; return e.cmp(e.es[i], e.es[j]) &#125;
+func (e Elements) Swap(i, j int)      &#123; e.es[i], e.es[j] = e.es[j], e.es[i] &#125;
+
+func (e *Elements) Push(item interface&#123;&#125;) &#123; e.es = append(e.es, item) &#125;
+func (e *Elements) Pop() interface&#123;&#125; &#123;
+    length := len(e.es)
+    if length == 0 &#123;
+        return nil
+    &#125;
+    top := e.es[length - 1]
+    e.es = e.es[:length - 1]
+    return top
+&#125;
+
+// 入堆
+func (h *Heap) Push(i interface&#123;&#125;) &#123;
+    heap.Push(h.elements, i)
+&#125;
+
+// 堆顶元素出堆
+func (h *Heap) Pop() interface&#123;&#125; &#123;
+    return heap.Pop(h.elements)
+&#125;
+
+// 查看堆顶元素
+func (h Heap) Top() interface&#123;&#125; &#123;
+    if len(h.elements.es) == 0 &#123;
+        return nil
+    &#125;
+    return h.elements.es[0]
+&#125;
+
+// 获取堆大小
+func (h Heap) Len() int  &#123;
+    return h.elements.Len()
+&#125;
+
+func CompareInt(a, b interface&#123;&#125;) bool &#123;
+    if a.(int) &gt; b.(int) &#123;
+        return true
+    &#125;
+    return false
+&#125;
+</code></pre>
 <h3 id="6-2-2-数组中的第K个最大元素"><a href="#6-2-2-数组中的第K个最大元素" class="headerlink" title="6.2.2 数组中的第K个最大元素"></a>6.2.2 数组中的第K个最大元素</h3><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/kth-largest-element-in-an-array/">LeetCode No.215</a></p>
 <blockquote>
 <p>问题描述：在未排序的数组中找到第 k 个最大的元素。请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素<br>输入: [3,2,1,5,6,4] 和 k &#x3D; 2<br>输出: 5</p>
 </blockquote>
 <p><strong>思路</strong>：使用最小堆，首先将前k个元素加入堆作为目前的最大的k个元素，然后遍历剩下的n-k个元素，如果堆顶元素比当前元素小，取出堆顶，将当前元素加入堆。最后堆顶的元素即为第k大的元素。<br><strong>时间复杂度</strong>：O(n*log(n))<br><strong>空间复杂度</strong>：O(k)</p>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">findKthLargest</span><span class="params">(nums []<span class="type">int</span>, k <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	heap1:= NewHeap(CompareInt)</span><br><span class="line">	<span class="comment">// 前k个元素建立大小为k的小顶堆</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; k; i++ &#123;</span><br><span class="line">		heap1.Push(nums[i])</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 遍历剩余的元素更新堆</span></span><br><span class="line">	<span class="keyword">for</span> i := k; i &lt; <span class="built_in">len</span>(nums); i++ &#123;</span><br><span class="line">		top := heap1.Top().(<span class="type">int</span>)</span><br><span class="line">		<span class="keyword">if</span> top &gt; nums[i] &#123;</span><br><span class="line">			heap1.Pop()</span><br><span class="line">			heap1.Push(nums[i])</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> heap1.Top().(<span class="type">int</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">func findKthLargest(nums []int, k int) int &#123;
+    heap1:= NewHeap(CompareInt)
+    // 前k个元素建立大小为k的小顶堆
+    for i := 0; i &lt; k; i++ &#123;
+        heap1.Push(nums[i])
+    &#125;
+    // 遍历剩余的元素更新堆
+    for i := k; i &lt; len(nums); i++ &#123;
+        top := heap1.Top().(int)
+        if top &gt; nums[i] &#123;
+            heap1.Pop()
+            heap1.Push(nums[i])
+        &#125;
+    &#125;
+    return heap1.Top().(int)
+&#125;
+</code></pre>
 
   </div>
   
@@ -2487,6 +2709,14 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
        <!-- 参考资料、相关资料等 -->
       
        <!-- 相关文章 -->
+      
+        
+  <div class="related_posts">
+    <section class='header'>
+      <i class="fa-solid fa-bookmark fa-fw" aria-hidden="true"></i><span>相关文章</span>
+    </section>
+    <section class='body'>
+      <div class="vlts-rps"><a class="item" href="/2023/03/19/数据结构-1-字符串/" title="数据结构(1): 字符串" rel="bookmark "><span class="title">数据结构(1): 字符串</span></a><a class="item" href="/2023/03/19/数据结构-2-数组/" title="数据结构(2): 数组" rel="bookmark "><span class="title">数据结构(2): 数组</span></a><a class="item" href="/2023/03/19/数据结构-4-树/" title="数据结构(4): 树" rel="bookmark "><span class="title">数据结构(4): 树</span></a><a class="item" href="/2023/03/19/数据结构-3-链表/" title="数据结构(3): 链表" rel="bookmark "><span class="title">数据结构(3): 链表</span></a><a class="item" href="/2023/04/02/数据结构-6-单调栈/" title="数据结构（6）: 单调栈" rel="bookmark "><span class="title">数据结构（6）: 单调栈</span></a></div></section></div>
       
       <!-- 版权声明组件 -->
       
@@ -2996,6 +3226,17 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
   <script>
 
+  volantis.css("https://unpkg.com/highlight.js@11.7.0/styles/a11y-dark.css");
+
+
+  volantis.js("https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js").then(()=>{
+    volantis.requestAnimationFrame(hljs.highlightAll)
+  })
+  volantis.pjax.push(()=>{
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  },"highlightjs")
 
 
   function pjax_highlightjs_copyCode(){
@@ -3020,7 +3261,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
 
   <script>
-  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp"];
+  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp"];
   let index = 0;
   let IntervalParallax = null;
 

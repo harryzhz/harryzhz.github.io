@@ -1599,7 +1599,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     debug: "env",
     cdn: {"js":{"app":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/app.js","parallax":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/parallax.js","rightMenu":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenu.js","rightMenus":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenus.js","sites":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/sites.js","friends":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/friends.js","contributors":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/contributors.js","search":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
     default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
-    lastupdate: new Date(1680429161732),
+    lastupdate: new Date(1680434952806),
     sidebar: {
       for_page: ["blogger","category","tagcloud","donate"],
       for_post: ["toc"],
@@ -2518,7 +2518,16 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <p>这两种方法都不支持范围查找，都会产生额外的cpu计算消耗，hash字段的查询性能更稳定，crc32计算的值冲突概率非常小。</p>
 <h2 id="独立索引"><a href="#独立索引" class="headerlink" title="独立索引"></a>独立索引</h2><p>必须是独立的索引字段才能用到索引，在索引上使用函数、表达式都会导致不能使用索引树搜索，从而导致慢查询。</p>
 <h3 id="CASE1：在索引上使用函数"><a href="#CASE1：在索引上使用函数" class="headerlink" title="CASE1：在索引上使用函数"></a>CASE1：在索引上使用函数</h3><p>建表语句如下：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `tradelog` (</span><br><span class="line">  `id` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `tradeid` <span class="type">varchar</span>(<span class="number">32</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `operator` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `t_modified` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> KEY (`id`),</span><br><span class="line">  KEY `tradeid` (`tradeid`),</span><br><span class="line">  KEY `t_modified` (`t_modified`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8mb4;</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">CREATE TABLE `tradelog` (
+  `id` int(11) NOT NULL,
+  `tradeid` varchar(32) DEFAULT NULL,
+  `operator` int(11) DEFAULT NULL,
+  `t_modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `tradeid` (`tradeid`),
+  KEY `t_modified` (`t_modified`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+</code></pre>
 <p>如果要查询几年内某个月的交易总数，查询语句可能如下：<br><code>select count(*) from tradelog where month(t_modified)=7;</code><br>索引上使用函数可能会导致其失去有序性，从而不能使用树搜索（不代表使用索引，可以在索引上遍历），即使没有改变索引的有序性优化器还是不能用索引快速查找，所以要避免这种写法。</p>
 <h3 id="CASE2：隐式类型转换"><a href="#CASE2：隐式类型转换" class="headerlink" title="CASE2：隐式类型转换"></a>CASE2：隐式类型转换</h3><p>假如有如下语句：<br><code>select * from tradelog where tradeid=110717;</code><br>tradeid字段是varchar类型，如果要和数字作比较会将其转换为数字类型，对于优化器来说上述语句相当于:<br><code>select * from tradelog where  CAST(tradid AS signed int) = 110717;</code><br>可以看到隐式的在索引字段上使用了函数，从而导致不能使用树搜索。</p>
 <h3 id="CASE3：隐式编码转换"><a href="#CASE3：隐式编码转换" class="headerlink" title="CASE3：隐式编码转换"></a>CASE3：隐式编码转换</h3><p>如果在做连表查询是，驱动表和被驱动表的字段编码类型不一致，会导致索引不能使用树搜索。</p>
@@ -2532,6 +2541,14 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
        <!-- 参考资料、相关资料等 -->
       
        <!-- 相关文章 -->
+      
+        
+  <div class="related_posts">
+    <section class='header'>
+      <i class="fa-solid fa-bookmark fa-fw" aria-hidden="true"></i><span>相关文章</span>
+    </section>
+    <section class='body'>
+      <div class="vlts-rps"><a class="item" href="/2023/03/25/MySQL-ORDER-BY-如何实现排序的/" title="MySQL ORDER BY 如何实现排序的?" rel="bookmark "><span class="title">MySQL ORDER BY 如何实现排序的?</span></a><a class="item" href="/2023/03/25/MySQL-中一条-SQL-语句是如何执行的？/" title="MySQL 中一条 SQL 语句是如何执行的？" rel="bookmark "><span class="title">MySQL 中一条 SQL 语句是如何执行的？</span></a><a class="item" href="/2023/03/25/MySQL-和-NoSQL基础知识概述/" title="MySQL 和 NoSQL基础知识概述" rel="bookmark "><span class="title">MySQL 和 NoSQL基础知识概述</span></a><a class="item" href="/2023/03/25/MySQL-脏页刷盘/" title="MySQL 脏页刷盘" rel="bookmark "><span class="title">MySQL 脏页刷盘</span></a><a class="item" href="/2023/03/25/MySQL-连接错误问题解决/" title="MySQL 连接错误问题解决" rel="bookmark "><span class="title">MySQL 连接错误问题解决</span></a></div></section></div>
       
       <!-- 版权声明组件 -->
       
@@ -3036,6 +3053,17 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
   <script>
 
+  volantis.css("https://unpkg.com/highlight.js@11.7.0/styles/a11y-dark.css");
+
+
+  volantis.js("https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js").then(()=>{
+    volantis.requestAnimationFrame(hljs.highlightAll)
+  })
+  volantis.pjax.push(()=>{
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  },"highlightjs")
 
 
   function pjax_highlightjs_copyCode(){
@@ -3060,7 +3088,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
 
   <script>
-  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp"];
+  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp"];
   let index = 0;
   let IntervalParallax = null;
 

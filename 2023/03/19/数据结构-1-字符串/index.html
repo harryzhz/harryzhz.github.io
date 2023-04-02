@@ -42,7 +42,7 @@
 <meta property="og:title" content="数据结构(1): 字符串">
 <meta property="og:url" content="https://harryzhang.cn/2023/03/19/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-1-%E5%AD%97%E7%AC%A6%E4%B8%B2/index.html">
 <meta property="og:site_name" content="Harry 的个人空间">
-<meta property="og:description" content="1.1 字符串移位 问题：将字符的前k个字符移到字符串结尾。Input：“abcde”，2Output：“cdeab”  三步翻转法： 将字符串分为前k位和后（n-k）位两部分，将两部分分别翻转，最后再整体翻转即可。时间复杂度：T &#x3D; O(n)参考原文  示例代码： 1234567891011121314151617&#x2F;&#x2F; 反转字符串func reverse(s string) strin">
+<meta property="og:description" content="1.1 字符串移位 问题：将字符的前k个字符移到字符串结尾。Input：“abcde”，2Output：“cdeab”  三步翻转法： 将字符串分为前k位和后（n-k）位两部分，将两部分分别翻转，最后再整体翻转即可。时间复杂度：T &#x3D; O(n)参考原文  示例代码： &#x2F;&#x2F; 反转字符串 func reverse(s string) string &amp;#123;     runes :&#x3D; []">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
 <meta property="article:published_time" content="2023-03-19T13:04:01.000Z">
@@ -1599,7 +1599,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     debug: "env",
     cdn: {"js":{"app":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/app.js","parallax":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/parallax.js","rightMenu":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenu.js","rightMenus":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenus.js","sites":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/sites.js","friends":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/friends.js","contributors":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/contributors.js","search":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
     default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
-    lastupdate: new Date(1680429161732),
+    lastupdate: new Date(1680434952806),
     sidebar: {
       for_page: ["blogger","category","tagcloud","donate"],
       for_post: ["toc"],
@@ -2445,26 +2445,132 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </blockquote>
 <p><strong>三步翻转法</strong>： 将字符串分为前k位和后（n-k）位两部分，将两部分分别翻转，最后再整体翻转即可。<br>时间复杂度：T &#x3D; O(n)<br><a target="_blank" rel="noopener" href="https://wizardforcel.gitbooks.io/the-art-of-programming-by-july/content/01.01.html">参考原文</a></p>
 <p><code> 示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 反转字符串</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">reverse</span><span class="params">(s <span class="type">string</span>)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">	runes := []<span class="type">rune</span>(s)</span><br><span class="line">	<span class="keyword">for</span> l, r := <span class="number">0</span>, <span class="built_in">len</span>(runes) - <span class="number">1</span>; l &lt; r; l, r = l + <span class="number">1</span>, r - <span class="number">1</span> &#123;</span><br><span class="line">		runes[l], runes[r] = runes[r], runes[l]</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="type">string</span>(runes)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 三步反转法对字符串进行循环移位</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">shift_string</span><span class="params">(s <span class="type">string</span>, k <span class="type">int</span>)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">	runes := []<span class="type">rune</span>(s)</span><br><span class="line">	ls, rs := runes[:k], runes[k:]</span><br><span class="line">	rls := reverse(<span class="type">string</span>(ls))</span><br><span class="line">	rrs := reverse(<span class="type">string</span>(rs))</span><br><span class="line">	<span class="keyword">return</span> reverse(rls + rrs)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">// 反转字符串
+func reverse(s string) string &#123;
+    runes := []rune(s)
+    for l, r := 0, len(runes) - 1; l &lt; r; l, r = l + 1, r - 1 &#123;
+        runes[l], runes[r] = runes[r], runes[l]
+    &#125;
+    return string(runes)
+&#125;
 
+// 三步反转法对字符串进行循环移位
+func shift_string(s string, k int) string &#123;
+    runes := []rune(s)
+    ls, rs := runes[:k], runes[k:]
+    rls := reverse(string(ls))
+    rrs := reverse(string(rs))
+    return reverse(rls + rrs)
+&#125;
+</code></pre>
 <h2 id="1-2-最长回文子串"><a href="#1-2-最长回文子串" class="headerlink" title="1.2 最长回文子串"></a>1.2 最长回文子串</h2><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-palindromic-substring/">LeetCode No.5</a></p>
 <blockquote>
 <p>问题：找出一个子串包含的最长回文子串。<br>Input: s &#x3D; “babad”<br>Output: “bab”<br>Note: “aba” is also a valid answer.</p>
 </blockquote>
 <p>解法1：从某个子串向两边扩展，遍历找出最长的一个（需要考虑偶数个、奇数个字符的回文子串）</p>
 <p><code>示例代码</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">LongestPalindrome</span><span class="params">(s <span class="type">string</span>)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">	rs := []<span class="type">rune</span>(s)</span><br><span class="line">	mx, st := <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">	i, j, c := <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> i = <span class="number">0</span>; i &lt; <span class="built_in">len</span>(rs); i++ &#123;</span><br><span class="line">		<span class="comment">// 奇数个字符的回文子串</span></span><br><span class="line">		<span class="keyword">for</span> j = <span class="number">0</span>; i - j &gt;= <span class="number">0</span> &amp;&amp; i + j &lt; <span class="built_in">len</span>(rs); j++ &#123;</span><br><span class="line">			<span class="keyword">if</span> rs[i - j] != rs[i + j] &#123;</span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">			&#125;</span><br><span class="line">			c = <span class="number">2</span> * j + <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> c &gt; mx &#123;</span><br><span class="line">			mx = c</span><br><span class="line">			st = i - j + <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 偶数个字符的回文子串</span></span><br><span class="line">		<span class="keyword">for</span> j = <span class="number">0</span>; (i - j) &gt;= <span class="number">0</span> &amp;&amp; (i + j + <span class="number">1</span>) &lt; <span class="built_in">len</span>(rs); j++ &#123;</span><br><span class="line">			<span class="keyword">if</span> rs[i - j] != rs[i + j + <span class="number">1</span>] &#123;</span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">			&#125;</span><br><span class="line">			c = j * <span class="number">2</span> + <span class="number">2</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> c &gt; mx &#123;</span><br><span class="line">			mx = c</span><br><span class="line">			st = i - j + <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="type">string</span>(rs[st: st + mx])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">func LongestPalindrome(s string) string &#123;
+    rs := []rune(s)
+    mx, st := 0, 0
+    i, j, c := 0, 0, 0
+    for i = 0; i &lt; len(rs); i++ &#123;
+        // 奇数个字符的回文子串
+        for j = 0; i - j &gt;= 0 &amp;&amp; i + j &lt; len(rs); j++ &#123;
+            if rs[i - j] != rs[i + j] &#123;
+                break
+            &#125;
+            c = 2 * j + 1
+        &#125;
+        if c &gt; mx &#123;
+            mx = c
+            st = i - j + 1
+        &#125;
+        // 偶数个字符的回文子串
+        for j = 0; (i - j) &gt;= 0 &amp;&amp; (i + j + 1) &lt; len(rs); j++ &#123;
+            if rs[i - j] != rs[i + j + 1] &#123;
+                break
+            &#125;
+            c = j * 2 + 2
+        &#125;
+        if c &gt; mx &#123;
+            mx = c
+            st = i - j + 1
+        &#125;
+    &#125;
+
+    return string(rs[st: st + mx])
+&#125;
+</code></pre>
 <p>解法2：马拉车算法<br>具体思路<a target="_blank" rel="noopener" href="https://books.halfrost.com/leetcode/ChapterFour/0001~0099/0005.Longest-Palindromic-Substring/">参考原文</a></p>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">min</span><span class="params">(x, y <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> x &lt; y &#123;</span><br><span class="line">		<span class="keyword">return</span> x</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> y</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">LongestPalindrome1</span><span class="params">(s <span class="type">string</span>)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(s) &lt; <span class="number">2</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> s</span><br><span class="line">	&#125;</span><br><span class="line">	news := <span class="built_in">make</span>([]<span class="type">rune</span>, <span class="built_in">len</span>(s))</span><br><span class="line">	news[<span class="number">0</span>] = <span class="string">&#x27;#&#x27;</span></span><br><span class="line">	<span class="keyword">for</span> _, r := <span class="keyword">range</span> s &#123;</span><br><span class="line">		news = <span class="built_in">append</span>(news, r)</span><br><span class="line">		news = <span class="built_in">append</span>(news, <span class="string">&#x27;#&#x27;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	dp := <span class="built_in">make</span>([]<span class="type">int</span>, <span class="built_in">len</span>(news))</span><br><span class="line">	mx, center, maxlen, maxst := <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(news); i++ &#123;</span><br><span class="line">		<span class="comment">// 算法核心转移方程</span></span><br><span class="line">		<span class="keyword">if</span> i &lt; mx &#123;</span><br><span class="line">			dp[i] = min(mx - i, dp[<span class="number">2</span>*center - i])</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 以i为中心，只接从距离i为d[i] + 1的位置扩散</span></span><br><span class="line">		left, right := i - (<span class="number">1</span> + dp[i]), i + (<span class="number">1</span>+ dp[i])</span><br><span class="line">		<span class="keyword">for</span> left &gt;= <span class="number">0</span> &amp;&amp; right &lt; <span class="built_in">len</span>(news) &amp;&amp; news[left] == news[right] &#123;</span><br><span class="line">			dp[i]++</span><br><span class="line">			left++</span><br><span class="line">			right--</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 更新mx</span></span><br><span class="line">		<span class="keyword">if</span> i + dp[i] &gt; mx &#123;</span><br><span class="line">			mx = i + dp[i]</span><br><span class="line">			center = i</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 更新最大长度和对应在源字符串的起始位置</span></span><br><span class="line">		<span class="keyword">if</span> dp[i] &gt; maxlen &#123;</span><br><span class="line">			maxlen = dp[i]</span><br><span class="line">			maxst = (i - maxlen) / <span class="number">2</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> s[maxst : maxst + maxlen]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">func min(x, y int) int &#123;
+    if x &lt; y &#123;
+        return x
+    &#125;
+    return y
+&#125;
+func LongestPalindrome1(s string) string &#123;
+    if len(s) &lt; 2 &#123;
+        return s
+    &#125;
+    news := make([]rune, len(s))
+    news[0] = &#39;#&#39;
+    for _, r := range s &#123;
+        news = append(news, r)
+        news = append(news, &#39;#&#39;)
+    &#125;
+    dp := make([]int, len(news))
+    mx, center, maxlen, maxst := 0, 0, 1, 0
+    for i := 0; i &lt; len(news); i++ &#123;
+        // 算法核心转移方程
+        if i &lt; mx &#123;
+            dp[i] = min(mx - i, dp[2*center - i])
+        &#125;
 
+        // 以i为中心，只接从距离i为d[i] + 1的位置扩散
+        left, right := i - (1 + dp[i]), i + (1+ dp[i])
+        for left &gt;= 0 &amp;&amp; right &lt; len(news) &amp;&amp; news[left] == news[right] &#123;
+            dp[i]++
+            left++
+            right--
+        &#125;
+        // 更新mx
+        if i + dp[i] &gt; mx &#123;
+            mx = i + dp[i]
+            center = i
+        &#125;
+        // 更新最大长度和对应在源字符串的起始位置
+        if dp[i] &gt; maxlen &#123;
+            maxlen = dp[i]
+            maxst = (i - maxlen) / 2
+        &#125;
+    &#125;
+    return s[maxst : maxst + maxlen]
+&#125;
+</code></pre>
 <h2 id="1-3-字符串的全排列"><a href="#1-3-字符串的全排列" class="headerlink" title="1.3 字符串的全排列"></a>1.3 字符串的全排列</h2><blockquote>
 <p>问题描述：输入一个字符串，打印出该字符串中字符的所有排列。<br>例如输入字符串abc，则输出由字符a、b、c 所能排列出来的所有字符串<br>abc、acb、bac、bca、cab 和 cba。</p>
 </blockquote>
 <p>解法1：递归方法DFS搜索，想象成树<br><img src="https://upload-images.jianshu.io/upload_images/14151453-21cc1e0269c2e662.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" class="lazyload" data-srcset="https://upload-images.jianshu.io/upload_images/14151453-21cc1e0269c2e662.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p>
 <p><code>示例代码:</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> res = []<span class="type">string</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">dfs_search</span><span class="params">(s <span class="type">string</span>, lv <span class="type">int</span>, cur <span class="type">string</span>)</span></span>  &#123;</span><br><span class="line">	<span class="keyword">if</span> lv == <span class="number">0</span> &#123;</span><br><span class="line">		res = <span class="built_in">append</span>(res, cur)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(s); i++ &#123;</span><br><span class="line">		<span class="comment">// 去掉当前字符，下一层在剩下的字符中挑</span></span><br><span class="line">		dfs_search(s[:i] + s[i+<span class="number">1</span>:], lv - <span class="number">1</span>, cur + <span class="type">string</span>(s[i]))</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">FullPermutation</span><span class="params">(s <span class="type">string</span>)</span></span> []<span class="type">string</span>  &#123;</span><br><span class="line">	res = []<span class="type">string</span>&#123;&#125;</span><br><span class="line">	dfs_search(s, <span class="built_in">len</span>(s), <span class="string">&quot;&quot;</span>)</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">var res = []string&#123;&#125;
 
+func dfs_search(s string, lv int, cur string)  &#123;
+    if lv == 0 &#123;
+        res = append(res, cur)
+    &#125;
+    for i := 0; i &lt; len(s); i++ &#123;
+        // 去掉当前字符，下一层在剩下的字符中挑
+        dfs_search(s[:i] + s[i+1:], lv - 1, cur + string(s[i]))
+    &#125;
+&#125;
+
+func FullPermutation(s string) []string  &#123;
+    res = []string&#123;&#125;
+    dfs_search(s, len(s), &quot;&quot;)
+    return res
+&#125;
+</code></pre>
 <p>解法2：字典序排列，从当前字符串s生成刚好比他大的下一个字符串排列<br><a target="_blank" rel="noopener" href="https://wizardforcel.gitbooks.io/the-art-of-programming-by-july/content/01.06.html">参考原文</a></p>
 <ol>
 <li>找到排列中最后一个升序的位置i</li>
@@ -2473,7 +2579,33 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>将i+1之后的字符串反转</li>
 </ol>
 <p><code>示例代码:</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 字典序排列算法</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">next_permutation</span><span class="params">(s <span class="type">string</span>)</span></span> (<span class="type">bool</span>, <span class="type">string</span>)  &#123;</span><br><span class="line">	rs := []<span class="type">rune</span>(s)</span><br><span class="line">	i, j := <span class="number">0</span>, <span class="number">0</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 找到最后一个升序的位置i</span></span><br><span class="line">	<span class="keyword">for</span> i = <span class="built_in">len</span>(rs) - <span class="number">2</span>; i &gt;= <span class="number">0</span> &amp;&amp; rs[i] &gt;= rs[i+<span class="number">1</span>]; i-- &#123;&#125;</span><br><span class="line">	<span class="keyword">if</span> i &lt; <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>, <span class="string">&quot;&quot;</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 找到i后面最后一个比rs[i]大的位置j</span></span><br><span class="line">	<span class="keyword">for</span> j = <span class="built_in">len</span>(rs) - <span class="number">1</span>; j &gt; i &amp;&amp; rs[j] &lt;= rs[i]; j-- &#123;&#125;</span><br><span class="line">	<span class="comment">// 交换rs[i], s[j]</span></span><br><span class="line">	rs[i], rs[j] = rs[j], rs[i]</span><br><span class="line">	<span class="comment">// 反转rs[i+1:]</span></span><br><span class="line">	rev := reverse(<span class="type">string</span>(rs[i + <span class="number">1</span>:]))</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span>, <span class="type">string</span>(rs[:i+<span class="number">1</span>]) + rev</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">DictOrderFullPermutation</span><span class="params">(s <span class="type">string</span>)</span></span> []<span class="type">string</span>  &#123;</span><br><span class="line">	res := []<span class="type">string</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> ok, next_str := <span class="literal">true</span>, s; ok; ok, next_str = next_permutation(next_str) &#123;</span><br><span class="line">		res = <span class="built_in">append</span>(res, next_str)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">// 字典序排列算法
+func next_permutation(s string) (bool, string)  &#123;
+    rs := []rune(s)
+    i, j := 0, 0
+
+    // 找到最后一个升序的位置i
+    for i = len(rs) - 2; i &gt;= 0 &amp;&amp; rs[i] &gt;= rs[i+1]; i-- &#123;&#125;
+    if i &lt; 0 &#123;
+        return false, &quot;&quot;
+    &#125;
+    // 找到i后面最后一个比rs[i]大的位置j
+    for j = len(rs) - 1; j &gt; i &amp;&amp; rs[j] &lt;= rs[i]; j-- &#123;&#125;
+    // 交换rs[i], s[j]
+    rs[i], rs[j] = rs[j], rs[i]
+    // 反转rs[i+1:]
+    rev := reverse(string(rs[i + 1:]))
+    return true, string(rs[:i+1]) + rev
+&#125;
+
+func DictOrderFullPermutation(s string) []string  &#123;
+    res := []string&#123;&#125;
+    for ok, next_str := true, s; ok; ok, next_str = next_permutation(next_str) &#123;
+        res = append(res, next_str)
+    &#125;
+    return res
+&#125;
+</code></pre>
 
   </div>
   
@@ -2483,6 +2615,14 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
        <!-- 参考资料、相关资料等 -->
       
        <!-- 相关文章 -->
+      
+        
+  <div class="related_posts">
+    <section class='header'>
+      <i class="fa-solid fa-bookmark fa-fw" aria-hidden="true"></i><span>相关文章</span>
+    </section>
+    <section class='body'>
+      <div class="vlts-rps"><a class="item" href="/2023/03/19/数据结构-2-数组/" title="数据结构(2): 数组" rel="bookmark "><span class="title">数据结构(2): 数组</span></a><a class="item" href="/2023/03/19/数据结构-4-树/" title="数据结构(4): 树" rel="bookmark "><span class="title">数据结构(4): 树</span></a><a class="item" href="/2023/03/19/数据结构-3-链表/" title="数据结构(3): 链表" rel="bookmark "><span class="title">数据结构(3): 链表</span></a><a class="item" href="/2023/03/19/数据结构-5-栈-队列-堆/" title="数据结构(5): 栈|队列|堆" rel="bookmark "><span class="title">数据结构(5): 栈|队列|堆</span></a><a class="item" href="/2023/04/02/数据结构-6-单调栈/" title="数据结构（6）: 单调栈" rel="bookmark "><span class="title">数据结构（6）: 单调栈</span></a></div></section></div>
       
       <!-- 版权声明组件 -->
       
@@ -2987,6 +3127,17 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
   <script>
 
+  volantis.css("https://unpkg.com/highlight.js@11.7.0/styles/a11y-dark.css");
+
+
+  volantis.js("https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js").then(()=>{
+    volantis.requestAnimationFrame(hljs.highlightAll)
+  })
+  volantis.pjax.push(()=>{
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  },"highlightjs")
 
 
   function pjax_highlightjs_copyCode(){
@@ -3011,7 +3162,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
 
   <script>
-  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp"];
+  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp"];
   let index = 0;
   let IntervalParallax = null;
 

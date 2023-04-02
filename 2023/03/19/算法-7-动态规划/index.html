@@ -1599,7 +1599,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     debug: "env",
     cdn: {"js":{"app":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/app.js","parallax":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/parallax.js","rightMenu":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenu.js","rightMenus":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenus.js","sites":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/sites.js","friends":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/friends.js","contributors":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/contributors.js","search":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
     default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
-    lastupdate: new Date(1680429161732),
+    lastupdate: new Date(1680434952806),
     sidebar: {
       for_page: ["blogger","category","tagcloud","donate"],
       for_post: ["toc"],
@@ -2449,32 +2449,109 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </blockquote>
 <p><strong>思路</strong>：当设选第i个房屋，则不能选i-1，假设dp[i]表示前i个房屋能偷到的最高金额，则有 dp[i] &#x3D; max(dp[i - 1], dp[i - 2] + nums[i])</p>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">rob</span><span class="params">(nums []<span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">    n := <span class="built_in">len</span>(nums)</span><br><span class="line">    <span class="keyword">if</span> n == <span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> n == <span class="number">1</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> nums[<span class="number">0</span>]</span><br><span class="line">    &#125;</span><br><span class="line">    dp := <span class="built_in">make</span>([]<span class="type">int</span>, n)</span><br><span class="line">    dp[<span class="number">0</span>], dp[<span class="number">1</span>] = nums[<span class="number">0</span>], max(nums[<span class="number">0</span>], nums[<span class="number">1</span>])</span><br><span class="line">    ans := dp[<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">2</span>; i &lt; n; i++ &#123;</span><br><span class="line">        dp[i] = max(dp[i - <span class="number">2</span>] + nums[i], dp[i - <span class="number">1</span>])</span><br><span class="line">        <span class="keyword">if</span> ans &lt; dp[i] &#123;</span><br><span class="line">            ans = dp[i]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="go">func rob(nums []int) int &#123;
+    n := len(nums)
+    if n == 0 &#123;
+        return 0
+    &#125;
+    if n == 1 &#123;
+        return nums[0]
+    &#125;
+    dp := make([]int, n)
+    dp[0], dp[1] = nums[0], max(nums[0], nums[1])
+    ans := dp[1]
+    for i := 2; i &lt; n; i++ &#123;
+        dp[i] = max(dp[i - 2] + nums[i], dp[i - 1])
+        if ans &lt; dp[i] &#123;
+            ans = dp[i]
+        &#125;
+    &#125;
+    return ans
+&#125;
+</code></pre>
 <h3 id="7-1-1-打家劫舍2"><a href="#7-1-1-打家劫舍2" class="headerlink" title="7.1-1 打家劫舍2"></a>7.1-1 打家劫舍2</h3><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/house-robber-ii/">LeetCode No.213</a></p>
 <blockquote>
 <p>问题描述：房屋变成了环形排列，其他和7.1相同</p>
 </blockquote>
 <p><strong>思路</strong>：环形排列后，第一个和最后一个不能同时偷，可以转化为[0, n-1]和[1, n]两个单排街道较大值。同时，可以看到第i个问题的最大值只和第i-1和i-2有关，可以只用两个值来保存前两个结果，降低空间复杂度。</p>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">rob</span><span class="params">(nums []<span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">    n := <span class="built_in">len</span>(nums)</span><br><span class="line">    <span class="keyword">if</span> n == <span class="number">1</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> nums[<span class="number">0</span>]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> max(dorob(nums[<span class="number">1</span>:]), dorob(nums[:n<span class="number">-1</span>]))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">dorob</span><span class="params">(nums []<span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">    n := <span class="built_in">len</span>(nums)</span><br><span class="line">    <span class="keyword">if</span> n == <span class="number">1</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> nums[<span class="number">0</span>]</span><br><span class="line">    &#125;</span><br><span class="line">    fisrt, second := nums[<span class="number">0</span>], max(nums[<span class="number">0</span>], nums[<span class="number">1</span>])</span><br><span class="line">    ans := second</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">2</span>; i &lt; n; i++ &#123;</span><br><span class="line">        fisrt, second = second, max(fisrt + nums[i], second)</span><br><span class="line">        <span class="keyword">if</span> second &gt; ans &#123;</span><br><span class="line">            ans = second</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">func rob(nums []int) int &#123;
+    n := len(nums)
+    if n == 1 &#123;
+        return nums[0]
+    &#125;
+    return max(dorob(nums[1:]), dorob(nums[:n-1]))
+&#125;
 
+func dorob(nums []int) int &#123;
+    n := len(nums)
+    if n == 1 &#123;
+        return nums[0]
+    &#125;
+    fisrt, second := nums[0], max(nums[0], nums[1])
+    ans := second
+    for i := 2; i &lt; n; i++ &#123;
+        fisrt, second = second, max(fisrt + nums[i], second)
+        if second &gt; ans &#123;
+            ans = second
+        &#125;
+    &#125;
+    return ans
+&#125;
+</code></pre>
 <h3 id="7-2-分割等和子集"><a href="#7-2-分割等和子集" class="headerlink" title="7.2 分割等和子集"></a>7.2 分割等和子集</h3><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/partition-equal-subset-sum/">LeetCode No.416</a></p>
 <blockquote>
 <p>问题描述：给定一个只包含正整数的非空数组。是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。<br>输入: [1, 5, 11, 5]<br>输出: true<br>解释: 数组可以分割成 [1, 5, 5] 和 [11]</p>
 </blockquote>
 <p><strong>思路</strong>：如果数组大小为奇数，结果必为false。然后该问题可以转化为背包大小为sum&#x2F;2的0-1背包问题，如果恰好能装满则结果为true。</p>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">canPartition</span><span class="params">(nums []<span class="type">int</span>)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">    sum := <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> _, n := <span class="keyword">range</span> nums &#123;</span><br><span class="line">        sum += n</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> sum % <span class="number">2</span> != <span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">    W := sum &gt;&gt; <span class="number">1</span></span><br><span class="line">    dp := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">int</span>]<span class="type">bool</span>)</span><br><span class="line">    dp[<span class="number">0</span>] = <span class="literal">true</span></span><br><span class="line">    <span class="keyword">for</span> _, n := <span class="keyword">range</span> nums &#123;</span><br><span class="line">        <span class="comment">// 这里进行了空间优化，需要从后向前算，否则计算后面的时候前面的值已经改过，不是上一层的值了。</span></span><br><span class="line">        <span class="comment">// dp[i][w] = dp[i - 1][w] || dp[i-1][w-v]</span></span><br><span class="line">        <span class="keyword">for</span> i := W; i &gt;= n; i-- &#123;</span><br><span class="line">            dp[i] = dp[i] || dp[i - n]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[W]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="go">func canPartition(nums []int) bool &#123;
+    sum := 0
+    for _, n := range nums &#123;
+        sum += n
+    &#125;
+    if sum % 2 != 0 &#123;
+        return false
+    &#125;
+    W := sum &gt;&gt; 1
+    dp := make(map[int]bool)
+    dp[0] = true
+    for _, n := range nums &#123;
+        // 这里进行了空间优化，需要从后向前算，否则计算后面的时候前面的值已经改过，不是上一层的值了。
+        // dp[i][w] = dp[i - 1][w] || dp[i-1][w-v]
+        for i := W; i &gt;= n; i-- &#123;
+            dp[i] = dp[i] || dp[i - n]
+        &#125;
+    &#125;
+    return dp[W]
+&#125;
+</code></pre>
 <h3 id="7-3-青蛙过河"><a href="#7-3-青蛙过河" class="headerlink" title="7.3 青蛙过河"></a>7.3 青蛙过河</h3><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/frog-jump/">LeetCode No.403</a></p>
 <blockquote>
 <p>题目描述：一只青蛙想要过河。 假定河流被等分为 x 个单元格，并且在每一个单元格内都有可能放有一石子（也有可能没有）。 青蛙可以跳上石头，但是不可以跳入水中。<br>给定石子的位置列表（用单元格序号升序表示）， 请判定青蛙能否成功过河（即能否在最后一步跳至最后一个石子上）。 开始时， 青蛙默认已站在第一个石子上，并可以假定它第一步只能跳跃一个单位（即只能从单元格1跳至单元格2）。<br>如果青蛙上一步跳跃了 k 个单位，那么它接下来的跳跃距离只能选择为 k - 1、k 或 k + 1个单位。 另请注意，青蛙只能向前方（终点的方向）跳跃。<br><strong>输入</strong>：[0,1,3,5,6,8,12,17]<br>总共有8个石子。<br>第一个石子处于序号为0的单元格的位置, 第二个石子处于序号为1的单元格的位置,<br>第三个石子在序号为3的单元格的位置， 以此定义整个数组…<br>最后一个石子处于序号为17的单元格的位置。<br><strong>输出</strong>： true。即青蛙可以成功过河，按照如下方案跳跃：<br>跳1个单位到第2块石子, 然后跳2个单位到第3块石子, 接着<br>跳2个单位到第4块石子, 然后跳3个单位到第6块石子,<br>跳4个单位到第7块石子, 最后，跳5个单位到第8个石子（即最后一块石子）。</p>
 </blockquote>
 <p><strong>思路</strong>：参考官方题解动态规划的方法，使用dmap[curpos] &#x3D; {jumps}表示到达当前curpos可以由jumps集合的任意一个步长一次到达当前位置，对于dmap[0] &#x3D; {0}，依次遍历每个石头的位置，对每个位置pos遍历jumps集合，对每个jump遍历k &#x3D; [jump-1，jump+1]，如果当前位置跳k补可以到达某个石头的位置（dmap中的存在key&#x3D;curpos+k），则将k添加到dmap[curpos+k]的集合。</p>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">canCross</span><span class="params">(stones []<span class="type">int</span>)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">	<span class="comment">// 用集合模拟set，只需要键值当做集合的元素，value设为空结构</span></span><br><span class="line">	dmap := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">int</span>]<span class="keyword">map</span>[<span class="type">int</span>]<span class="keyword">struct</span>&#123;&#125;, <span class="number">0</span>)</span><br><span class="line">	dmap[<span class="number">0</span>] = <span class="keyword">map</span>[<span class="type">int</span>]<span class="keyword">struct</span>&#123;&#125;&#123;<span class="number">0</span>: &#123;&#125;&#125;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt; <span class="built_in">len</span>(stones); i++ &#123;</span><br><span class="line">		dmap[stones[i]] = <span class="keyword">map</span>[<span class="type">int</span>]<span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> _, cur_pos := <span class="keyword">range</span> stones &#123;</span><br><span class="line">		steps := dmap[cur_pos]</span><br><span class="line">		<span class="keyword">for</span> step, _ := <span class="keyword">range</span> steps &#123;</span><br><span class="line">			<span class="keyword">for</span> k := step - <span class="number">1</span>; k &lt;= step + <span class="number">1</span>; k++ &#123;</span><br><span class="line">				<span class="keyword">if</span> _, ok := dmap[cur_pos + k]; ok == <span class="literal">true</span> &amp;&amp; k &gt; <span class="number">0</span> &#123;</span><br><span class="line">					dmap[cur_pos + k][k] = <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">len</span>(dmap[stones[<span class="built_in">len</span>(stones) - <span class="number">1</span>]]) != <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="go">func canCross(stones []int) bool &#123;
+    // 用集合模拟set，只需要键值当做集合的元素，value设为空结构
+    dmap := make(map[int]map[int]struct&#123;&#125;, 0)
+    dmap[0] = map[int]struct&#123;&#125;&#123;0: &#123;&#125;&#125;
+    for i := 1; i &lt; len(stones); i++ &#123;
+        dmap[stones[i]] = map[int]struct&#123;&#125;&#123;&#125;
+    &#125;
+    for _, cur_pos := range stones &#123;
+        steps := dmap[cur_pos]
+        for step, _ := range steps &#123;
+            for k := step - 1; k &lt;= step + 1; k++ &#123;
+                if _, ok := dmap[cur_pos + k]; ok == true &amp;&amp; k &gt; 0 &#123;
+                    dmap[cur_pos + k][k] = struct&#123;&#125;&#123;&#125;
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+    return len(dmap[stones[len(stones) - 1]]) != 0
+&#125;
+</code></pre>
 <h3 id="7-4-编辑距离"><a href="#7-4-编辑距离" class="headerlink" title="7.4 编辑距离"></a>7.4 编辑距离</h3><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/edit-distance/">LeetCode No.72</a></p>
 <blockquote>
 <p>题目描述：给你两个单词 word1 和 word2，请你计算出将 word1 转换成 word2 所使用的最少操作数 。<br>你可以对一个单词进行如下三种操作：插入一个字符、删除一个字符、替换一个字符。</p>
@@ -2485,7 +2562,35 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>当word1[i] !&#x3D; word2[j]时 dp[i][j] &#x3D; min(dp[i - 1][j - 1], min(dp[i - 1][j], dp[i][j - 1])) + 1</li>
 </ul>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">min</span><span class="params">(x, y <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> x &lt; y &#123;</span><br><span class="line">		<span class="keyword">return</span> x</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> y</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">minDistance</span><span class="params">(word1 <span class="type">string</span>, word2 <span class="type">string</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	LFROM, LTO := <span class="built_in">len</span>(word1), <span class="built_in">len</span>(word2)</span><br><span class="line">	dp := <span class="built_in">make</span>([][]<span class="type">int</span>, LFROM + <span class="number">1</span>)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt;= LFROM; i++ &#123;</span><br><span class="line">		dp[i] = <span class="built_in">make</span>([]<span class="type">int</span>, LTO + <span class="number">1</span>)</span><br><span class="line">		dp[i][<span class="number">0</span>] = i</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> j := <span class="number">0</span>; j &lt;= LTO; j++ &#123;</span><br><span class="line">		dp[<span class="number">0</span>][j] = j</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= LFROM; i++ &#123;</span><br><span class="line">		<span class="keyword">for</span> j := <span class="number">1</span>; j &lt;= LTO; j++ &#123;</span><br><span class="line">			<span class="keyword">if</span> word1[i - <span class="number">1</span>] == word2[j - <span class="number">1</span>] &#123;</span><br><span class="line">				dp[i][j] = min(dp[i - <span class="number">1</span>][j - <span class="number">1</span>], min(dp[i - <span class="number">1</span>][j], dp[i][j - <span class="number">1</span>]) + <span class="number">1</span>)</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				dp[i][j] = min(dp[i - <span class="number">1</span>][j - <span class="number">1</span>], min(dp[i - <span class="number">1</span>][j], dp[i][j - <span class="number">1</span>])) + <span class="number">1</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> dp[LFROM][LTO]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">func min(x, y int) int &#123;
+    if x &lt; y &#123;
+        return x
+    &#125;
+    return y
+&#125;
+
+func minDistance(word1 string, word2 string) int &#123;
+    LFROM, LTO := len(word1), len(word2)
+    dp := make([][]int, LFROM + 1)
+    for i := 0; i &lt;= LFROM; i++ &#123;
+        dp[i] = make([]int, LTO + 1)
+        dp[i][0] = i
+    &#125;
+    for j := 0; j &lt;= LTO; j++ &#123;
+        dp[0][j] = j
+    &#125;
+    for i := 1; i &lt;= LFROM; i++ &#123;
+        for j := 1; j &lt;= LTO; j++ &#123;
+            if word1[i - 1] == word2[j - 1] &#123;
+                dp[i][j] = min(dp[i - 1][j - 1], min(dp[i - 1][j], dp[i][j - 1]) + 1)
+            &#125; else &#123;
+                dp[i][j] = min(dp[i - 1][j - 1], min(dp[i - 1][j], dp[i][j - 1])) + 1
+            &#125;
+        &#125;
+    &#125;
+    return dp[LFROM][LTO]
+&#125;
+</code></pre>
 
   </div>
   
@@ -2495,6 +2600,14 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
        <!-- 参考资料、相关资料等 -->
       
        <!-- 相关文章 -->
+      
+        
+  <div class="related_posts">
+    <section class='header'>
+      <i class="fa-solid fa-bookmark fa-fw" aria-hidden="true"></i><span>相关文章</span>
+    </section>
+    <section class='body'>
+      <div class="vlts-rps"><a class="item" href="/2023/03/19/数据结构-1-字符串/" title="数据结构(1): 字符串" rel="bookmark "><span class="title">数据结构(1): 字符串</span></a><a class="item" href="/2023/03/19/数据结构-2-数组/" title="数据结构(2): 数组" rel="bookmark "><span class="title">数据结构(2): 数组</span></a><a class="item" href="/2023/03/19/数据结构-4-树/" title="数据结构(4): 树" rel="bookmark "><span class="title">数据结构(4): 树</span></a><a class="item" href="/2023/03/19/数据结构-3-链表/" title="数据结构(3): 链表" rel="bookmark "><span class="title">数据结构(3): 链表</span></a><a class="item" href="/2023/03/19/算法-1-双指针/" title="算法(1): 双指针" rel="bookmark "><span class="title">算法(1): 双指针</span></a></div></section></div>
       
       <!-- 版权声明组件 -->
       
@@ -2999,6 +3112,17 @@ LRU（Least Recent Used）策略：优先淘汰最近最少使用的数据，常
 
   <script>
 
+  volantis.css("https://unpkg.com/highlight.js@11.7.0/styles/a11y-dark.css");
+
+
+  volantis.js("https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js").then(()=>{
+    volantis.requestAnimationFrame(hljs.highlightAll)
+  })
+  volantis.pjax.push(()=>{
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  },"highlightjs")
 
 
   function pjax_highlightjs_copyCode(){
@@ -3023,7 +3147,7 @@ LRU（Least Recent Used）策略：优先淘汰最近最少使用的数据，常
 
 
   <script>
-  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp"];
+  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp"];
   let index = 0;
   let IntervalParallax = null;
 

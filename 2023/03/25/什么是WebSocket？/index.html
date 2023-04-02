@@ -1598,7 +1598,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     debug: "env",
     cdn: {"js":{"app":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/app.js","parallax":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/parallax.js","rightMenu":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenu.js","rightMenus":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenus.js","sites":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/sites.js","friends":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/friends.js","contributors":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/contributors.js","search":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
     default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
-    lastupdate: new Date(1680429161732),
+    lastupdate: new Date(1680434952806),
     sidebar: {
       for_page: ["blogger","category","tagcloud","donate"],
       for_post: ["toc"],
@@ -2473,7 +2473,48 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>也支持加密传输，WS+SSL，URL形如<code>wss://</code></li>
 </ol>
 <h2 id="Go语言实现"><a href="#Go语言实现" class="headerlink" title="Go语言实现"></a>Go语言实现</h2><p>go的标准SDK中没有支持WebSocket，但是官方维护的net子包中支持<br><code>go get golang.org/x/net/websocket</code></p>
-<h3 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">var</span> sock = <span class="literal">null</span>;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">var</span> wsuri = <span class="string">&quot;ws://127.0.0.1:7777&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="variable language_">window</span>.<span class="property">onload</span> = <span class="keyword">function</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;onload&quot;</span>);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        sock = <span class="keyword">new</span> <span class="title class_">WebSocket</span>(wsuri);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        sock.<span class="property">onopen</span> = <span class="keyword">function</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;connected to &quot;</span> + wsuri);</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        sock.<span class="property">onclose</span> = <span class="keyword">function</span>(<span class="params">e</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;connection closed (&quot;</span> + e.<span class="property">code</span> + <span class="string">&quot;)&quot;</span>);</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        sock.<span class="property">onmessage</span> = <span class="keyword">function</span>(<span class="params">e</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;message received: &quot;</span> + e.<span class="property">data</span>);</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">function</span> <span class="title function_">send</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">var</span> msg = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;message&#x27;</span>).<span class="property">value</span>;</span></span><br><span class="line"><span class="language-javascript">        sock.<span class="title function_">send</span>(msg);</span></span><br><span class="line"><span class="language-javascript">    &#125;;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>WebSocket Echo Test<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">        Message: <span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">&quot;message&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">value</span>=<span class="string">&quot;Hello, world!&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">onclick</span>=<span class="string">&quot;send();&quot;</span>&gt;</span>Send Message<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h3><pre><code class="html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+    var sock = null;
+    var wsuri = &quot;ws://127.0.0.1:7777&quot;;
+
+    window.onload = function() &#123;
+
+        console.log(&quot;onload&quot;);
+
+        sock = new WebSocket(wsuri);
+
+        sock.onopen = function() &#123;
+            console.log(&quot;connected to &quot; + wsuri);
+        &#125;
+
+        sock.onclose = function(e) &#123;
+            console.log(&quot;connection closed (&quot; + e.code + &quot;)&quot;);
+        &#125;
+
+        sock.onmessage = function(e) &#123;
+            console.log(&quot;message received: &quot; + e.data);
+        &#125;
+    &#125;;
+
+    function send() &#123;
+        var msg = document.getElementById(&#39;message&#39;).value;
+        sock.send(msg);
+    &#125;;
+&lt;/script&gt;
+&lt;h1&gt;WebSocket Echo Test&lt;/h1&gt;
+&lt;form&gt;
+    &lt;p&gt;
+        Message: &lt;input id=&quot;message&quot; type=&quot;text&quot; value=&quot;Hello, world!&quot;&gt;
+    &lt;/p&gt;
+&lt;/form&gt;
+&lt;button onclick=&quot;send();&quot;&gt;Send Message&lt;/button&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
 <p>客户端JavaScript代码，通过<code>new WebSocket(wsuri)</code>创建了一个WebSocket连接，握手成功后会触发onopen事件，客户端绑定了四个事件：</p>
 <ul>
 <li>onopen：建立连接后触发</li>
@@ -2481,7 +2522,43 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>onerror：发生错误时触发</li>
 <li>onclose：关闭连接时触发</li>
 </ul>
-<h3 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;golang.org/x/net/websocket&quot;</span></span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line">	<span class="string">&quot;net/http&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">handleEcho</span><span class="params">(ws *websocket.Conn)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> err <span class="type">error</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="keyword">var</span> reply <span class="type">string</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> err = websocket.Message.Receive(ws, &amp;reply); err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Println(<span class="string">&quot;[server] Can&#x27;t receive&quot;</span>)</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">		log.Println(<span class="string">&quot;[server] Received from client:&quot;</span>, reply)</span><br><span class="line"></span><br><span class="line">		msg := <span class="string">&quot;welcome: &quot;</span> + reply</span><br><span class="line">		<span class="keyword">if</span> err = websocket.Message.Send(ws, msg); err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Println(<span class="string">&quot;[server] Can&#x27;t Send&quot;</span>)</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">		log.Println(<span class="string">&quot;[server] Send to client:&quot;</span>, msg)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	http.Handle(<span class="string">&quot;/&quot;</span>, websocket.Handler(handleEcho))</span><br><span class="line">	log.Println(<span class="string">&quot;[server] listen in 127.0.0.1:7777&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> err := http.ListenAndServe(<span class="string">&quot;:7777&quot;</span>, <span class="literal">nil</span>); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(<span class="string">&quot;[server] ListenAndServe:&quot;</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h3><pre><code class="go">package main
+
+import (
+    &quot;golang.org/x/net/websocket&quot;
+    &quot;log&quot;
+    &quot;net/http&quot;
+)
+
+func handleEcho(ws *websocket.Conn) &#123;
+    var err error
+
+    for &#123;
+        var reply string
+
+        if err = websocket.Message.Receive(ws, &amp;reply); err != nil &#123;
+            log.Println(&quot;[server] Can&#39;t receive&quot;)
+            break
+        &#125;
+        log.Println(&quot;[server] Received from client:&quot;, reply)
+
+        msg := &quot;welcome: &quot; + reply
+        if err = websocket.Message.Send(ws, msg); err != nil &#123;
+            log.Println(&quot;[server] Can&#39;t Send&quot;)
+            break
+        &#125;
+        log.Println(&quot;[server] Send to client:&quot;, msg)
+    &#125;
+&#125;
+
+func main() &#123;
+    http.Handle(&quot;/&quot;, websocket.Handler(handleEcho))
+    log.Println(&quot;[server] listen in 127.0.0.1:7777&quot;)
+    if err := http.ListenAndServe(&quot;:7777&quot;, nil); err != nil &#123;
+        log.Fatal(&quot;[server] ListenAndServe:&quot;, err)
+    &#125;
+&#125;
+</code></pre>
 <p>运行后在客户端页面点击Send Message按钮，可以看到服务端如下响应：<br><img src="https://upload-images.jianshu.io/upload_images/14151453-e2ef3c1cb34f117d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" class="lazyload" data-srcset="https://upload-images.jianshu.io/upload_images/14151453-e2ef3c1cb34f117d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>【1】<a target="_blank" rel="noopener" href="https://github.com/astaxie/build-web-application-with-golang/blob/master/zh/08.2.md">build-web-application-with-golang</a><br>【2】<a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/1022910821149312/1103303693824096">廖雪峰：WebSocket</a><br>【3】<a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2017/05/websocket.html">阮一峰：WebSocket教程</a></p>
 
@@ -2493,6 +2570,14 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
        <!-- 参考资料、相关资料等 -->
       
        <!-- 相关文章 -->
+      
+        
+  <div class="related_posts">
+    <section class='header'>
+      <i class="fa-solid fa-bookmark fa-fw" aria-hidden="true"></i><span>相关文章</span>
+    </section>
+    <section class='body'>
+      <div class="vlts-rps"><a class="item" href="/2023/03/25/HTTPS原理详解/" title="HTTPS原理详解" rel="bookmark "><span class="title">HTTPS原理详解</span></a></div></section></div>
       
       <!-- 版权声明组件 -->
       
@@ -3005,6 +3090,17 @@ TCP：面...</p>
 
   <script>
 
+  volantis.css("https://unpkg.com/highlight.js@11.7.0/styles/a11y-dark.css");
+
+
+  volantis.js("https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js").then(()=>{
+    volantis.requestAnimationFrame(hljs.highlightAll)
+  })
+  volantis.pjax.push(()=>{
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  },"highlightjs")
 
 
   function pjax_highlightjs_copyCode(){
@@ -3029,7 +3125,7 @@ TCP：面...</p>
 
 
   <script>
-  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp"];
+  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp"];
   let index = 0;
   let IntervalParallax = null;
 

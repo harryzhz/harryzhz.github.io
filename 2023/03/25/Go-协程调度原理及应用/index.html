@@ -1599,7 +1599,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     debug: "env",
     cdn: {"js":{"app":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/app.js","parallax":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/parallax.js","rightMenu":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenu.js","rightMenus":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenus.js","sites":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/sites.js","friends":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/friends.js","contributors":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/contributors.js","search":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
     default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
-    lastupdate: new Date(1680429161732),
+    lastupdate: new Date(1680434952806),
     sidebar: {
       for_page: ["blogger","category","tagcloud","donate"],
       for_post: ["toc"],
@@ -2444,13 +2444,28 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <h3 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h3><p>在Go中，应用程序并发处理的部分被称作<strong>goroutines（协程）</strong>，它是一种更轻量级的线程，和操作系统的线程之间并无一对一的关系。<strong>协程</strong>是根据一个或多个线程的可用性，映射（多路复用，执行于）在它们之上的；协程调度器负责在Go运行时调度进行协程的工作。</p>
 <h3 id="通道（Channel）"><a href="#通道（Channel）" class="headerlink" title="通道（Channel）"></a>通道（Channel）</h3><p>协程工作在相同的地址空间中，所以共享内存的方式是同步的，可以使用互斥锁来实现，但是Go中更好的方案是使用Channel来同步协程。<br>通道类型（Chan）就像一个可用于发送类型化数据的管道，由其负责协程之间的通信，在任何时间，一个通道数据被设计为只有一个协程可以对其访问，所以不会发生数据竞争。</p>
 <h4 id="通道阻塞"><a href="#通道阻塞" class="headerlink" title="通道阻塞"></a>通道阻塞</h4><p>默认情况下，Go创建的通道是同步且无缓冲的：在有接受者接受数据之前，发送不会结束，发送者是直接将数据交给接受者的，所以这种通道的发送或接受操作在对方准备好之前都是阻塞的。<br>例如以下代码，执行会报错死锁：<br><code>示例1.1:</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">	ch &lt;- <span class="number">1</span></span><br><span class="line">	&lt;-ch</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">func main() &#123;
+    ch := make(chan int)
+    ch &lt;- 1
+    &lt;-ch
+&#125;
+</code></pre>
 <p>因为对ch的读写都在main函数的主协程中，执行到<code>ch &lt;-1</code>时由于接收ch的数据还没准备好，发送数据将被阻塞，程序无法继续执行。必须使用关键字<code>go</code>来启动一个新的协程发送数据，另一个协程接收数据，如下所示：<br><code>示例1.2</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		ch &lt;- <span class="number">1</span></span><br><span class="line">	&#125;()</span><br><span class="line">	fmt.Println(&lt;- ch)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="go">func main() &#123;
+    ch := make(chan int)
+    go func() &#123;
+        ch &lt;- 1
+    &#125;()
+    fmt.Println(&lt;- ch)
+&#125;
+</code></pre>
 <p>使用<code>make</code>创建一个通道的时候可以传入第二个参数指定通道缓冲区大小，这种方式在通道写满之前，发送数据不会被阻塞，通道不为空时接收操作不会被阻塞，如果将示例1.1中的创建通道传第二个参数为1，就可以正常运行不会死锁了，代码如下：<br><code>示例1.3</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>, <span class="number">1</span>)</span><br><span class="line">	ch &lt;- <span class="number">1</span></span><br><span class="line">	fmt.Println(&lt;- ch)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="go">func main() &#123;
+    ch := make(chan int, 1)
+    ch &lt;- 1
+    fmt.Println(&lt;- ch)
+&#125;
+</code></pre>
 <h2 id="Go协程调度原理"><a href="#Go协程调度原理" class="headerlink" title="Go协程调度原理"></a>Go协程调度原理</h2><h3 id="调度器架构"><a href="#调度器架构" class="headerlink" title="调度器架构"></a>调度器架构</h3><p>Go的调度器从最开始的单线程经过不断的改进、优化，发展到现在的GMP模型，在GMP模型中有三个重要的结构：</p>
 <ul>
 <li>G(Goroutine)：go协程，一个可执行单元，调度器作用就是对所有G的切换</li>
@@ -2473,26 +2488,131 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <p>用两个协程顺序打印出1-100，要求一个协程打印1、3、5、7…奇数，另一个协程打印2、4、6、8…偶数，输出必须是顺序的。</p>
 </blockquote>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// ch用来同步两个协程交替执行</span></span><br><span class="line">	ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">	<span class="comment">// ch_end用来阻塞主程序，让两个协程可以执行完</span></span><br><span class="line">	ch_end := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= <span class="number">100</span>; i++ &#123;</span><br><span class="line">			ch &lt;- <span class="number">1</span></span><br><span class="line">			<span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">0</span> &#123;</span><br><span class="line">				fmt.Println(i)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		ch_end &lt;- <span class="number">1</span></span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= <span class="number">100</span>; i++ &#123;</span><br><span class="line">			&lt;-ch</span><br><span class="line">			<span class="keyword">if</span> i % <span class="number">2</span> != <span class="number">0</span> &#123;</span><br><span class="line">				fmt.Println(i)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	&lt;-ch_end</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="go">func main() &#123;
+    // ch用来同步两个协程交替执行
+    ch := make(chan int)
+    // ch_end用来阻塞主程序，让两个协程可以执行完
+    ch_end := make(chan int)
+    go func() &#123;
+        for i := 1; i &lt;= 100; i++ &#123;
+            ch &lt;- 1
+            if i % 2 == 0 &#123;
+                fmt.Println(i)
+            &#125;
+        &#125;
+        ch_end &lt;- 1
+    &#125;()
+    go func() &#123;
+        for i := 1; i &lt;= 100; i++ &#123;
+            &lt;-ch
+            if i % 2 != 0 &#123;
+                fmt.Println(i)
+            &#125;
+        &#125;
+    &#125;()
+    &lt;-ch_end
+&#125;
+</code></pre>
 <h3 id="并行素数筛选"><a href="#并行素数筛选" class="headerlink" title="并行素数筛选"></a>并行素数筛选</h3><blockquote>
 <p>有一个协程不断生2~n的自然数，对每个素数起一个协程，用来筛选素数</p>
 </blockquote>
 <p><code>示例代码:</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">generate</span><span class="params">(ch <span class="keyword">chan</span> <span class="type">int</span>, n <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">2</span>; i &lt;= n ; i++ &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;generate:&quot;</span>, i)</span><br><span class="line">		ch &lt;- i</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">close</span>(ch)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">filter</span><span class="params">(in, out <span class="keyword">chan</span> <span class="type">int</span>, prime <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="keyword">range</span> in &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;filter(%d): %d\n&quot;</span>, prime, i)</span><br><span class="line">		<span class="keyword">if</span> i % prime != <span class="number">0</span> &#123;</span><br><span class="line">			out &lt;- i</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">close</span>(out)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	res := []<span class="type">int</span>&#123;&#125;</span><br><span class="line">	ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">	<span class="keyword">go</span> generate(ch, <span class="number">112</span>)</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> prime, ok := &lt;- ch; ok &#123;</span><br><span class="line">			res = <span class="built_in">append</span>(res, prime)</span><br><span class="line">			ch_out := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">			<span class="keyword">go</span> filter(ch, ch_out, prime)</span><br><span class="line">			<span class="comment">// 前一个素数过滤协程的输出通道是后一个素数过滤通道的输入通道</span></span><br><span class="line">			ch = ch_out</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="string">&quot;main:&quot;</span>, res)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">func generate(ch chan int, n int) &#123;
+    for i := 2; i &lt;= n ; i++ &#123;
+        fmt.Println(&quot;generate:&quot;, i)
+        ch &lt;- i
+    &#125;
+    close(ch)
+&#125;
 
+func filter(in, out chan int, prime int) &#123;
+    for i := range in &#123;
+        fmt.Printf(&quot;filter(%d): %d\n&quot;, prime, i)
+        if i % prime != 0 &#123;
+            out &lt;- i
+        &#125;
+    &#125;
+    close(out)
+&#125;
+
+
+func main() &#123;
+    res := []int&#123;&#125;
+    ch := make(chan int)
+    go generate(ch, 112)
+    
+    for &#123;
+        if prime, ok := &lt;- ch; ok &#123;
+            res = append(res, prime)
+            ch_out := make(chan int)
+            go filter(ch, ch_out, prime)
+            // 前一个素数过滤协程的输出通道是后一个素数过滤通道的输入通道
+            ch = ch_out
+        &#125; else &#123;
+            break
+        &#125;
+    &#125;
+    fmt.Println(&quot;main:&quot;, res)
+&#125;
+</code></pre>
 <h3 id="实现超时机制"><a href="#实现超时机制" class="headerlink" title="实现超时机制"></a>实现超时机制</h3><blockquote>
 <p>当设置的超时时间到达后如果work还不可执行就终止等待，返回超时</p>
 </blockquote>
 <p><code>示例代码</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TimeOut</span><span class="params">(timeout time.Duration)</span></span> &#123;</span><br><span class="line">	ch_to := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">bool</span>, <span class="number">1</span>)</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		time.Sleep(timeout)</span><br><span class="line">		ch_to &lt;- <span class="literal">true</span></span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	ch_do := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>, <span class="number">1</span>)</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		time.Sleep(<span class="number">3e9</span>)</span><br><span class="line">		ch_do &lt;- <span class="number">1</span></span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">select</span> &#123;</span><br><span class="line">	<span class="keyword">case</span> i := &lt;- ch_do:</span><br><span class="line">		fmt.Println(<span class="string">&quot;do something, id:&quot;</span>, i)</span><br><span class="line">	<span class="keyword">case</span> &lt;-ch_to:</span><br><span class="line">		fmt.Println(<span class="string">&quot;timeout&quot;</span>)</span><br><span class="line">		<span class="keyword">break</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">func TimeOut(timeout time.Duration) &#123;
+    ch_to := make(chan bool, 1)
+    go func() &#123;
+        time.Sleep(timeout)
+        ch_to &lt;- true
+    &#125;()
 
+    ch_do := make(chan int, 1)
+    go func() &#123;
+        time.Sleep(3e9)
+        ch_do &lt;- 1
+    &#125;()
+
+    select &#123;
+    case i := &lt;- ch_do:
+        fmt.Println(&quot;do something, id:&quot;, i)
+    case &lt;-ch_to:
+        fmt.Println(&quot;timeout&quot;)
+        break
+    &#125;
+&#125;
+</code></pre>
 <h3 id="实现迭代器"><a href="#实现迭代器" class="headerlink" title="实现迭代器"></a>实现迭代器</h3><blockquote>
 <p>实现一个惰性迭代器，每次调用返回一个列表元素，直到所有的元素被访问完返回nil</p>
 </blockquote>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 迭代器</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">iterator</span><span class="params">(iterable []<span class="keyword">interface</span>&#123;&#125;)</span></span> <span class="keyword">chan</span> <span class="keyword">interface</span>&#123;&#125;&#123;</span><br><span class="line">	yield := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">interface</span>&#123;&#125;)</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(iterable); i++ &#123;</span><br><span class="line">			yield &lt;- iterable[i]</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">close</span>(yield)</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> yield</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取下一个元素</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">next</span><span class="params">(iter <span class="keyword">chan</span> <span class="keyword">interface</span>&#123;&#125;)</span></span> <span class="keyword">interface</span>&#123;&#125; &#123;</span><br><span class="line">	<span class="keyword">for</span> v := <span class="keyword">range</span> iter &#123;</span><br><span class="line">		<span class="keyword">return</span> v</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	nums := []<span class="keyword">interface</span>&#123;&#125;&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;</span><br><span class="line">	iter := iterator(nums)</span><br><span class="line">	<span class="keyword">for</span> v := next(iter); v != <span class="literal">nil</span>; v = next(iter) &#123;</span><br><span class="line">		fmt.Println(v)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">// 迭代器
+func iterator(iterable []interface&#123;&#125;) chan interface&#123;&#125;&#123;
+    yield := make(chan interface&#123;&#125;)
+    go func() &#123;
+        for i := 0; i &lt; len(iterable); i++ &#123;
+            yield &lt;- iterable[i]
+        &#125;
+        close(yield)
+    &#125;()
+    return yield
+&#125;
 
+// 获取下一个元素
+func next(iter chan interface&#123;&#125;) interface&#123;&#125; &#123;
+    for v := range iter &#123;
+        return v
+    &#125;
+    return nil
+&#125;
+
+func main() &#123;
+    nums := []interface&#123;&#125;&#123;1, 2, 3, 4, 5&#125;
+    iter := iterator(nums)
+    for v := next(iter); v != nil; v = next(iter) &#123;
+        fmt.Println(v)
+    &#125;
+&#125;
+</code></pre>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>【1】<a target="_blank" rel="noopener" href="https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/14.1.md">《The Way to Go》：并发、并行和协程</a><br>【2】<a target="_blank" rel="noopener" href="https://studygolang.com/articles/26795">Golang的协程调度器原理及GMP设计思想？</a></p>
 
   </div>
@@ -2503,6 +2623,14 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
        <!-- 参考资料、相关资料等 -->
       
        <!-- 相关文章 -->
+      
+        
+  <div class="related_posts">
+    <section class='header'>
+      <i class="fa-solid fa-bookmark fa-fw" aria-hidden="true"></i><span>相关文章</span>
+    </section>
+    <section class='body'>
+      <div class="vlts-rps"><a class="item" href="/2023/03/25/Go-实战-Socket-编程/" title="Go 实战: Socket 编程" rel="bookmark "><span class="title">Go 实战: Socket 编程</span></a></div></section></div>
       
       <!-- 版权声明组件 -->
       
@@ -3010,6 +3138,17 @@ Processor(compiler gener...</p>
 
   <script>
 
+  volantis.css("https://unpkg.com/highlight.js@11.7.0/styles/a11y-dark.css");
+
+
+  volantis.js("https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js").then(()=>{
+    volantis.requestAnimationFrame(hljs.highlightAll)
+  })
+  volantis.pjax.push(()=>{
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  },"highlightjs")
 
 
   function pjax_highlightjs_copyCode(){
@@ -3034,7 +3173,7 @@ Processor(compiler gener...</p>
 
 
   <script>
-  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp"];
+  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp"];
   let index = 0;
   let IntervalParallax = null;
 

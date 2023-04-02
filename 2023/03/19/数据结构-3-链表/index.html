@@ -1599,7 +1599,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     debug: "env",
     cdn: {"js":{"app":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/app.js","parallax":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/parallax.js","rightMenu":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenu.js","rightMenus":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenus.js","sites":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/sites.js","friends":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/friends.js","contributors":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/contributors.js","search":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
     default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
-    lastupdate: new Date(1680429161732),
+    lastupdate: new Date(1680434952806),
     sidebar: {
       for_page: ["blogger","category","tagcloud","donate"],
       for_post: ["toc"],
@@ -2446,15 +2446,74 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </blockquote>
 <p><strong>思路</strong>：两个指针，p1先走n步，然后p1和p2再一起走，当p1到链表结尾，p2就是要删除的节点。注意处理可能删除的是头结点（n&#x3D;length）或者不需要删除（n&gt;length）的情况。<br><strong>可以通过增加一个虚拟的头节点，避免对头节点的特殊处理。</strong></p>
 <p><code>示例代码</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * type ListNode struct &#123;</span></span><br><span class="line"><span class="comment"> *     Val int</span></span><br><span class="line"><span class="comment"> *     Next *ListNode</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">removeNthFromEnd</span><span class="params">(head *ListNode, n <span class="type">int</span>)</span></span> *ListNode &#123;</span><br><span class="line">    p1, p2 := head, head</span><br><span class="line">    i := <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> ; i &lt; n &amp;&amp; p1 != <span class="literal">nil</span> ; i++ &#123;</span><br><span class="line">        p1 = p1.Next</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> p1 == <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> i &lt; n &#123;</span><br><span class="line">            <span class="comment">// 不需要删除</span></span><br><span class="line">            <span class="keyword">return</span> head</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 删除头节点</span></span><br><span class="line">            <span class="keyword">return</span> head.Next</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> p1.Next != <span class="literal">nil</span> &#123;</span><br><span class="line">        p1 = p1.Next</span><br><span class="line">        p2 = p2.Next</span><br><span class="line">    &#125;</span><br><span class="line">    t := p2.Next</span><br><span class="line">    <span class="keyword">if</span> t != <span class="literal">nil</span> &#123;</span><br><span class="line">        p2.Next = t.Next</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> head</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="go">/**
+ * Definition for singly-linked list.
+ * type ListNode struct &#123;
+ *     Val int
+ *     Next *ListNode
+ * &#125;
+ */
+func removeNthFromEnd(head *ListNode, n int) *ListNode &#123;
+    p1, p2 := head, head
+    i := 0
+    for ; i &lt; n &amp;&amp; p1 != nil ; i++ &#123;
+        p1 = p1.Next
+    &#125;
+    if p1 == nil &#123;
+        if i &lt; n &#123;
+            // 不需要删除
+            return head
+        &#125; else &#123;
+            // 删除头节点
+            return head.Next
+        &#125;
+    &#125;
+    for p1.Next != nil &#123;
+        p1 = p1.Next
+        p2 = p2.Next
+    &#125;
+    t := p2.Next
+    if t != nil &#123;
+        p2.Next = t.Next
+    &#125;
+    return head
+&#125;
+</code></pre>
 <h2 id="3-2-K个一组翻转链表"><a href="#3-2-K个一组翻转链表" class="headerlink" title="3.2 K个一组翻转链表"></a>3.2 K个一组翻转链表</h2><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/reverse-nodes-in-k-group/">LeetCode No.25</a></p>
 <blockquote>
 <p>题目描述：给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。k 是一个正整数，它的值小于或等于链表的长度。如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。<br>进阶：<br>你可以设计一个只使用常数额外空间的算法来解决此问题吗？<br>你不能只是单纯的改变节点内部的值，而是需要实际进行节点交换。</p>
 </blockquote>
 <p><strong>思路：</strong> 先遍历一遍求出链表长度n，则需要翻转n&#x2F;k组。使用一个虚拟头节点保存结果，每一轮翻转完将尾节保存，下一轮翻转结束后将上一轮的为节点的Next节点指向当前轮的头结点。</p>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">reverseKGroup</span><span class="params">(head *ListNode, k <span class="type">int</span>)</span></span> *ListNode &#123;</span><br><span class="line">    n := <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> p := head; p != <span class="literal">nil</span>; p = p.Next &#123;</span><br><span class="line">        n++</span><br><span class="line">    &#125;</span><br><span class="line">    reshead := &amp;ListNode&#123;&#125;</span><br><span class="line">    <span class="keyword">var</span> lasttail *ListNode</span><br><span class="line">    <span class="keyword">for</span> i, p := <span class="number">0</span>, head; i &lt;= n/k; i++ &#123;</span><br><span class="line">        <span class="keyword">if</span> i == n / k &#123;</span><br><span class="line">            lasttail.Next = p</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        &#125;</span><br><span class="line">        curhead, curtail := p, p</span><br><span class="line">        <span class="keyword">for</span> j := <span class="number">0</span>; j &lt; k; j++ &#123;</span><br><span class="line">            tmp := p</span><br><span class="line">            p = p.Next</span><br><span class="line">            tmp.Next = curhead</span><br><span class="line">            curhead = tmp</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> i == <span class="number">0</span> &#123;</span><br><span class="line">            reshead.Next = curhead</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            lasttail.Next = curhead</span><br><span class="line">        &#125;</span><br><span class="line">        lasttail = curtail</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> reshead.Next</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">func reverseKGroup(head *ListNode, k int) *ListNode &#123;
+    n := 0
+    for p := head; p != nil; p = p.Next &#123;
+        n++
+    &#125;
+    reshead := &amp;ListNode&#123;&#125;
+    var lasttail *ListNode
+    for i, p := 0, head; i &lt;= n/k; i++ &#123;
+        if i == n / k &#123;
+            lasttail.Next = p
+            break
+        &#125;
+        curhead, curtail := p, p
+        for j := 0; j &lt; k; j++ &#123;
+            tmp := p
+            p = p.Next
+            tmp.Next = curhead
+            curhead = tmp
+        &#125;
+        if i == 0 &#123;
+            reshead.Next = curhead
+        &#125; else &#123;
+            lasttail.Next = curhead
+        &#125;
+        lasttail = curtail
+    &#125;
+    return reshead.Next
+&#125;
+</code></pre>
 
   </div>
   
@@ -2464,6 +2523,14 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
        <!-- 参考资料、相关资料等 -->
       
        <!-- 相关文章 -->
+      
+        
+  <div class="related_posts">
+    <section class='header'>
+      <i class="fa-solid fa-bookmark fa-fw" aria-hidden="true"></i><span>相关文章</span>
+    </section>
+    <section class='body'>
+      <div class="vlts-rps"><a class="item" href="/2023/03/19/数据结构-1-字符串/" title="数据结构(1): 字符串" rel="bookmark "><span class="title">数据结构(1): 字符串</span></a><a class="item" href="/2023/03/19/数据结构-2-数组/" title="数据结构(2): 数组" rel="bookmark "><span class="title">数据结构(2): 数组</span></a><a class="item" href="/2023/03/19/数据结构-4-树/" title="数据结构(4): 树" rel="bookmark "><span class="title">数据结构(4): 树</span></a><a class="item" href="/2023/03/19/数据结构-5-栈-队列-堆/" title="数据结构(5): 栈|队列|堆" rel="bookmark "><span class="title">数据结构(5): 栈|队列|堆</span></a><a class="item" href="/2023/04/02/数据结构-6-单调栈/" title="数据结构（6）: 单调栈" rel="bookmark "><span class="title">数据结构（6）: 单调栈</span></a></div></section></div>
       
       <!-- 版权声明组件 -->
       
@@ -2972,6 +3039,17 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
   <script>
 
+  volantis.css("https://unpkg.com/highlight.js@11.7.0/styles/a11y-dark.css");
+
+
+  volantis.js("https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js").then(()=>{
+    volantis.requestAnimationFrame(hljs.highlightAll)
+  })
+  volantis.pjax.push(()=>{
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  },"highlightjs")
 
 
   function pjax_highlightjs_copyCode(){
@@ -2996,7 +3074,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
 
   <script>
-  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp"];
+  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp"];
   let index = 0;
   let IntervalParallax = null;
 

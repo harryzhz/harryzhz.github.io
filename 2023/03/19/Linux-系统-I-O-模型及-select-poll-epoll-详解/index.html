@@ -1600,7 +1600,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     debug: "env",
     cdn: {"js":{"app":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/app.js","parallax":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/parallax.js","rightMenu":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenu.js","rightMenus":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenus.js","sites":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/sites.js","friends":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/friends.js","contributors":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/contributors.js","search":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
     default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
-    lastupdate: new Date(1680429161732),
+    lastupdate: new Date(1680434952806),
     sidebar: {
       for_page: ["blogger","category","tagcloud","donate"],
       for_post: ["toc"],
@@ -2469,15 +2469,18 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <h3 id="IO多路复用"><a href="#IO多路复用" class="headerlink" title="IO多路复用"></a>IO多路复用</h3><p>是用select、poll等待数据，可以等待多个socket中的任一个变为可读，这一过程会被阻塞，当某个套接字数据到来时返回，之后再用recvfrom系统调用把数据从内核缓存区复制到用户进程，流程如下：<br><img src="https://upload-images.jianshu.io/upload_images/14151453-8845990e0d75eb9a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" class="lazyload" data-srcset="https://upload-images.jianshu.io/upload_images/14151453-8845990e0d75eb9a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p>
 <p>流程类似阻塞IO，甚至比阻塞IO更差，多使用了一个系统调用，但是IO多路复用最大的特点是让单个进程能同时处理多个IO事件的能力，又被称为事件驱动IO，相比于多线程模型，IO复用模型不需要线程的创建、切换、销毁，系统开销更小，适合高并发的场景。</p>
 <h4 id="select"><a href="#select" class="headerlink" title="select"></a>select</h4><p>select是IO多路复用模型的一种实现，当select函数返回后可以通过轮询fdset来找到就绪的socket。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">select</span><span class="params">(<span class="type">int</span> n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, <span class="keyword">struct</span> timeval *timeout)</span></span><br></pre></td></tr></table></figure>
-
+<pre><code class="c">int select(int n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout)
+</code></pre>
 <p>优点是几乎所有平台都支持，缺点在于能够监听的fd数量有限，Linux系统上一般为1024，是写死在宏定义中的，要修改需要重新编译内核。而且每次都要把所有的fd在用户空间和内核空间拷贝，这个操作是比较耗时的。</p>
 <h4 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h4><p>poll和select基本相同，不同的是poll没有最大fd数量限制（实际也会受到物理资源的限制，因为系统的fd数量是有限的），而且提供了更多的时间类型。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">poll</span><span class="params">(<span class="keyword">struct</span> pollfd *fds, <span class="type">unsigned</span> <span class="type">int</span> nfds, <span class="type">int</span> timeout)</span></span><br></pre></td></tr></table></figure>
-
+<pre><code class="c">int poll(struct pollfd *fds, unsigned int nfds, int timeout)
+</code></pre>
 <p>总结：select和poll都需要在返回后通过轮询的方式检查就绪的socket，事实上同时连的大量socket在一个时刻只有很少的处于就绪状态，因此随着监视的描述符数量的变多，其性能也会逐渐下降。</p>
 <h4 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h4><p>epoll是select和poll的改进版本，更加灵活，没有描述符限制。epoll使用一个文件描述符管理多个描述符，将用户关系的文件描述符的事件存放到内核的一个事件表中，这样在用户空间和内核空间的copy只需一次。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">epoll_create</span><span class="params">(<span class="type">int</span> size)</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">epoll_ctl</span><span class="params">(<span class="type">int</span> epfd, <span class="type">int</span> op, <span class="type">int</span> fd, <span class="keyword">struct</span> epoll_event *event)</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">epoll_wait</span><span class="params">(<span class="type">int</span> epfd, <span class="keyword">struct</span> epoll_event * events, <span class="type">int</span> maxevents, <span class="type">int</span> timeout)</span></span><br></pre></td></tr></table></figure>
+<pre><code class="c">int epoll_create(int size)
+int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)
+int epoll_wait(int epfd, struct epoll_event * events, int maxevents, int timeout)
+</code></pre>
 <p>epoll_create()用来创建一个epoll句柄。<br>epoll_ctl() 用于向内核注册新的描述符或者是改变某个文件描述符的状态。已注册的描述符在内核中会被维护在一棵红黑树上，通过回调函数内核会将 I&#x2F;O 准备好的描述符加入到一个就绪链表中管理。<br> epoll_wait() 可以从就绪链表中得到事件完成的描述符，因此进程不需要通过轮询来获得事件完成的描述符。</p>
 <h5 id="LT模式（水平触发，默认）"><a href="#LT模式（水平触发，默认）" class="headerlink" title="LT模式（水平触发，默认）"></a>LT模式（水平触发，默认）</h5><p>当epoll_wait检测到描述符IO事件发生并且通知给应用程序时，应用程序可以不立即处理该事件，下次调用epoll_wait还会再次通知该事件，支持block和nonblocking socket。</p>
 <h5 id="ET模式（边缘触发）"><a href="#ET模式（边缘触发）" class="headerlink" title="ET模式（边缘触发）"></a>ET模式（边缘触发）</h5><p>当epoll_wait检测到描述符IO事件发生并且通知给应用程序时，应用程序需要立即处理该事件，如果不立即处理，下次调用epoll_wait不会再次通知该事件。</p>
@@ -2500,6 +2503,14 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
        <!-- 参考资料、相关资料等 -->
       
        <!-- 相关文章 -->
+      
+        
+  <div class="related_posts">
+    <section class='header'>
+      <i class="fa-solid fa-bookmark fa-fw" aria-hidden="true"></i><span>相关文章</span>
+    </section>
+    <section class='body'>
+      <div class="vlts-rps"><a class="item" href="/2023/03/13/Linux进程管理-supervisor和nohup原理及使用/" title="Linux进程管理:supervisor和nohup原理及使用" rel="bookmark "><span class="title">Linux进程管理:supervisor和nohup原理及使用</span></a></div></section></div>
       
       <!-- 版权声明组件 -->
       
@@ -3013,6 +3024,17 @@ LRU（Least Recent Used）策略：优先淘汰最近最少使用的数据，常
 
   <script>
 
+  volantis.css("https://unpkg.com/highlight.js@11.7.0/styles/a11y-dark.css");
+
+
+  volantis.js("https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js").then(()=>{
+    volantis.requestAnimationFrame(hljs.highlightAll)
+  })
+  volantis.pjax.push(()=>{
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  },"highlightjs")
 
 
   function pjax_highlightjs_copyCode(){
@@ -3037,7 +3059,7 @@ LRU（Least Recent Used）策略：优先淘汰最近最少使用的数据，常
 
 
   <script>
-  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp"];
+  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp"];
   let index = 0;
   let IntervalParallax = null;
 

@@ -1600,7 +1600,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     debug: "env",
     cdn: {"js":{"app":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/app.js","parallax":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/parallax.js","rightMenu":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenu.js","rightMenus":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenus.js","sites":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/sites.js","friends":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/friends.js","contributors":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/contributors.js","search":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
     default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
-    lastupdate: new Date(1680429161732),
+    lastupdate: new Date(1680434952806),
     sidebar: {
       for_page: ["blogger","category","tagcloud","donate"],
       for_post: ["toc"],
@@ -2465,7 +2465,55 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>如果不存在直接返回nil值</li>
 </ul>
 <h3 id="Go语言实现"><a href="#Go语言实现" class="headerlink" title="Go语言实现"></a>Go语言实现</h3><p>使用Go内建map类型和container包的list（双向链表）</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;container/list&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Pair <span class="keyword">struct</span> &#123;</span><br><span class="line">	key <span class="type">int</span></span><br><span class="line">	val <span class="type">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> LRUCache <span class="keyword">struct</span> &#123;</span><br><span class="line">	<span class="built_in">cap</span> <span class="type">int</span></span><br><span class="line">	list *list.List</span><br><span class="line">	kv <span class="keyword">map</span>[<span class="type">int</span>]*list.Element</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Constructor</span><span class="params">(capacity <span class="type">int</span>)</span></span> LRUCache &#123;</span><br><span class="line">	<span class="keyword">return</span> LRUCache&#123;</span><br><span class="line">		<span class="built_in">cap</span>: capacity,</span><br><span class="line">		list: list.New(),</span><br><span class="line">		kv: <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">int</span>]*list.Element),</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(this *LRUCache)</span></span> Get(key <span class="type">int</span>) <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> v, ok := this.kv[key]; ok == <span class="literal">true</span> &#123;</span><br><span class="line">		this.list.MoveToFront(v)</span><br><span class="line">		<span class="keyword">return</span> v.Value.(Pair).val</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(this *LRUCache)</span></span> Put(key <span class="type">int</span>, value <span class="type">int</span>)  &#123;</span><br><span class="line">	<span class="keyword">if</span> elem, ok := this.kv[key]; ok == <span class="literal">true</span> &#123;</span><br><span class="line">		elem.Value = Pair&#123;key: key, val: value&#125;</span><br><span class="line">		this.list.MoveToFront(elem)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> this.list.Len() &gt;= this.<span class="built_in">cap</span> &#123;</span><br><span class="line">		<span class="built_in">delete</span>(this.kv, this.list.Back().Value.(Pair).key)</span><br><span class="line">		this.list.Remove(this.list.Back())</span><br><span class="line">	&#125;</span><br><span class="line">	this.list.PushFront(Pair&#123;key: key, val: value&#125;)</span><br><span class="line">	this.kv[key] = this.list.Front()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">import (
+    &quot;container/list&quot;
+)
+
+type Pair struct &#123;
+    key int
+    val int
+&#125;
+
+type LRUCache struct &#123;
+    cap int
+    list *list.List
+    kv map[int]*list.Element
+&#125;
+
+
+func Constructor(capacity int) LRUCache &#123;
+    return LRUCache&#123;
+        cap: capacity,
+        list: list.New(),
+        kv: make(map[int]*list.Element),
+    &#125;
+&#125;
+
+
+func (this *LRUCache) Get(key int) int &#123;
+    if v, ok := this.kv[key]; ok == true &#123;
+        this.list.MoveToFront(v)
+        return v.Value.(Pair).val
+    &#125; else &#123;
+        return -1
+    &#125;
+&#125;
+
+
+func (this *LRUCache) Put(key int, value int)  &#123;
+    if elem, ok := this.kv[key]; ok == true &#123;
+        elem.Value = Pair&#123;key: key, val: value&#125;
+        this.list.MoveToFront(elem)
+        return
+    &#125;
+    if this.list.Len() &gt;= this.cap &#123;
+        delete(this.kv, this.list.Back().Value.(Pair).key)
+        this.list.Remove(this.list.Back())
+    &#125;
+    this.list.PushFront(Pair&#123;key: key, val: value&#125;)
+    this.kv[key] = this.list.Front()
+&#125;
+</code></pre>
 
   </div>
   
@@ -2475,6 +2523,14 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
        <!-- 参考资料、相关资料等 -->
       
        <!-- 相关文章 -->
+      
+        
+  <div class="related_posts">
+    <section class='header'>
+      <i class="fa-solid fa-bookmark fa-fw" aria-hidden="true"></i><span>相关文章</span>
+    </section>
+    <section class='body'>
+      <div class="vlts-rps"><a class="item" href="/2023/03/19/数据结构-1-字符串/" title="数据结构(1): 字符串" rel="bookmark "><span class="title">数据结构(1): 字符串</span></a><a class="item" href="/2023/03/19/数据结构-2-数组/" title="数据结构(2): 数组" rel="bookmark "><span class="title">数据结构(2): 数组</span></a><a class="item" href="/2023/03/19/数据结构-4-树/" title="数据结构(4): 树" rel="bookmark "><span class="title">数据结构(4): 树</span></a><a class="item" href="/2023/03/19/数据结构-3-链表/" title="数据结构(3): 链表" rel="bookmark "><span class="title">数据结构(3): 链表</span></a><a class="item" href="/2023/03/19/算法-1-双指针/" title="算法(1): 双指针" rel="bookmark "><span class="title">算法(1): 双指针</span></a></div></section></div>
       
       <!-- 版权声明组件 -->
       
@@ -2983,6 +3039,17 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
   <script>
 
+  volantis.css("https://unpkg.com/highlight.js@11.7.0/styles/a11y-dark.css");
+
+
+  volantis.js("https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js").then(()=>{
+    volantis.requestAnimationFrame(hljs.highlightAll)
+  })
+  volantis.pjax.push(()=>{
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  },"highlightjs")
 
 
   function pjax_highlightjs_copyCode(){
@@ -3007,7 +3074,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
 
   <script>
-  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp"];
+  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp"];
   let index = 0;
   let IntervalParallax = null;
 

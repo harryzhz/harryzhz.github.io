@@ -1598,7 +1598,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     debug: "env",
     cdn: {"js":{"app":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/app.js","parallax":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/parallax.js","rightMenu":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenu.js","rightMenus":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenus.js","sites":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/sites.js","friends":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/friends.js","contributors":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/contributors.js","search":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
     default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
-    lastupdate: new Date(1680429161732),
+    lastupdate: new Date(1680434952806),
     sidebar: {
       for_page: ["blogger","category","tagcloud","donate"],
       for_post: ["toc"],
@@ -2445,7 +2445,35 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <p><strong>思路</strong>：采用交换法，选第一个数为基准数pivot，在pl &lt;&#x3D; pr的前提下，指针pl从基准数+1的位置向右走，直到碰到比pivot大的数，指针pr从最右边向左走，直到碰到比pivot小的数，交换arr[pl], arr[pr]，循环结束时pr &#x3D; pl - 1，将基准数和pr交换。递归调用对基准数位置两边的区间调整。</p>
 <p><img src="https://upload-images.jianshu.io/upload_images/14151453-a8e8b8d1195b3f44.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" class="lazyload" data-srcset="https://upload-images.jianshu.io/upload_images/14151453-a8e8b8d1195b3f44.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">partition</span><span class="params">(arr []<span class="type">int</span>, left, right <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	pivot := arr[left]</span><br><span class="line">	pl, pr := left + <span class="number">1</span>, right</span><br><span class="line">	<span class="keyword">for</span> pl &lt;= pr &#123;</span><br><span class="line">		<span class="keyword">for</span> ; pl &lt;= pr &amp;&amp; arr[pl] &lt; pivot; pl++ &#123;&#125;</span><br><span class="line">		<span class="keyword">for</span> ; pl &lt;= pr &amp;&amp; arr[pr] &gt; pivot; pr-- &#123;&#125;</span><br><span class="line">		<span class="keyword">if</span> pl &lt; pr &#123;</span><br><span class="line">			arr[pl], arr[pr] = arr[pr], arr[pl]</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 结束时pr = pl -1</span></span><br><span class="line">	arr[left], arr[pr] = arr[pr], arr[left]</span><br><span class="line">	<span class="keyword">return</span> pr</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">recursive</span><span class="params">(arr []<span class="type">int</span>, left, right <span class="type">int</span>)</span></span>  &#123;</span><br><span class="line">	<span class="keyword">if</span> left &gt;= right &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	mid := partition(arr, left, right)</span><br><span class="line">	recursive(arr, left, mid - <span class="number">1</span>)</span><br><span class="line">	recursive(arr, mid + <span class="number">1</span>, right)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">QuickSort</span><span class="params">(arr []<span class="type">int</span>)</span></span> []<span class="type">int</span> &#123;</span><br><span class="line">	recursive(arr, <span class="number">0</span>, <span class="built_in">len</span>(arr) - <span class="number">1</span>)</span><br><span class="line">	<span class="keyword">return</span> arr</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">func partition(arr []int, left, right int) int &#123;
+    pivot := arr[left]
+    pl, pr := left + 1, right
+    for pl &lt;= pr &#123;
+        for ; pl &lt;= pr &amp;&amp; arr[pl] &lt; pivot; pl++ &#123;&#125;
+        for ; pl &lt;= pr &amp;&amp; arr[pr] &gt; pivot; pr-- &#123;&#125;
+        if pl &lt; pr &#123;
+            arr[pl], arr[pr] = arr[pr], arr[pl]
+        &#125;
+    &#125;
+    // 结束时pr = pl -1
+    arr[left], arr[pr] = arr[pr], arr[left]
+    return pr
+&#125;
+
+func recursive(arr []int, left, right int)  &#123;
+    if left &gt;= right &#123;
+        return
+    &#125;
+    mid := partition(arr, left, right)
+    recursive(arr, left, mid - 1)
+    recursive(arr, mid + 1, right)
+&#125;
+
+func QuickSort(arr []int) []int &#123;
+    recursive(arr, 0, len(arr) - 1)
+    return arr
+&#125;
+</code></pre>
 
   </div>
   
@@ -2455,6 +2483,14 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
        <!-- 参考资料、相关资料等 -->
       
        <!-- 相关文章 -->
+      
+        
+  <div class="related_posts">
+    <section class='header'>
+      <i class="fa-solid fa-bookmark fa-fw" aria-hidden="true"></i><span>相关文章</span>
+    </section>
+    <section class='body'>
+      <div class="vlts-rps"><a class="item" href="/2023/03/19/算法-1-双指针/" title="算法(1): 双指针" rel="bookmark "><span class="title">算法(1): 双指针</span></a></div></section></div>
       
       <!-- 版权声明组件 -->
       
@@ -2963,6 +2999,17 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
   <script>
 
+  volantis.css("https://unpkg.com/highlight.js@11.7.0/styles/a11y-dark.css");
+
+
+  volantis.js("https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js").then(()=>{
+    volantis.requestAnimationFrame(hljs.highlightAll)
+  })
+  volantis.pjax.push(()=>{
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  },"highlightjs")
 
 
   function pjax_highlightjs_copyCode(){
@@ -2987,7 +3034,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
 
   <script>
-  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp"];
+  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp"];
   let index = 0;
   let IntervalParallax = null;
 

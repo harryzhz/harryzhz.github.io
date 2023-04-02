@@ -1600,7 +1600,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     debug: "env",
     cdn: {"js":{"app":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/app.js","parallax":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/parallax.js","rightMenu":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenu.js","rightMenus":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenus.js","sites":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/sites.js","friends":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/friends.js","contributors":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/contributors.js","search":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
     default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
-    lastupdate: new Date(1680429161732),
+    lastupdate: new Date(1680434952806),
     sidebar: {
       for_page: ["blogger","category","tagcloud","donate"],
       for_post: ["toc"],
@@ -2446,15 +2446,81 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </blockquote>
 <p>思路：深度优先搜索，从根节点到每个叶子节点的所有路径即结果，深度为子串的长度</p>
 <p><code>示例代码:</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> (</span><br><span class="line">	letterMap = []<span class="type">string</span>&#123;</span><br><span class="line">		<span class="string">&quot; &quot;</span>,    <span class="comment">//0</span></span><br><span class="line">		<span class="string">&quot;&quot;</span>,     <span class="comment">//1</span></span><br><span class="line">		<span class="string">&quot;abc&quot;</span>,  <span class="comment">//2</span></span><br><span class="line">		<span class="string">&quot;def&quot;</span>,  <span class="comment">//3</span></span><br><span class="line">		<span class="string">&quot;ghi&quot;</span>,  <span class="comment">//4</span></span><br><span class="line">		<span class="string">&quot;jkl&quot;</span>,  <span class="comment">//5</span></span><br><span class="line">		<span class="string">&quot;mno&quot;</span>,  <span class="comment">//6</span></span><br><span class="line">		<span class="string">&quot;pqrs&quot;</span>, <span class="comment">//7</span></span><br><span class="line">		<span class="string">&quot;tuv&quot;</span>,  <span class="comment">//8</span></span><br><span class="line">		<span class="string">&quot;wxyz&quot;</span>, <span class="comment">//9</span></span><br><span class="line">	&#125;</span><br><span class="line">	res   = []<span class="type">string</span>&#123;&#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">letterCombinations</span><span class="params">(digits <span class="type">string</span>)</span></span> []<span class="type">string</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> digits == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> []<span class="type">string</span>&#123;&#125;</span><br><span class="line">	&#125;</span><br><span class="line">    res = []<span class="type">string</span>&#123;&#125;</span><br><span class="line">	dfs(digits, <span class="number">0</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">dfs</span><span class="params">(digits <span class="type">string</span>, i <span class="type">int</span>, s <span class="type">string</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> i == <span class="built_in">len</span>(digits) &#123;</span><br><span class="line">		res = <span class="built_in">append</span>(res, s)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	curs := letterMap[digits[i] - <span class="string">&#x27;0&#x27;</span>]</span><br><span class="line">	<span class="keyword">for</span> _, ch := <span class="keyword">range</span> curs &#123;</span><br><span class="line">		dfs(digits, i+<span class="number">1</span>, s + <span class="type">string</span>(ch))</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">var (
+    letterMap = []string&#123;
+        &quot; &quot;,    //0
+        &quot;&quot;,     //1
+        &quot;abc&quot;,  //2
+        &quot;def&quot;,  //3
+        &quot;ghi&quot;,  //4
+        &quot;jkl&quot;,  //5
+        &quot;mno&quot;,  //6
+        &quot;pqrs&quot;, //7
+        &quot;tuv&quot;,  //8
+        &quot;wxyz&quot;, //9
+    &#125;
+    res   = []string&#123;&#125;
+)
 
+func letterCombinations(digits string) []string &#123;
+    if digits == &quot;&quot; &#123;
+        return []string&#123;&#125;
+    &#125;
+    res = []string&#123;&#125;
+    dfs(digits, 0, &quot;&quot;)
+    return res
+&#125;
+
+func dfs(digits string, i int, s string) &#123;
+    if i == len(digits) &#123;
+        res = append(res, s)
+        return
+    &#125;
+    curs := letterMap[digits[i] - &#39;0&#39;]
+    for _, ch := range curs &#123;
+        dfs(digits, i+1, s + string(ch))
+    &#125;
+&#125;
+</code></pre>
 <blockquote>
 <p>问题2：给定一个数组，要求在这个数组中找出 k 个数之和为 target 的所有组合。<br>Input: nums &#x3D; [1, 0, -1, 0, -2, 2], and target &#x3D; 0.<br>Output:  [ [-1,  0, 0, 1], [-2, -1, 1, 2], [-2,  0, 0, 2] ]</p>
 </blockquote>
 <p>思路：深度优先搜索，层数为k。注意去重的处理。</p>
 <p><code>示例代码:</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;sort&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> res = [][]<span class="type">int</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fourSum</span><span class="params">(nums []<span class="type">int</span>, target <span class="type">int</span>)</span></span> [][]<span class="type">int</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(nums) == <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> [][]<span class="type">int</span>&#123;&#125;</span><br><span class="line">	&#125;</span><br><span class="line">    sort.Ints(nums)</span><br><span class="line">    res = [][]<span class="type">int</span>&#123;&#125;</span><br><span class="line">	r := []<span class="type">int</span>&#123;&#125;</span><br><span class="line">	dfs_sum(nums, <span class="number">0</span>, r, target)</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">dfs_sum</span><span class="params">(nums []<span class="type">int</span>, i <span class="type">int</span>, r []<span class="type">int</span>, target <span class="type">int</span>)</span></span>  &#123;</span><br><span class="line">    <span class="keyword">if</span> i == <span class="number">4</span> || <span class="number">0</span> == <span class="built_in">len</span>(nums) &#123;</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(r) &gt;= <span class="number">4</span> &amp;&amp; r[<span class="number">0</span>] + r[<span class="number">1</span>] + r[<span class="number">2</span>] + r[<span class="number">3</span>] == target &#123;</span><br><span class="line">            res = <span class="built_in">append</span>(res, []<span class="type">int</span>&#123;r[<span class="number">0</span>], r[<span class="number">1</span>], r[<span class="number">2</span>], r[<span class="number">3</span>]&#125;)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> j := <span class="number">0</span>; j &lt; <span class="built_in">len</span>(nums); j++ &#123;</span><br><span class="line">        <span class="keyword">if</span> j &gt; <span class="number">0</span> &amp;&amp; nums[j] == nums[j<span class="number">-1</span>] &#123;</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        &#125;</span><br><span class="line">        r = <span class="built_in">append</span>(r, nums[j])</span><br><span class="line">        dfs_sum(nums[j+<span class="number">1</span>:], i + <span class="number">1</span>, r, target)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(r) &gt;= <span class="number">1</span> &#123;</span><br><span class="line">            r = r[:<span class="built_in">len</span>(r)<span class="number">-1</span>]</span><br><span class="line">        &#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">import &quot;sort&quot;
 
+var res = [][]int&#123;&#125;
+
+func fourSum(nums []int, target int) [][]int &#123;
+    if len(nums) == 0 &#123;
+        return [][]int&#123;&#125;
+    &#125;
+    sort.Ints(nums)
+    res = [][]int&#123;&#125;
+    r := []int&#123;&#125;
+    dfs_sum(nums, 0, r, target)
+    return res
+&#125;
+
+func dfs_sum(nums []int, i int, r []int, target int)  &#123;
+    if i == 4 || 0 == len(nums) &#123;
+        if len(r) &gt;= 4 &amp;&amp; r[0] + r[1] + r[2] + r[3] == target &#123;
+            res = append(res, []int&#123;r[0], r[1], r[2], r[3]&#125;)
+        &#125;
+        return
+    &#125;
+    for j := 0; j &lt; len(nums); j++ &#123;
+        if j &gt; 0 &amp;&amp; nums[j] == nums[j-1] &#123;
+            continue
+        &#125;
+        r = append(r, nums[j])
+        dfs_sum(nums[j+1:], i + 1, r, target)
+        if len(r) &gt;= 1 &#123;
+            r = r[:len(r)-1]
+        &#125;
+    &#125;
+&#125;
+</code></pre>
 <h2 id="3-2-宽度优先搜索-BFS"><a href="#3-2-宽度优先搜索-BFS" class="headerlink" title="3.2 宽度优先搜索 BFS"></a>3.2 宽度优先搜索 BFS</h2><p>宽度优先搜索通常用在求最短路径，按层遍历，第一次满足要求的层数就是最短的路径。BFS需要借助队列来保存每一层的节点，访问过的节点要做标记避免重复访问。</p>
 <h3 id="3-2-1-二进制矩阵中的最短路径"><a href="#3-2-1-二进制矩阵中的最短路径" class="headerlink" title="3.2.1 二进制矩阵中的最短路径"></a>3.2.1 二进制矩阵中的最短路径</h3><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/shortest-path-in-binary-matrix/">LeetCode No.1091</a></p>
 <blockquote>
@@ -2462,15 +2528,90 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </blockquote>
 <p><strong>思路</strong>：从左上角开始，遍历所有可以走的方向，BFS方式求到达右下角的最小层数。</p>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Pos <span class="keyword">struct</span> &#123;</span><br><span class="line">	x, y <span class="type">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">shortestPathBinaryMatrix</span><span class="params">(grid [][]<span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(grid) == <span class="number">0</span> || <span class="built_in">len</span>(grid[<span class="number">0</span>]) == <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">	&#125;</span><br><span class="line">	M, N := <span class="built_in">len</span>(grid), <span class="built_in">len</span>(grid[<span class="number">0</span>])</span><br><span class="line">	direction := []Pos&#123;&#123;<span class="number">1</span>, <span class="number">-1</span>&#125;, &#123;<span class="number">1</span>, <span class="number">0</span>&#125;, &#123;<span class="number">1</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">-1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">1</span>&#125;, &#123;<span class="number">-1</span>, <span class="number">-1</span>&#125;, &#123;<span class="number">-1</span>, <span class="number">0</span>&#125;, &#123;<span class="number">-1</span>, <span class="number">1</span>&#125;&#125;</span><br><span class="line">	Q := list.New()</span><br><span class="line">	<span class="comment">// 根节点入队</span></span><br><span class="line">	Q.PushBack(Pos&#123;<span class="number">0</span>, <span class="number">0</span>&#125;)</span><br><span class="line">	path_len := <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> Q.Len() != <span class="number">0</span> &#123;</span><br><span class="line">		<span class="comment">// 保存当前层的长度</span></span><br><span class="line">		level_size := Q.Len()</span><br><span class="line">		path_len++</span><br><span class="line">		<span class="comment">// 依次处理当前层的所有节点</span></span><br><span class="line">		<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; level_size; i++ &#123;</span><br><span class="line">			cur_pos := Q.Front().Value.(Pos)</span><br><span class="line">			Q.Remove(Q.Front())</span><br><span class="line">			<span class="keyword">if</span> grid[cur_pos.x][cur_pos.y] == <span class="number">1</span> &#123;</span><br><span class="line">				<span class="keyword">continue</span></span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">// 如果到达右下角返回结果</span></span><br><span class="line">			<span class="keyword">if</span> cur_pos.x == (M - <span class="number">1</span>) &amp;&amp; cur_pos.y == (N - <span class="number">1</span>) &#123;</span><br><span class="line">				<span class="keyword">return</span> path_len</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">// 访问过的位置标记为1</span></span><br><span class="line">			grid[cur_pos.x][cur_pos.y] = <span class="number">1</span></span><br><span class="line">			<span class="comment">// 遍历所有能走的方向，加入队列</span></span><br><span class="line">			<span class="keyword">for</span> _, dr := <span class="keyword">range</span> direction &#123;</span><br><span class="line">				nx, ny := cur_pos.x + dr.x, cur_pos.y + dr.y</span><br><span class="line">				<span class="keyword">if</span> nx &lt; <span class="number">0</span> || nx &gt;= M || ny &lt; <span class="number">0</span> || ny &gt;= N &#123;</span><br><span class="line">					<span class="keyword">continue</span></span><br><span class="line">				&#125;</span><br><span class="line">				Q.PushBack(Pos&#123;nx, ny&#125;)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">type Pos struct &#123;
+    x, y int
+&#125;
 
+func shortestPathBinaryMatrix(grid [][]int) int &#123;
+    if len(grid) == 0 || len(grid[0]) == 0 &#123;
+        return -1
+    &#125;
+    M, N := len(grid), len(grid[0])
+    direction := []Pos&#123;&#123;1, -1&#125;, &#123;1, 0&#125;, &#123;1, 1&#125;, &#123;0, -1&#125;, &#123;0, 1&#125;, &#123;-1, -1&#125;, &#123;-1, 0&#125;, &#123;-1, 1&#125;&#125;
+    Q := list.New()
+    // 根节点入队
+    Q.PushBack(Pos&#123;0, 0&#125;)
+    path_len := 0
+    for Q.Len() != 0 &#123;
+        // 保存当前层的长度
+        level_size := Q.Len()
+        path_len++
+        // 依次处理当前层的所有节点
+        for i := 0; i &lt; level_size; i++ &#123;
+            cur_pos := Q.Front().Value.(Pos)
+            Q.Remove(Q.Front())
+            if grid[cur_pos.x][cur_pos.y] == 1 &#123;
+                continue
+            &#125;
+            // 如果到达右下角返回结果
+            if cur_pos.x == (M - 1) &amp;&amp; cur_pos.y == (N - 1) &#123;
+                return path_len
+            &#125;
+            // 访问过的位置标记为1
+            grid[cur_pos.x][cur_pos.y] = 1
+            // 遍历所有能走的方向，加入队列
+            for _, dr := range direction &#123;
+                nx, ny := cur_pos.x + dr.x, cur_pos.y + dr.y
+                if nx &lt; 0 || nx &gt;= M || ny &lt; 0 || ny &gt;= N &#123;
+                    continue
+                &#125;
+                Q.PushBack(Pos&#123;nx, ny&#125;)
+            &#125;
+        &#125;
+    &#125;
+    return -1
+&#125;
+</code></pre>
 <h3 id="3-2-2-完全平方数"><a href="#3-2-2-完全平方数" class="headerlink" title="3.2.2 完全平方数"></a>3.2.2 完全平方数</h3><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/perfect-squares">LeetCode No.279</a></p>
 <blockquote>
 <p>题目描述：给定正整数 n，找到若干个完全平方数（比如 1, 4, 9, 16, …）使得它们的和等于 n。你需要让组成和的完全平方数的个数最少。<br>给你一个整数 n ，返回和为 n 的完全平方数的 最少数量 。<br>完全平方数 是一个整数，其值等于另一个整数的平方；换句话说，其值等于一个整数自乘的积。例如，1、4、9 和 16 都是完全平方数，而 3 和 11 不是。</p>
 </blockquote>
 <p><strong>思路</strong>：转化为BFS问题模型，从1到根号n的所有平方数（1，4，9…）为每次所有可能的路径。从n开始遍历，当n&#x3D;0时即为结果。</p>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">numSquares</span><span class="params">(n <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	numsqs := []<span class="type">int</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> i, ii := <span class="number">1</span>, <span class="number">1</span>; ii &lt;= n; i, ii = i + <span class="number">1</span>, (i + <span class="number">1</span>) * (i + <span class="number">1</span>)&#123;</span><br><span class="line">		numsqs = <span class="built_in">append</span>(numsqs, ii)</span><br><span class="line">	&#125;</span><br><span class="line">	mark := <span class="keyword">map</span>[<span class="type">int</span>]<span class="type">bool</span>&#123;&#125;</span><br><span class="line">	Q := list.New()</span><br><span class="line">	Q.PushBack(n)</span><br><span class="line">	mark[n] = <span class="literal">true</span></span><br><span class="line">	ans := <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> Q.Len() != <span class="number">0</span> &#123;</span><br><span class="line">		lv_size := Q.Len()</span><br><span class="line">		ans++</span><br><span class="line">		<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; lv_size; i++ &#123;</span><br><span class="line">			cur := Q.Front().Value.(<span class="type">int</span>)</span><br><span class="line">			Q.Remove(Q.Front())</span><br><span class="line">			<span class="keyword">for</span> _, nq := <span class="keyword">range</span> numsqs &#123;</span><br><span class="line">				<span class="keyword">if</span> cur == nq &#123;</span><br><span class="line">					<span class="keyword">return</span> ans</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> cur &lt; nq &#123;</span><br><span class="line">					<span class="keyword">break</span></span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> mark[cur - nq] &#123;</span><br><span class="line">					<span class="keyword">continue</span></span><br><span class="line">				&#125;</span><br><span class="line">				mark[cur - nq] = <span class="literal">true</span></span><br><span class="line">				Q.PushBack(cur - nq)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> n</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">func numSquares(n int) int &#123;
+    numsqs := []int&#123;&#125;
+    for i, ii := 1, 1; ii &lt;= n; i, ii = i + 1, (i + 1) * (i + 1)&#123;
+        numsqs = append(numsqs, ii)
+    &#125;
+    mark := map[int]bool&#123;&#125;
+    Q := list.New()
+    Q.PushBack(n)
+    mark[n] = true
+    ans := 0
+    for Q.Len() != 0 &#123;
+        lv_size := Q.Len()
+        ans++
+        for i := 0; i &lt; lv_size; i++ &#123;
+            cur := Q.Front().Value.(int)
+            Q.Remove(Q.Front())
+            for _, nq := range numsqs &#123;
+                if cur == nq &#123;
+                    return ans
+                &#125;
+                if cur &lt; nq &#123;
+                    break
+                &#125;
+                if mark[cur - nq] &#123;
+                    continue
+                &#125;
+                mark[cur - nq] = true
+                Q.PushBack(cur - nq)
+            &#125;
+        &#125;
+    &#125;
+    return n
+&#125;
+</code></pre>
 
   </div>
   
@@ -2480,6 +2621,14 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
        <!-- 参考资料、相关资料等 -->
       
        <!-- 相关文章 -->
+      
+        
+  <div class="related_posts">
+    <section class='header'>
+      <i class="fa-solid fa-bookmark fa-fw" aria-hidden="true"></i><span>相关文章</span>
+    </section>
+    <section class='body'>
+      <div class="vlts-rps"><a class="item" href="/2023/03/19/数据结构-1-字符串/" title="数据结构(1): 字符串" rel="bookmark "><span class="title">数据结构(1): 字符串</span></a><a class="item" href="/2023/03/19/数据结构-2-数组/" title="数据结构(2): 数组" rel="bookmark "><span class="title">数据结构(2): 数组</span></a><a class="item" href="/2023/03/19/数据结构-4-树/" title="数据结构(4): 树" rel="bookmark "><span class="title">数据结构(4): 树</span></a><a class="item" href="/2023/03/19/数据结构-3-链表/" title="数据结构(3): 链表" rel="bookmark "><span class="title">数据结构(3): 链表</span></a><a class="item" href="/2023/03/19/算法-1-双指针/" title="算法(1): 双指针" rel="bookmark "><span class="title">算法(1): 双指针</span></a></div></section></div>
       
       <!-- 版权声明组件 -->
       
@@ -2986,6 +3135,17 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
   <script>
 
+  volantis.css("https://unpkg.com/highlight.js@11.7.0/styles/a11y-dark.css");
+
+
+  volantis.js("https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js").then(()=>{
+    volantis.requestAnimationFrame(hljs.highlightAll)
+  })
+  volantis.pjax.push(()=>{
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  },"highlightjs")
 
 
   function pjax_highlightjs_copyCode(){
@@ -3010,7 +3170,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
 
   <script>
-  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp"];
+  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp"];
   let index = 0;
   let IntervalParallax = null;
 

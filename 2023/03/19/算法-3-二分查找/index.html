@@ -1599,7 +1599,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     debug: "env",
     cdn: {"js":{"app":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/app.js","parallax":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/parallax.js","rightMenu":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenu.js","rightMenus":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenus.js","sites":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/sites.js","friends":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/friends.js","contributors":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/contributors.js","search":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
     default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
-    lastupdate: new Date(1680429161732),
+    lastupdate: new Date(1680434952806),
     sidebar: {
       for_page: ["blogger","category","tagcloud","donate"],
       for_post: ["toc"],
@@ -2447,8 +2447,23 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </blockquote>
 <p><strong>思路</strong>：按照二分查找法，定义low，high两个指针，结束条件为low &gt; high，如果目标值不存在返回low的位置就是要插入的位置。</p>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">searchInsert</span><span class="params">(nums []<span class="type">int</span>, target <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	l, h := <span class="number">0</span>, <span class="built_in">len</span>(nums) - <span class="number">1</span></span><br><span class="line">	<span class="keyword">var</span> m <span class="type">int</span></span><br><span class="line">	<span class="keyword">for</span> l &lt;= h &#123;</span><br><span class="line">		m = h + l &gt;&gt; <span class="number">1</span></span><br><span class="line">		<span class="keyword">if</span> nums[m] == target &#123;</span><br><span class="line">			<span class="keyword">return</span> m</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> nums[m] &gt; target &#123;</span><br><span class="line">			h = m - <span class="number">1</span></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			l = m + <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> l</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="go">func searchInsert(nums []int, target int) int &#123;
+    l, h := 0, len(nums) - 1
+    var m int
+    for l &lt;= h &#123;
+        m = h + l &gt;&gt; 1
+        if nums[m] == target &#123;
+            return m
+        &#125;
+        if nums[m] &gt; target &#123;
+            h = m - 1
+        &#125; else &#123;
+            l = m + 1
+        &#125;
+    &#125;
+    return l
+&#125;
+</code></pre>
 <h3 id="3-2-搜索旋转排序数组"><a href="#3-2-搜索旋转排序数组" class="headerlink" title="3.2 搜索旋转排序数组"></a>3.2 搜索旋转排序数组</h3><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/search-in-rotated-sorted-array/">LeetCode No.33</a></p>
 <blockquote>
 <p>问题描述：整数数组 nums 按升序排列，数组中的值 互不相同 。在传递给函数之前，nums 在预先未知的某个下标 k（0 &lt;&#x3D; k &lt; nums.length）上进行了 旋转，使数组变为 [nums[k], nums[k+1], …, nums[n-1], nums[0], nums[1], …, nums[k-1]]（下标 从 0 开始 计数）。例如， [0,1,2,4,5,6,7] 在下标 3 处经旋转后可能变为 [4,5,6,7,0,1,2] 。<br>给你 旋转后 的数组 nums 和一个整数 target ，如果 nums 中存在这个目标值 target ，则返回它的索引，否则返回 -1</p>
@@ -2459,15 +2474,61 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>在知道是那边有序后即可根据边界和target来选择去左半区还是右半区搜索</li>
 </ul>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">search</span><span class="params">(nums []<span class="type">int</span>, target <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	low, high := <span class="number">0</span>, <span class="built_in">len</span>(nums) - <span class="number">1</span></span><br><span class="line">	<span class="keyword">for</span> low &lt;= high &#123;</span><br><span class="line">		mid := (low + high) / <span class="number">2</span></span><br><span class="line">		<span class="keyword">if</span> nums[mid] == target &#123;</span><br><span class="line">			<span class="keyword">return</span> mid</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> nums[mid] &gt;= nums[low] &#123;</span><br><span class="line">			<span class="keyword">if</span> target &lt; nums[mid] &amp;&amp; target &gt;= nums[low] &#123;</span><br><span class="line">				high = mid - <span class="number">1</span></span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				low = mid + <span class="number">1</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> target &gt; nums[mid] &amp;&amp; target &lt;= nums[high] &#123;</span><br><span class="line">				low = mid + <span class="number">1</span></span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				high = mid - <span class="number">1</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="go">func search(nums []int, target int) int &#123;
+    low, high := 0, len(nums) - 1
+    for low &lt;= high &#123;
+        mid := (low + high) / 2
+        if nums[mid] == target &#123;
+            return mid
+        &#125;
+        if nums[mid] &gt;= nums[low] &#123;
+            if target &lt; nums[mid] &amp;&amp; target &gt;= nums[low] &#123;
+                high = mid - 1
+            &#125; else &#123;
+                low = mid + 1
+            &#125;
+        &#125; else &#123;
+            if target &gt; nums[mid] &amp;&amp; target &lt;= nums[high] &#123;
+                low = mid + 1
+            &#125; else &#123;
+                high = mid - 1
+            &#125;
+        &#125;
+    &#125;
+    return -1
+&#125;
+</code></pre>
 <h3 id="3-3-排序数组中查找元素的第一个和最后一个位置（有重复元素）"><a href="#3-3-排序数组中查找元素的第一个和最后一个位置（有重复元素）" class="headerlink" title="3.3 排序数组中查找元素的第一个和最后一个位置（有重复元素）"></a>3.3 排序数组中查找元素的第一个和最后一个位置（有重复元素）</h3><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/">LeetCode No.34</a></p>
 <blockquote>
 <p>问题描述：给定一个按照升序排列的整数数组 nums，和一个目标值 target。找出给定目标值在数组中的开始位置和结束位置，如果数组中不存在目标值 target，返回 [-1, -1]。</p>
 </blockquote>
 <p><strong>思路</strong>：找到最左边的target位置和target+1最左边的位置-1，要找最左边的target，那么当nums[mid] &gt;&#x3D; target时都要继续往左半区搜索。</p>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">searchRange</span><span class="params">(nums []<span class="type">int</span>, target <span class="type">int</span>)</span></span> []<span class="type">int</span> &#123;</span><br><span class="line">	ledge := search(nums, target)</span><br><span class="line">	<span class="keyword">if</span> ledge == <span class="built_in">len</span>(nums) || nums[ledge] != target &#123;</span><br><span class="line">		<span class="keyword">return</span> []<span class="type">int</span>&#123;<span class="number">-1</span>, <span class="number">-1</span>&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	redge := search(nums, target + <span class="number">1</span>) - <span class="number">1</span></span><br><span class="line">	<span class="keyword">return</span> []<span class="type">int</span>&#123;ledge, redge&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">search</span><span class="params">(nums []<span class="type">int</span>, target <span class="type">int</span>)</span></span> <span class="type">int</span>  &#123;</span><br><span class="line">	l, r := <span class="number">0</span>, <span class="built_in">len</span>(nums) - <span class="number">1</span></span><br><span class="line">	<span class="keyword">for</span> l &lt;= r &#123;</span><br><span class="line">		mid := (l + r) / <span class="number">2</span></span><br><span class="line">		<span class="keyword">if</span> nums[mid] &gt;= target &#123;</span><br><span class="line">			r = mid - <span class="number">1</span></span><br><span class="line">			<span class="keyword">if</span> l &gt; r &amp;&amp; nums[mid] == target &#123;</span><br><span class="line">				<span class="keyword">return</span> mid</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			l = mid + <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> l</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">func searchRange(nums []int, target int) []int &#123;
+    ledge := search(nums, target)
+    if ledge == len(nums) || nums[ledge] != target &#123;
+        return []int&#123;-1, -1&#125;
+    &#125;
+    redge := search(nums, target + 1) - 1
+    return []int&#123;ledge, redge&#125;
+&#125;
+
+func search(nums []int, target int) int  &#123;
+    l, r := 0, len(nums) - 1
+    for l &lt;= r &#123;
+        mid := (l + r) / 2
+        if nums[mid] &gt;= target &#123;
+            r = mid - 1
+            if l &gt; r &amp;&amp; nums[mid] == target &#123;
+                return mid
+            &#125;
+        &#125; else &#123;
+            l = mid + 1
+        &#125;
+    &#125;
+    return l
+&#125;
+</code></pre>
 
   </div>
   
@@ -2477,6 +2538,14 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
        <!-- 参考资料、相关资料等 -->
       
        <!-- 相关文章 -->
+      
+        
+  <div class="related_posts">
+    <section class='header'>
+      <i class="fa-solid fa-bookmark fa-fw" aria-hidden="true"></i><span>相关文章</span>
+    </section>
+    <section class='body'>
+      <div class="vlts-rps"><a class="item" href="/2023/03/19/数据结构-1-字符串/" title="数据结构(1): 字符串" rel="bookmark "><span class="title">数据结构(1): 字符串</span></a><a class="item" href="/2023/03/19/数据结构-2-数组/" title="数据结构(2): 数组" rel="bookmark "><span class="title">数据结构(2): 数组</span></a><a class="item" href="/2023/03/19/数据结构-4-树/" title="数据结构(4): 树" rel="bookmark "><span class="title">数据结构(4): 树</span></a><a class="item" href="/2023/03/19/数据结构-3-链表/" title="数据结构(3): 链表" rel="bookmark "><span class="title">数据结构(3): 链表</span></a><a class="item" href="/2023/03/19/算法-1-双指针/" title="算法(1): 双指针" rel="bookmark "><span class="title">算法(1): 双指针</span></a></div></section></div>
       
       <!-- 版权声明组件 -->
       
@@ -2983,6 +3052,17 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
   <script>
 
+  volantis.css("https://unpkg.com/highlight.js@11.7.0/styles/a11y-dark.css");
+
+
+  volantis.js("https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js").then(()=>{
+    volantis.requestAnimationFrame(hljs.highlightAll)
+  })
+  volantis.pjax.push(()=>{
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  },"highlightjs")
 
 
   function pjax_highlightjs_copyCode(){
@@ -3007,7 +3087,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
 
   <script>
-  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp"];
+  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp"];
   let index = 0;
   let IntervalParallax = null;
 

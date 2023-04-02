@@ -1599,7 +1599,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     debug: "env",
     cdn: {"js":{"app":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/app.js","parallax":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/parallax.js","rightMenu":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenu.js","rightMenus":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenus.js","sites":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/sites.js","friends":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/friends.js","contributors":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/contributors.js","search":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
     default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
-    lastupdate: new Date(1680429161732),
+    lastupdate: new Date(1680434952806),
     sidebar: {
       for_page: ["blogger","category","tagcloud","donate"],
       for_post: ["toc"],
@@ -2486,8 +2486,11 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <h4 id="复杂度"><a href="#复杂度" class="headerlink" title="复杂度"></a>复杂度</h4><p>快速排序时间复杂度是<code>O(N*logN)</code>，优先队列排序时间复杂度为<code>O((N-K)*logK)</code>，K表示堆的大小，即返回记录的个数，对于该场景下为<code>(N-3)*log3</code>，基本可以看做线性时间复杂度，如果是limit 1的时候就相当于求最小值，该算法就是线性时间复杂度。<br>其次sort buffer中只需要维护堆，内存的消耗也大大减少，空间复杂度为<code>O(K)</code>。</p>
 <h2 id="order-by-rand"><a href="#order-by-rand" class="headerlink" title="order by rand()"></a>order by rand()</h2><p>如果需要随机选1个数，SQL语句可能如下：<br><code>SELECT * FROM t ORDER BY RAND() LIMIT 1</code><br>需要注意到是这种方式会建临时表进行排序，临时表除了查询字段会多加一个排序字段存放rand()生成的值，即对每一行记录使用rand()函数生成一个随机数，然后根据这个数来排序。</p>
 <p>这种写法的成本是比较高的，所以建议尽量避免这种写法，建议先随机一个0~N-1的值（N表示表总行数），然后去查数据库的某行，比如：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">rand1</span>():</span><br><span class="line">    N = mysql.query(<span class="string">&quot;select count(*) from t&quot;</span>)</span><br><span class="line">    res = mysql.query(<span class="string">&quot;select * from t limit N, 1&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
-
+<pre><code class="python">def rand1():
+    N = mysql.query(&quot;select count(*) from t&quot;)
+    res = mysql.query(&quot;select * from t limit N, 1&quot;)
+    return res
+</code></pre>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>【极客时间】<a target="_blank" rel="noopener" href="https://time.geekbang.org/column/article/73479">MySQL实战45讲：16、17</a></p>
 
   </div>
@@ -2498,6 +2501,14 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
        <!-- 参考资料、相关资料等 -->
       
        <!-- 相关文章 -->
+      
+        
+  <div class="related_posts">
+    <section class='header'>
+      <i class="fa-solid fa-bookmark fa-fw" aria-hidden="true"></i><span>相关文章</span>
+    </section>
+    <section class='body'>
+      <div class="vlts-rps"><a class="item" href="/2023/03/25/MySQL-中一条-SQL-语句是如何执行的？/" title="MySQL 中一条 SQL 语句是如何执行的？" rel="bookmark "><span class="title">MySQL 中一条 SQL 语句是如何执行的？</span></a><a class="item" href="/2023/03/25/MySQL-和-NoSQL基础知识概述/" title="MySQL 和 NoSQL基础知识概述" rel="bookmark "><span class="title">MySQL 和 NoSQL基础知识概述</span></a><a class="item" href="/2023/03/25/MySQL-索引原理详解/" title="MySQL 索引原理详解" rel="bookmark "><span class="title">MySQL 索引原理详解</span></a><a class="item" href="/2023/03/25/MySQL-脏页刷盘/" title="MySQL 脏页刷盘" rel="bookmark "><span class="title">MySQL 脏页刷盘</span></a><a class="item" href="/2023/03/25/MySQL-连接错误问题解决/" title="MySQL 连接错误问题解决" rel="bookmark "><span class="title">MySQL 连接错误问题解决</span></a></div></section></div>
       
       <!-- 版权声明组件 -->
       
@@ -3007,6 +3018,17 @@ $mysql -h172.16.0.1 -u...</p>
 
   <script>
 
+  volantis.css("https://unpkg.com/highlight.js@11.7.0/styles/a11y-dark.css");
+
+
+  volantis.js("https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js").then(()=>{
+    volantis.requestAnimationFrame(hljs.highlightAll)
+  })
+  volantis.pjax.push(()=>{
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  },"highlightjs")
 
 
   function pjax_highlightjs_copyCode(){
@@ -3031,7 +3053,7 @@ $mysql -h172.16.0.1 -u...</p>
 
 
   <script>
-  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp"];
+  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp"];
   let index = 0;
   let IntervalParallax = null;
 

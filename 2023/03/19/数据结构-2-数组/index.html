@@ -1599,7 +1599,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     debug: "env",
     cdn: {"js":{"app":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/app.js","parallax":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/parallax.js","rightMenu":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenu.js","rightMenus":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenus.js","sites":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/sites.js","friends":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/friends.js","contributors":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/contributors.js","search":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
     default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
-    lastupdate: new Date(1680429161732),
+    lastupdate: new Date(1680434952806),
     sidebar: {
       for_page: ["blogger","category","tagcloud","donate"],
       for_post: ["toc"],
@@ -2457,8 +2457,45 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </ul>
 <p>最后会有这么几种可能：有2个大于n&#x2F;3，有1个大于n&#x2F;3，有0个大于n&#x2F;3，遍历结束后选出了两个候选人，但是这两个候选人是否满足&gt; n&#x2F;3，还需要再遍历一遍数组，找出两个候选人的具体票数，因为不一定有。<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43946031/article/details/113856373">参考原文</a></p>
 <p><code> 示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">majorityElement</span><span class="params">(nums []<span class="type">int</span>)</span></span> []<span class="type">int</span> &#123;</span><br><span class="line">    v1, c1, v2, c2 := <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> _, n := <span class="keyword">range</span> nums &#123;</span><br><span class="line">        <span class="keyword">if</span> n == v1 &#123;</span><br><span class="line">            c1++</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> n == v2 &#123;</span><br><span class="line">            c2++</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> c1 == <span class="number">0</span> &#123;</span><br><span class="line">                v1 = n</span><br><span class="line">                c1++</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> c2 == <span class="number">0</span> &#123;</span><br><span class="line">                v2 = n</span><br><span class="line">                c2++</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                c1--</span><br><span class="line">                c2-- </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    r := <span class="built_in">make</span>([]<span class="type">int</span>, <span class="number">0</span>)</span><br><span class="line">    c1, c2 = <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> _, n := <span class="keyword">range</span> nums &#123;</span><br><span class="line">        <span class="keyword">if</span> n == v1 &#123;</span><br><span class="line">            c1++</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> n == v2 &amp;&amp; v2 != v1 &#123;</span><br><span class="line">            c2++</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> c1 &gt; <span class="built_in">len</span>(nums) / <span class="number">3</span> &#123;</span><br><span class="line">        r = <span class="built_in">append</span>(r, v1)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> c2 &gt; <span class="built_in">len</span>(nums) / <span class="number">3</span> &#123;</span><br><span class="line">        r = <span class="built_in">append</span>(r, v2)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> r</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="go">func majorityElement(nums []int) []int &#123;
+    v1, c1, v2, c2 := 0, 0, 0, 0
+    for _, n := range nums &#123;
+        if n == v1 &#123;
+            c1++
+        &#125; else if n == v2 &#123;
+            c2++
+        &#125; else &#123;
+            if c1 == 0 &#123;
+                v1 = n
+                c1++
+            &#125; else if c2 == 0 &#123;
+                v2 = n
+                c2++
+            &#125; else &#123;
+                c1--
+                c2-- 
+            &#125;
+        &#125;
+    &#125;
+    r := make([]int, 0)
+    c1, c2 = 0, 0
+    for _, n := range nums &#123;
+        if n == v1 &#123;
+            c1++
+        &#125;
+        if n == v2 &amp;&amp; v2 != v1 &#123;
+            c2++
+        &#125;
+    &#125;
+    if c1 &gt; len(nums) / 3 &#123;
+        r = append(r, v1)
+    &#125;
+    if c2 &gt; len(nums) / 3 &#123;
+        r = append(r, v2)
+    &#125;
+    return r
+&#125;
+</code></pre>
 <h2 id="2-2-缺失的第一个正数"><a href="#2-2-缺失的第一个正数" class="headerlink" title="2.2 缺失的第一个正数"></a>2.2 缺失的第一个正数</h2><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/first-missing-positive/">LeetCode No.41</a></p>
 <blockquote>
 <p>题目描述：给你一个未排序的整数数组 nums ，请你找出其中没有出现的最小的正整数。<br>进阶：实现时间复杂度为 O(n) 并且只使用常数级别额外空间的解决方案</p>
@@ -2466,8 +2503,19 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <p><strong>思路：</strong>长度为N的整数数组，没有出现的最小正整数一定在[1, N + 1]。</p>
 <p>方法1：最容易的做法用一个额外的哈希表记录出现的数字，然后从1遍历到N+1，根据hash表如果出现缺失就返回。但是该方法空间复杂度为O(n)。</p>
 <p><code>示例代码：</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">firstMissingPositive</span><span class="params">(nums []<span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	m := <span class="keyword">map</span>[<span class="type">int</span>]<span class="type">bool</span>&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> _, n := <span class="keyword">range</span> nums &#123;</span><br><span class="line">		m[n] = <span class="literal">true</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= <span class="built_in">len</span>(nums); i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> m[i] == <span class="literal">false</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> i</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">len</span>(nums) + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="go">func firstMissingPositive(nums []int) int &#123;
+    m := map[int]bool&#123;&#125;
+    for _, n := range nums &#123;
+        m[n] = true
+    &#125;
+    for i := 1; i &lt;= len(nums); i++ &#123;
+        if m[i] == false &#123;
+            return i
+        &#125;
+    &#125;
+    return len(nums) + 1
+&#125;
+</code></pre>
 <p>方法2：在原数组上建哈希表，因为结果只需要判断[1, N]的数，因此可以以负数当做标记（参考LeetCode官方题解）。</p>
 <ul>
 <li>将数组中所有小于等于 0 的数修改为 N+1</li>
@@ -2475,15 +2523,60 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 <li>遍历数组检查，如果值非负数返回i + 1，全为负数返回N+1</li>
 </ul>
 <p><code>示例代码:</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">IntAbs</span><span class="params">(x <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> x &lt; <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> -x</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> x</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 只关注正整数，用&quot;-&quot;号做标记</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">firstMissingPositive</span><span class="params">(nums []<span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	n := <span class="built_in">len</span>(nums)</span><br><span class="line">	<span class="comment">// 预处理，将元素全部变为整数</span></span><br><span class="line">	<span class="keyword">for</span> i, v := <span class="keyword">range</span> nums &#123;</span><br><span class="line">		<span class="keyword">if</span> v &lt;= <span class="number">0</span> &#123;</span><br><span class="line">			nums[i] = n + <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 打标记</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; n; i++ &#123;</span><br><span class="line">		x := IntAbs(nums[i])</span><br><span class="line">		<span class="keyword">if</span> x &lt;= n &amp;&amp; nums[x - <span class="number">1</span>] &gt; <span class="number">0</span> &#123;</span><br><span class="line">			nums[x - <span class="number">1</span>] *= <span class="number">-1</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 检查标记</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; n; i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> nums[i] &gt; <span class="number">0</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> i + <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> n + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">func IntAbs(x int) int &#123;
+    if x &lt; 0 &#123;
+        return -x
+    &#125;
+    return x
+&#125;
 
+// 只关注正整数，用&quot;-&quot;号做标记
+func firstMissingPositive(nums []int) int &#123;
+    n := len(nums)
+    // 预处理，将元素全部变为整数
+    for i, v := range nums &#123;
+        if v &lt;= 0 &#123;
+            nums[i] = n + 1
+        &#125;
+    &#125;
+    // 打标记
+    for i := 0; i &lt; n; i++ &#123;
+        x := IntAbs(nums[i])
+        if x &lt;= n &amp;&amp; nums[x - 1] &gt; 0 &#123;
+            nums[x - 1] *= -1
+        &#125;
+    &#125;
+    // 检查标记
+    for i := 0; i &lt; n; i++ &#123;
+        if nums[i] &gt; 0 &#123;
+            return i + 1
+        &#125;
+    &#125;
+    return n + 1
+&#125;
+</code></pre>
 <p>方法3：置换，将数组恢复成形如[1, 2, … , N]的形式，即nums[i-1]&#x3D;i（参考LeetCode官方题解）。</p>
 <ul>
 <li>设v &#x3D; nums[i], 如果nums[i] &#x3D;&#x3D; nums [v-1]，则不需要置换，否则将nums[v-1]设为v，此时要先把nums[v-1]的值保存到nums[i]，此时v-1已经是正确的位置，但是i不一定是正确的位置，需要继续置换。</li>
 <li>检查每个位置的值是否正确，全部正确返回N+1，否则返回i+1</li>
 </ul>
 <p><code>示例代码:</code></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">firstMissingPositive</span><span class="params">(nums []<span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	n := <span class="built_in">len</span>(nums)</span><br><span class="line">	<span class="keyword">for</span> i, v := <span class="keyword">range</span> nums &#123;</span><br><span class="line">		<span class="keyword">for</span> v &gt; <span class="number">0</span> &amp;&amp; v &lt; n + <span class="number">1</span> &amp;&amp; nums[i] != nums[v - <span class="number">1</span>] &#123;</span><br><span class="line">			nums[v - <span class="number">1</span>], nums[i] = v, nums[v - <span class="number">1</span>]</span><br><span class="line">			v = nums[i]</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> i, v := <span class="keyword">range</span> nums &#123;</span><br><span class="line">		<span class="keyword">if</span> v != i + <span class="number">1</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> i + <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> n + <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">func firstMissingPositive(nums []int) int &#123;
+    n := len(nums)
+    for i, v := range nums &#123;
+        for v &gt; 0 &amp;&amp; v &lt; n + 1 &amp;&amp; nums[i] != nums[v - 1] &#123;
+            nums[v - 1], nums[i] = v, nums[v - 1]
+            v = nums[i]
+        &#125;
+    &#125;
+    for i, v := range nums &#123;
+        if v != i + 1 &#123;
+            return i + 1
+        &#125;
+    &#125;
+    return n + 1
+&#125;
+</code></pre>
 
   </div>
   
@@ -2493,6 +2586,14 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
        <!-- 参考资料、相关资料等 -->
       
        <!-- 相关文章 -->
+      
+        
+  <div class="related_posts">
+    <section class='header'>
+      <i class="fa-solid fa-bookmark fa-fw" aria-hidden="true"></i><span>相关文章</span>
+    </section>
+    <section class='body'>
+      <div class="vlts-rps"><a class="item" href="/2023/03/19/数据结构-1-字符串/" title="数据结构(1): 字符串" rel="bookmark "><span class="title">数据结构(1): 字符串</span></a><a class="item" href="/2023/03/19/数据结构-4-树/" title="数据结构(4): 树" rel="bookmark "><span class="title">数据结构(4): 树</span></a><a class="item" href="/2023/03/19/数据结构-3-链表/" title="数据结构(3): 链表" rel="bookmark "><span class="title">数据结构(3): 链表</span></a><a class="item" href="/2023/03/19/数据结构-5-栈-队列-堆/" title="数据结构(5): 栈|队列|堆" rel="bookmark "><span class="title">数据结构(5): 栈|队列|堆</span></a><a class="item" href="/2023/04/02/数据结构-6-单调栈/" title="数据结构（6）: 单调栈" rel="bookmark "><span class="title">数据结构（6）: 单调栈</span></a></div></section></div>
       
       <!-- 版权声明组件 -->
       
@@ -3000,6 +3101,17 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
   <script>
 
+  volantis.css("https://unpkg.com/highlight.js@11.7.0/styles/a11y-dark.css");
+
+
+  volantis.js("https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js").then(()=>{
+    volantis.requestAnimationFrame(hljs.highlightAll)
+  })
+  volantis.pjax.push(()=>{
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  },"highlightjs")
 
 
   function pjax_highlightjs_copyCode(){
@@ -3024,7 +3136,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 
 
   <script>
-  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp"];
+  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp"];
   let index = 0;
   let IntervalParallax = null;
 
