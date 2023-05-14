@@ -6,8 +6,8 @@
   <meta name="Volantis" content="5.7.7">
   <meta charset="utf-8">
   <!-- SEO相关 -->
-  <meta name="robots" content="noindex,follow">
-  <link rel="canonical" href="https://harryzhang.cn/tags/mysql/"/>
+  
+  <link rel="canonical" href="https://harryzhang.cn/2023/05/14/go-语言-channel-最佳实践/"/>
   <!-- 渲染优化 -->
     <meta http-equiv='x-dns-prefetch-control' content='on' />
       <link rel='dns-prefetch' href='https://unpkg.com'>
@@ -34,20 +34,21 @@
   <!-- feed -->
       <link rel="alternate" href="/atom.xml" title="Harry 的个人空间" type="application/atom+xml">
   <!-- 页面元数据 -->
-  <title>标签：MySQL - Harry 的个人空间</title>
-  <meta name="keywords" content="技术博客,后端开发">
+  <title>Go 语言 Channel 最佳实践 - Harry 的个人空间</title>
+  <meta name="keywords" content="Go,技术博客,后端开发">
   <meta desc name="description" content="一个后端开发工程师的技术博客 - harry zhang - Harry 的个人空间">
   
-<meta property="og:type" content="website">
-<meta property="og:title" content="Harry 的个人空间">
-<meta property="og:url" content="https://harryzhang.cn/tags/MySQL/index.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go 语言 Channel 最佳实践">
+<meta property="og:url" content="https://harryzhang.cn/2023/05/14/Go-%E8%AF%AD%E8%A8%80-Channel-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/index.html">
 <meta property="og:site_name" content="Harry 的个人空间">
-<meta property="og:description" content="一个后端开发工程师的技术博客">
+<meta property="og:description" content="简介 Channel 基本概念介绍 基本使用方法参见 Go指南  Go 语言中的通道（channel）是一种特殊的类型。通道像一个传送带或者队列，总是遵循先入先出（First In First Out）的规则，保证收发数据的顺序。每一个通道都是一个具体类型的导管，也就是声明channel的时候需要为其指定元素类型。 不带缓冲的通道创建不带缓冲的通道语法如下 ch :&#x3D; make(chan int)">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
+<meta property="article:published_time" content="2023-05-14T09:31:52.000Z">
+<meta property="article:modified_time" content="2023-05-14T16:39:05.259Z">
 <meta property="article:author" content="harry zhang">
-<meta property="article:tag" content="技术博客">
-<meta property="article:tag" content="后端开发">
+<meta property="article:tag" content="Go">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
   <style>
@@ -2290,7 +2291,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
       <!-- see: /layout/_partial/scripts/_ctrl/coverCtrl.ejs -->
-      <div id="half" class='cover-wrapper  search' style="display: ;">
+      <div id="half" class='cover-wrapper post search' style="display: ;">
         
   <div id="parallax-window"></div>
 
@@ -2365,37 +2366,9 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       <div id="safearea">
         <div class="body-wrapper">
           
-
 <div id="l_main" class=''>
-  
-    
-      
-  <section class="post-list">
-    
-      
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      
-    
-    
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
-  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/03/25/MySQL-连接错误问题解决/">
+  <article itemscope itemtype="http://schema.org/Article" class="article post white-box reveal md shadow floatable blur article-type-post" id="post" itemscope itemprop="blogPost">
+  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/05/14/Go-语言-Channel-最佳实践/">
   <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
     <meta itemprop="name" content="Harry 的个人空间">
   </span>
@@ -2404,516 +2377,401 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     <meta itemprop="description" content="一个后端开发工程师的技术博客">
   </span>
   
-  
+
+
   
     <span hidden>
       <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
     </span>
   
-  
+  <div class="article-meta" id="top">
     
-    <h2 class="article-title"  itemprop="name headline">
-      <a href="/2023/03/25/MySQL-%E8%BF%9E%E6%8E%A5%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/"  itemprop="url">
-        MySQL 连接错误问题解决
-      </a>
-    </h2>
-  
-  <div class='md article-desc' itemprop="articleBody">
     
-      
-        软件环境
-操作系统：Ubuntu16.04-server
-MySQL版本：5.7.25
+    
+      <h1 class="title" itemprop="name headline">
+        Go 语言 Channel 最佳实践
+      </h1>
+      <div class='new-meta-box'>
+        
+          
+            
+<div class='new-meta-item author' itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <a itemprop="url" class='author' href="/" rel="nofollow">
+    <img itemprop="image" src="https://upload.jianshu.io/users/upload_avatars/14151453/0f03d78b-5b29-466c-8b21-e61b0a356aa7.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240" class="lazyload" data-srcset="https://upload.jianshu.io/users/upload_avatars/14151453/0f03d78b-5b29-466c-8b21-e61b0a356aa7.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+    <p itemprop="name">harry zhang</p>
+  </a>
+</div>
 
-故障一只能通过localhost登录MySQL
-
-报错如下
-$mysql -h172.16.0.1 -uroot -p123456mysql: [Warning] Using a password on the command line interface can be insecure.ERROR 1...
-      
+          
+        
+          
+            
+  <div class='new-meta-item category'>
+    <i class="fa-solid fa-folder-open fa-fw" aria-hidden="true"></i>
+    <a class="category-link" href="/categories/Golang/">Golang</a>
+    
+      <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
+        <a href="/categories/Golang/" itemprop="url"><span itemprop="name">Golang</span></a>
+      </span>
     
   </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time itemprop="dateCreated datePublished" datetime="2023-03-25T15:15:48+08:00">2023-03-25</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
-          
-            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
-              <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url"><span itemprop="name">数据库</span></a>
-            </span>
+
+
           
         
+          
+            <div class="new-meta-item date" itemprop="dateCreated datePublished" datetime="2023-05-14T17:31:52+08:00">
+  <a class='notlink'>
+    <i class="fa-solid fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2023年5月14日</p>
+  </a>
+</div>
+
+          
+        
+        <!-- Custom Files topMeta begin-->
+        
+        <!-- Custom Files topMeta end-->
       </div>
+    
+  </div>
+
+
+  <div id="layoutHelper-page-plugins"></div>
+  <div id="post-body" itemprop="articleBody">
+    <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><blockquote>
+<p>Channel 基本概念介绍</p>
+<p>基本使用方法参见 <a target="_blank" rel="noopener" href="https://tour.go-zh.org/concurrency/2">Go指南</a></p>
+</blockquote>
+<p>Go 语言中的通道（channel）是一种特殊的类型。通道像一个传送带或者队列，总是遵循先入先出（First In First Out）的规则，保证收发数据的顺序。每一个通道都是一个具体类型的导管，也就是声明channel的时候需要为其指定元素类型。</p>
+<h3 id="不带缓冲的通道"><a href="#不带缓冲的通道" class="headerlink" title="不带缓冲的通道"></a>不带缓冲的通道</h3><p>创建不带缓冲的通道语法如下</p>
+<pre><code class="go">ch := make(chan int)
+</code></pre>
+<p>不带缓冲的通道发送和接收操作在另一端准备好之前都会阻塞，可以想象为是直接由发送者将数据传给接收者，没有中间缓冲区。这使得 Go 程可以在没有显式的锁或竞态变量的情况下进行同步。</p>
+<h3 id="带缓冲的通道"><a href="#带缓冲的通道" class="headerlink" title="带缓冲的通道"></a>带缓冲的通道</h3><p>将缓冲长度作为第二个参数提供给 make 来初始化一个带缓冲的信道</p>
+<pre><code class="go">ch := make(chan int, 100)
+</code></pre>
+<p>仅当信道的缓冲区填满后，向其发送数据时才会阻塞。当缓冲区为空时，接受方会阻塞。</p>
+<h3 id="关闭通道"><a href="#关闭通道" class="headerlink" title="关闭通道"></a>关闭通道</h3><pre><code class="go">close(ch)
+</code></pre>
+<p>发送者可通过 close 关闭一个信道来表示没有需要发送的值了。接收者可以通过为接收表达式分配第二个参数来测试信道是否被关闭：若没有值可以接收且信道已被关闭，那么在执行完 <code>v, ok := &lt;-ch</code><br>之后 ok 会被设置为 false。</p>
+<p>循环 <code>for i := range ch</code> 会不断从通道接收数据直到它被关闭</p>
+<p><strong>注意：</strong> 信道通常情况无需关闭，只有在必须告诉接收者不在有要发送的数据时才有必要关闭，不合理的关闭反而会带来各种问题，比如往一个已关闭的通道里写入数据导致 panic。因此很多 Channel 的使用教程会建议不要关闭通道，或者说只有发送者才能关闭通道</p>
+<h3 id="select-通道"><a href="#select-通道" class="headerlink" title="select 通道"></a>select 通道</h3><p>select 语句使一个 Go 程可以等待多个通信操作。select 会阻塞到某个分支可以继续执行为止，这时就会执行该分支。当多个分支都准备好时会随机选择一个执行。</p>
+<pre><code class="go">select &#123;
+case v &lt;- ch1:
+case v &lt;- ch2:
+case &lt;-quit:
+    return
+&#125;
+</code></pre>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><blockquote>
+<p>Channel 的几种经典应用场景及示例</p>
+</blockquote>
+<p>Channel 用于 Goroutine 之间的通信，常用于交换数据、并发控制、协程同步、超时控制等场景</p>
+<h3 id="1-生产-消费模型"><a href="#1-生产-消费模型" class="headerlink" title="1. 生产-消费模型"></a>1. 生产-消费模型</h3><p>用来在生产者和消费者之前的数据传输，生产者协程将结果发送到通道，消费者协程从通道读取结果，生产者和消费者是并发进行的</p>
+<pre><code class="go">func producer(ch chan&lt;- int) &#123;
+    defer close(ch)
+
+    for i := 0; i &lt; 5; i++ &#123;
+        time.Sleep(time.Second)
+        fmt.Printf(&quot;[%s] Produced: %d\n&quot;, time.Now().Format(time.DateTime), i)
+        ch &lt;- i
+    &#125;
+&#125;
+
+func consumer(ch &lt;-chan int) &#123;
+    for &#123;
+        if v, ok := &lt;-ch; ok &#123;
+            time.Sleep(time.Second)
+            fmt.Printf(&quot;[%s] Consumed: %d\n&quot;, time.Now().Format(time.DateTime), v)
+        &#125; else &#123;
+            break
+        &#125;
+    &#125;
+&#125;
+
+func TestProdConsume(t *testing.T) &#123;
+    ch := make(chan int, 5)
+
+    go producer(ch)
+    go consumer(ch)
+
+    time.Sleep(10 * time.Second)
+&#125;
+</code></pre>
+<p>执行结果如下：</p>
+<pre><code class="md">=== RUN   TestProdConsume
+[2023-05-15 00:35:58] Produced: 0
+[2023-05-15 00:35:59] Produced: 1
+[2023-05-15 00:35:59] Consumed: 0
+[2023-05-15 00:36:00] Consumed: 1
+[2023-05-15 00:36:00] Produced: 2
+[2023-05-15 00:36:01] Consumed: 2
+[2023-05-15 00:36:01] Produced: 3
+[2023-05-15 00:36:02] Consumed: 3
+[2023-05-15 00:36:02] Produced: 4
+[2023-05-15 00:36:03] Consumed: 4
+--- PASS: TestProdConsume (10.00s)
+</code></pre>
+<h3 id="2-限制并发数"><a href="#2-限制并发数" class="headerlink" title="2. 限制并发数"></a>2. 限制并发数</h3><p>当你有大量任务想通过 Goroutine 并发处理，但又不希望同时起太多 Goroutine 导致负载过高，可以通过 Channel 控制并发数量。</p>
+<p>以下代码示例中，TotalNum 表示任务总数，ParallelNum 表示并发数</p>
+<pre><code class="go">func TestConcurrencyNumberLimit(t *testing.T) &#123;
+    const TotalNum = 10
+    const ParallelNum = 2
+
+    wg := &amp;sync.WaitGroup&#123;&#125;
+    // 限制并发数，缓冲区大小即为最大并发数
+    ch := make(chan struct&#123;&#125;, ParallelNum)
+
+    for i := 0; i &lt; TotalNum; i++ &#123;
+        wg.Add(1)
+        // 通道满时写入操作阻塞在这里，则不会继续起新的协程
+        ch &lt;- struct&#123;&#125;&#123;&#125;
+        go func(idx int) &#123;
+            defer func() &#123;
+                wg.Done()
+                &lt;-ch
+            &#125;()
+
+            fmt.Printf(&quot;[%s] process: %d/%d\n&quot;, time.Now().Format(time.DateTime), idx, TotalNum)
+            time.Sleep(1 * time.Second)
+        &#125;(i + 1)
+    &#125;
+
+    wg.Wait()
+&#125;
+</code></pre>
+<p>执行结果如下，可以看到并发数设置为 2 时每秒完成两个任务，10 个任务总共耗时 5 秒</p>
+<pre><code class="md">=== RUN   TestConcurrencyNumber
+[2023-05-15 00:07:42] process: 2/10
+[2023-05-15 00:07:42] process: 1/10
+[2023-05-15 00:07:43] process: 3/10
+[2023-05-15 00:07:43] process: 4/10
+[2023-05-15 00:07:44] process: 5/10
+[2023-05-15 00:07:44] process: 6/10
+[2023-05-15 00:07:45] process: 7/10
+[2023-05-15 00:07:45] process: 8/10
+[2023-05-15 00:07:46] process: 9/10
+[2023-05-15 00:07:46] process: 10/10
+--- PASS: TestConcurrencyNumber (5.00s)
+</code></pre>
+<h3 id="3-超时控制"><a href="#3-超时控制" class="headerlink" title="3. 超时控制"></a>3. 超时控制</h3><pre><code class="go">func TestTimeout(t *testing.T) &#123;
+    ch := make(chan int, 1)
+
+    // 执行一个耗时的任务
+    go func() &#123;
+        time.Sleep(2 * time.Second)
+        ch &lt;- 1
+    &#125;()
+
+    select &#123;
+    case res := &lt;-ch:
+        // 任务执行完毕
+        fmt.Println(&quot;result: &quot;, res)
+    case &lt;-time.After(1 * time.Second):
+        // 任务执行超时
+        fmt.Println(&quot;timeout&quot;)
+    &#125;
+&#125;
+</code></pre>
+<p>当任务耗时 2 秒，超时时间 1 秒时输出如下：</p>
+<pre><code class="md">=== RUN   TestTimeout
+timeout
+--- PASS: TestTimeout (1.00s)
+</code></pre>
+<p>当任务耗时 2 秒，超时时间 3 秒时输出如下：</p>
+<pre><code class="md">=== RUN   TestTimeout
+result:  1
+--- PASS: TestTimeout (2.00s)
+</code></pre>
+<h2 id="如何优雅关闭通道"><a href="#如何优雅关闭通道" class="headerlink" title="如何优雅关闭通道"></a>如何优雅关闭通道</h2><p>关于 “只能发送者关闭通道” 只是一种口头的约束，你可以在任何地方调用 <code>close</code> 方法来关闭通道，程序也可以编译运行。</p>
+<p>实际上是发送者还是接收者关闭通道并没有太大影响，重点是通道的所有者，通常是创建通道的 Goroutine 做为所有者，负责管理通道的生命周期。</p>
+<p>如果是一个发送者，可以直接由发送者关闭。<br>如果是多个发送者，希望所有发送者发送完毕再关闭通道，则需要有个额外的 Goroutine 来管理所有发送者，并在所有发送者结束后来关闭通道。代码示例如下：</p>
+<pre><code class="go">func TestCh(t *testing.T) &#123;
+    ch := make(chan int, 10)
+
+    // 启动所有发送者协程
+    wg := &amp;sync.WaitGroup&#123;&#125;
+    for i := 1; i &lt; 10; i++ &#123;
+        wg.Add(1)
+        go func(v int) &#123;
+            defer wg.Done()
+            ch &lt;- v
+            fmt.Println(&quot;send:&quot;, v)
+        &#125;(i)
+    &#125;
+
+    // 启动接受者协程
+    quit := make(chan struct&#123;&#125;)
+    go func() &#123;
+        // 接收数据直到通道关闭
+        for v := range ch &#123;
+            fmt.Println(&quot;receive:&quot;, v)
+        &#125;
+        quit &lt;- struct&#123;&#125;&#123;&#125;
+    &#125;()
+
+    // 等待所有发送者协程结束，关闭通道
+    wg.Wait()
+    fmt.Println(&quot;send over...&quot;)
+    close(ch)
+
+    // 等待接收者协程结束
+    &lt;-quit
+    fmt.Println(&quot;receive over!!!&quot;)
+&#125;
+</code></pre>
+
+  </div>
+  
+  
+    
+    <div class='footer'>
+       <!-- 参考资料、相关资料等 -->
       
-        <div>
-          <a class='readmore' href='/2023/03/25/MySQL-%E8%BF%9E%E6%8E%A5%E9%94%99%E8%AF%AF%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/' itemprop="url">
-            阅读全文
-          </a>
-        </div>
+       <!-- 相关文章 -->
+      
+        
+  <div class="related_posts">
+    <section class='header'>
+      <i class="fa-solid fa-bookmark fa-fw" aria-hidden="true"></i><span>相关文章</span>
+    </section>
+    <section class='body'>
+      <div class="vlts-rps"><a class="item" href="/2023/03/25/Go-实战-Socket-编程/" title="Go 实战: Socket 编程" rel="bookmark "><span class="title">Go 实战: Socket 编程</span></a><a class="item" href="/2023/03/25/Go-实战-基于Thrift框架的-RPC-服务-Demo/" title="Go 实战: 基于Thrift框架的 RPC 服务 Demo" rel="bookmark "><span class="title">Go 实战: 基于Thrift框架的 RPC 服务 Demo</span></a><a class="item" href="/2023/05/14/Go-语言中的值方法和指针方法/" title="Go 语言中的值方法和指针方法" rel="bookmark "><span class="title">Go 语言中的值方法和指针方法</span></a><a class="item" href="/2023/03/25/Go-协程调度原理及应用/" title="Go 协程调度原理及应用" rel="bookmark "><span class="title">Go 协程调度原理及应用</span></a></div></section></div>
+      
+      <!-- 版权声明组件 -->
+      
+      <!-- 打赏组件 -->
       
     </div>
   
+  
+    
 
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateModified" datetime="2023-05-15T00:39:05+08:00">
+  <a class='notlink'>
+    <i class="fa-solid fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2023年5月15日</p>
+  </a>
 </div>
 
-          </div>
         
       
         
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
-  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/03/25/MySQL-ORDER-BY-如何实现排序的/">
-  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Harry 的个人空间">
-  </span>
-  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
-    <meta itemprop="name" content="Harry 的个人空间">
-    <meta itemprop="description" content="一个后端开发工程师的技术博客">
-  </span>
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Go/" rel="nofollow"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i><p>Go</p></a></div>
+  <span hidden itemprop="keywords">Go</span>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://harryzhang.cn/2023/05/14/Go-%E8%AF%AD%E8%A8%80-Channel-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/&title=Go 语言 Channel 最佳实践 - Harry 的个人空间&summary="
+          
+          >
+          
+            <img src="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/logo/128/qq.png" class="lazyload" data-srcset="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/logo/128/qq.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://harryzhang.cn/2023/05/14/Go-%E8%AF%AD%E8%A8%80-Channel-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/&title=Go 语言 Channel 最佳实践 - Harry 的个人空间&summary="
+          
+          >
+          
+            <img src="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/logo/128/qzone.png" class="lazyload" data-srcset="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/logo/128/qzone.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=https://harryzhang.cn/2023/05/14/Go-%E8%AF%AD%E8%A8%80-Channel-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/&title=Go 语言 Channel 最佳实践 - Harry 的个人空间&summary="
+          
+          >
+          
+            <img src="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/logo/128/weibo.png" class="lazyload" data-srcset="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/logo/128/weibo.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+          
+        </a>
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+    <!-- Custom Files bottomMeta begin -->
+    
+    <!-- Custom Files bottomMeta end -->
+  </div>
+
+
   
   
+
   
+    <div class="prev-next">
+      
+      
+        <a class='next' href='/2023/05/14/Go-%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%80%BC%E6%96%B9%E6%B3%95%E5%92%8C%E6%8C%87%E9%92%88%E6%96%B9%E6%B3%95/'>
+          <p class='title'>Go 语言中的值方法和指针方法<i class="fa-solid fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>概念函数和方法在 Go 语言中，我们可以为自定义类型定义方法。方法是一个与特定类型关联的函数。方法可以被定义在值类型上或指针类型上。这两种方法分别称为值方法和指针方法。
+// 函数
+func H...</p>
+        </a>
+      
+    </div>
+  
+  <!-- Custom Files postEnd begin-->
+  
+  <!-- Custom Files postEnd end-->
+</article>
+
+
+  
+
+
+  <article class="post white-box shadow floatable blur" id="comments">
     <span hidden>
-      <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
+      <meta itemprop="discussionUrl" content="/2023/05/14/Go-%E8%AF%AD%E8%A8%80-Channel-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/index.html#comments">
     </span>
-  
-  
+    <p ct><i class='fa-solid fa-comments'></i> 评论</p>
     
-    <h2 class="article-title"  itemprop="name headline">
-      <a href="/2023/03/25/MySQL-ORDER-BY-%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E6%8E%92%E5%BA%8F%E7%9A%84/"  itemprop="url">
-        MySQL ORDER BY 如何实现排序的?
-      </a>
-    </h2>
-  
-  <div class='md article-desc' itemprop="articleBody">
-    
-      
-        MySQL是如何进行排序的？假设有一个表t结构如下图所示：
-id为主键，type上建有索引，那么如果要查类型为1，val最小的1000行，那么SQL语句如下：SELECT type, val, detail FROM t WHERE type = 1 ORDER BY val LIMIT 1000;
-全字段排序对上述查询执行explain结果如下：
-Using filesort表示需要排序，...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time itemprop="dateCreated datePublished" datetime="2023-03-25T15:12:42+08:00">2023-03-25</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
-          
-            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
-              <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url"><span itemprop="name">数据库</span></a>
-            </span>
-          
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2023/03/25/MySQL-ORDER-BY-%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E6%8E%92%E5%BA%8F%E7%9A%84/' itemprop="url">
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
 
-</div>
+    <div id="layoutHelper-comments"></div>
 
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
-  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/03/25/MySQL-脏页刷盘/">
-  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Harry 的个人空间">
-  </span>
-  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
-    <meta itemprop="name" content="Harry 的个人空间">
-    <meta itemprop="description" content="一个后端开发工程师的技术博客">
-  </span>
-  
-  
-  
-    <span hidden>
-      <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
-    </span>
-  
-  
-    
-    <h2 class="article-title"  itemprop="name headline">
-      <a href="/2023/03/25/MySQL-%E8%84%8F%E9%A1%B5%E5%88%B7%E7%9B%98/"  itemprop="url">
-        MySQL 脏页刷盘
-      </a>
-    </h2>
-  
-  <div class='md article-desc' itemprop="articleBody">
-    
-      
-        什么是脏页？InnoDB在处理更新语句时，先写内存再写redo log，并不会立即将数据页的更新落地到磁盘（WAL机制），这就会产生升内存数据页和磁盘数据页的数据不一致的情况，这种数据不一致的数据页称为脏页，当脏页写入到磁盘（这个操作称为flush）后，数据一致后称为干净页。
-什么时候会flush脏页？
-redo log写满redo log大小是固定的，写完后会循环覆盖写入。当有新的内容要写...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time itemprop="dateCreated datePublished" datetime="2023-03-25T15:12:03+08:00">2023-03-25</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
-          
-            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
-              <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url"><span itemprop="name">数据库</span></a>
-            </span>
-          
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2023/03/25/MySQL-%E8%84%8F%E9%A1%B5%E5%88%B7%E7%9B%98/' itemprop="url">
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
-  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/03/25/MySQL-索引原理详解/">
-  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Harry 的个人空间">
-  </span>
-  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
-    <meta itemprop="name" content="Harry 的个人空间">
-    <meta itemprop="description" content="一个后端开发工程师的技术博客">
-  </span>
-  
-  
-  
-    <span hidden>
-      <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
-    </span>
-  
-  
-    
-    <h2 class="article-title"  itemprop="name headline">
-      <a href="/2023/03/25/MySQL-%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3/"  itemprop="url">
-        MySQL 索引原理详解
-      </a>
-    </h2>
-  
-  <div class='md article-desc' itemprop="articleBody">
-    
-      
-        索引的底层实现InnoDB存储引擎数据结构使用B+树
-B+树B+数据的基本结构如下图
-为什么选用B+树MySQL为什么要选B+树作为存储结构呢，与B树相比有哪些优点？
-1. 减少磁盘访问，提高查询效率B+树非叶子节点上是不存数据的，仅存键值，而B树节点中不仅存储键值，也会存储数据。因为数据页的大小是固定的（InnoDB中页的默认大小是16KB），如果不存储数据，那么就会存储更多的键值，相应的...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time itemprop="dateCreated datePublished" datetime="2023-03-25T15:11:48+08:00">2023-03-25</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
-          
-            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
-              <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url"><span itemprop="name">数据库</span></a>
-            </span>
-          
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2023/03/25/MySQL-%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3/' itemprop="url">
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
-  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/03/25/MySQL-中一条-SQL-语句是如何执行的？/">
-  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Harry 的个人空间">
-  </span>
-  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
-    <meta itemprop="name" content="Harry 的个人空间">
-    <meta itemprop="description" content="一个后端开发工程师的技术博客">
-  </span>
-  
-  
-  
-    <span hidden>
-      <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
-    </span>
-  
-  
-    
-    <h2 class="article-title"  itemprop="name headline">
-      <a href="/2023/03/25/MySQL-%E4%B8%AD%E4%B8%80%E6%9D%A1-SQL-%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84%EF%BC%9F/"  itemprop="url">
-        MySQL 中一条 SQL 语句是如何执行的？
-      </a>
-    </h2>
-  
-  <div class='md article-desc' itemprop="articleBody">
-    
-      
-        SQL语句执行的经过从用户发起请求，到服务接口调用MySQL驱动，MySQL服务器执行完SQL语句返回结果中间发生了什么？首先放一张图来看整个过程使用到的各个组件，然后再对各个过程进行分析。
-
-1. 连接过程以Openresty服务器为例，Openresty是多进程+I&#x2F;O多路复用结构（Nginx的I&#x2F;O模型），可以支撑高的并发，一个Worker就是一个进程，一个进程可以...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time itemprop="dateCreated datePublished" datetime="2023-03-25T15:11:22+08:00">2023-03-25</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
-          
-            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
-              <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url"><span itemprop="name">数据库</span></a>
-            </span>
-          
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2023/03/25/MySQL-%E4%B8%AD%E4%B8%80%E6%9D%A1-SQL-%E8%AF%AD%E5%8F%A5%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84%EF%BC%9F/' itemprop="url">
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
-  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/03/25/MySQL-和-NoSQL基础知识概述/">
-  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Harry 的个人空间">
-  </span>
-  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
-    <meta itemprop="name" content="Harry 的个人空间">
-    <meta itemprop="description" content="一个后端开发工程师的技术博客">
-  </span>
-  
-  
-  
-    <span hidden>
-      <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
-    </span>
-  
-  
-    
-    <h2 class="article-title"  itemprop="name headline">
-      <a href="/2023/03/25/MySQL-%E5%92%8C-NoSQL%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%A6%82%E8%BF%B0/"  itemprop="url">
-        MySQL 和 NoSQL基础知识概述
-      </a>
-    </h2>
-  
-  <div class='md article-desc' itemprop="articleBody">
-    
-      
-        MySQL索引
-B+Tree
-
-平衡树，查找树，所有叶子节点位于同一层
-
-进行查找时首先再根节点进行二分查找，找到一个key所在的指针，然后递归的在指针所指向的节点进行查找，直到查到叶子节点，然后在叶子节点二分查找，找出key所对应的data
-
-插入删除操作会破坏数的平衡性，需要进行分裂、合并、旋转等操作来维护平衡性
-
-与红黑树相比
-
-B+树的高度更低
-更适合磁盘访问，节点大小设置和磁盘页大...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time itemprop="dateCreated datePublished" datetime="2023-03-25T15:10:58+08:00">2023-03-25</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
-          
-            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
-              <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url"><span itemprop="name">数据库</span></a>
-            </span>
-          
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2023/03/25/MySQL-%E5%92%8C-NoSQL%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%A6%82%E8%BF%B0/' itemprop="url">
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
-  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/03/25/数据库基础知识概述/">
-  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Harry 的个人空间">
-  </span>
-  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
-    <meta itemprop="name" content="Harry 的个人空间">
-    <meta itemprop="description" content="一个后端开发工程师的技术博客">
-  </span>
-  
-  
-  
-    <span hidden>
-      <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
-    </span>
-  
-  
-    
-    <h2 class="article-title"  itemprop="name headline">
-      <a href="/2023/03/25/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%A6%82%E8%BF%B0/"  itemprop="url">
-        数据库基础知识概述
-      </a>
-    </h2>
-  
-  <div class='md article-desc' itemprop="articleBody">
-    
-      
-        事务
-ACID
-
-原子性
-
-隔离性
-
-一致性
-
-持久性
-
-应对系统崩溃，可以用Redo Log恢复
+  </article>
 
 
 
 
-AUTOCOMMIT：MySQL默认采用自动提交，不显示start transaction，每个查询都会被当成一个事务执行并自动提交
 
 
-并发一致性问题
-丢失修改
-
-脏读
-
-不可重复读
-
-幻读
-
-insert操作引起
-
-
-
-锁
-锁粒度
-
-行锁
-表锁
-
-
-锁类型
-
-读写锁
-
-互斥锁（X锁...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time itemprop="dateCreated datePublished" datetime="2023-03-25T15:10:28+08:00">2023-03-25</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
-          
-            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
-              <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url"><span itemprop="name">数据库</span></a>
-            </span>
-          
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2023/03/25/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%A6%82%E8%BF%B0/' itemprop="url">
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-    
-  </section>
-  
-    
-  
-
-
-    
-  
 </div>
 <aside id='l_side' itemscope itemtype="http://schema.org/WPSideBar">
   
@@ -2922,174 +2780,48 @@ insert操作引起
     
     
       
-<section class="widget blogger desktop mobile pjax">
-  <div class='content'>
     
-      
-        <a class='avatar flat-box circle' href='/about/'>
-          <img no-lazy src='https://upload.jianshu.io/users/upload_avatars/14151453/0f03d78b-5b29-466c-8b21-e61b0a356aa7.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240'/>
-        </a>
-      
-    
-    
-      <div class='text'>
-        
-        
-        
-          <p><span id="jinrishici-sentence">Harry 的个人空间</span></p>
-          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
-        
-      </div>
-    
-    
-      <div class="social-wrapper">
-        
-          
-            <a href="/atom.xml"
-              class="social fa-solid fa-rss flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="mailto:me@xxx.com"
-              class="social fa-solid fa-envelope flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="https://github.com/harryzhz"
-              class="social fab fa-github flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="/"
-              class="social fa-solid fa-headphones-alt flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-      </div>
-    
-  </div>
-</section>
-
-    
-  
-
-  
-    
-    
-      
-  
-  <section class="widget category desktop pjax">
-    
-  <header>
-    
-      <a href='/categories/'><i class="fa-solid fa-folder-open fa-fw" aria-hidden="true"></i><span class='name'>文章分类</span></a>
-    
-  </header>
-
-
-    <div class='content'>
-      <ul class="entry navigation">
-        
-          <li><a class="flat-box"
-            title="/categories/Golang/" href="/categories/Golang/"
-            active-action="action-categoriesGolang"
-            ><div class='name'>Golang</div><div class='badge'>(5)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/"
-            active-action="action-categoriesE58886E5B883E5BC8FE7B3BBE7BB9F"
-            ><div class='name'>分布式系统</div><div class='badge'>(7)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"
-            active-action="action-categoriesE5BEAEE69C8DE58AA1"
-            ><div class='name'>微服务</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"
-            active-action="action-categoriesE6938DE4BD9CE7B3BBE7BB9F"
-            ><div class='name'>操作系统</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"
-            active-action="action-categoriesE695B0E68DAEE5BA93"
-            ><div class='name'>数据库</div><div class='badge'>(7)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"
-            active-action="action-categoriesE695B0E68DAEE7BB93E69E84"
-            ><div class='name'>数据结构</div><div class='badge'>(6)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E7%AE%97%E6%B3%95/" href="/categories/%E7%AE%97%E6%B3%95/"
-            active-action="action-categoriesE7AE97E6B395"
-            ><div class='name'>算法</div><div class='badge'>(8)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E7%BC%93%E5%AD%98/" href="/categories/%E7%BC%93%E5%AD%98/"
-            active-action="action-categoriesE7BC93E5AD98"
-            ><div class='name'>缓存</div><div class='badge'>(3)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"
-            active-action="action-categoriesE8AEA1E7AE97E69CBAE7BD91E7BB9C"
-            ><div class='name'>计算机网络</div><div class='badge'>(5)</div></a></li>
-        
-      </ul>
-    </div>
-  </section>
-
-
-    
-  
-
-  
-    
-    
-      
-  
-  <section class="widget tagcloud desktop mobile pjax">
-    
-  <header>
-    
-      <a href='/tags/'><i class="fa-solid fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
-    
-  </header>
-
-
-    <div class='content'>
-      <a href="/tags/BASE/" style="font-size: 14px; color: #999">BASE</a> <a href="/tags/CAP/" style="font-size: 14px; color: #999">CAP</a> <a href="/tags/Cache-Aside/" style="font-size: 14px; color: #999">Cache-Aside</a> <a href="/tags/Cookie/" style="font-size: 14px; color: #999">Cookie</a> <a href="/tags/GMP/" style="font-size: 14px; color: #999">GMP</a> <a href="/tags/Go/" style="font-size: 20px; color: #707070">Go</a> <a href="/tags/Goroutine/" style="font-size: 14px; color: #999">Goroutine</a> <a href="/tags/HTTPS/" style="font-size: 14px; color: #999">HTTPS</a> <a href="/tags/I-O%E6%A8%A1%E5%9E%8B/" style="font-size: 14px; color: #999">I/O模型</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/LRU/" style="font-size: 14px; color: #999">LRU</a> <a href="/tags/Linux/" style="font-size: 16px; color: #8b8b8b">Linux</a> <a href="/tags/MQ/" style="font-size: 14px; color: #999">MQ</a> <a href="/tags/MySQL/" style="font-size: 22px; color: #636363">MySQL</a> <a href="/tags/NoSQL/" style="font-size: 14px; color: #999">NoSQL</a> <a href="/tags/RPC/" style="font-size: 14px; color: #999">RPC</a> <a href="/tags/RabbitMQ/" style="font-size: 14px; color: #999">RabbitMQ</a> <a href="/tags/Redis/" style="font-size: 18px; color: #7e7e7e">Redis</a> <a href="/tags/Redis-%E9%9B%86%E7%BE%A4/" style="font-size: 14px; color: #999">Redis 集群</a> <a href="/tags/RocketMQ/" style="font-size: 14px; color: #999">RocketMQ</a> <a href="/tags/SQL%E8%AF%AD%E5%8F%A5/" style="font-size: 14px; color: #999">SQL语句</a> <a href="/tags/Session/" style="font-size: 14px; color: #999">Session</a> <a href="/tags/Socket/" style="font-size: 14px; color: #999">Socket</a> <a href="/tags/TCP/" style="font-size: 14px; color: #999">TCP</a> <a href="/tags/Thrift/" style="font-size: 14px; color: #999">Thrift</a> <a href="/tags/WebSocket/" style="font-size: 14px; color: #999">WebSocket</a> <a href="/tags/leaf/" style="font-size: 14px; color: #999">leaf</a> <a href="/tags/leetcode/" style="font-size: 24px; color: #555">leetcode</a> <a href="/tags/select-poll-epoll/" style="font-size: 14px; color: #999">select/poll/epoll</a> <a href="/tags/snowflake/" style="font-size: 14px; color: #999">snowflake</a> <a href="/tags/%E4%B8%80%E8%87%B4%E6%80%A7/" style="font-size: 14px; color: #999">一致性</a> <a href="/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C/" style="font-size: 14px; color: #999">一致性哈希</a> <a href="/tags/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/" style="font-size: 14px; color: #999">二分查找</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/" style="font-size: 14px; color: #999">二叉搜索树</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 14px; color: #999">二叉树</a> <a href="/tags/%E4%BB%A4%E7%89%8C%E6%A1%B6/" style="font-size: 14px; color: #999">令牌桶</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 14px; color: #999">分布式</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 14px; color: #999">动态规划</a> <a href="/tags/%E5%8D%95%E8%B0%83%E6%A0%88/" style="font-size: 14px; color: #999">单调栈</a> <a href="/tags/%E5%94%AF%E4%B8%80ID/" style="font-size: 14px; color: #999">唯一ID</a> <a href="/tags/%E5%A0%86/" style="font-size: 14px; color: #999">堆</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 14px; color: #999">字符串</a> <a href="/tags/%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/" style="font-size: 14px; color: #999">守护进程</a> <a href="/tags/%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2/" style="font-size: 14px; color: #999">广度优先搜索</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" style="font-size: 14px; color: #999">快速排序</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 14px; color: #999">排序</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 14px; color: #999">数组</a> <a href="/tags/%E6%A0%88/" style="font-size: 14px; color: #999">栈</a> <a href="/tags/%E6%A0%91/" style="font-size: 14px; color: #999">树</a> <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" style="font-size: 14px; color: #999">消息队列</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2/" style="font-size: 14px; color: #999">深度优先搜索</a> <a href="/tags/%E6%BC%8F%E6%A1%B6/" style="font-size: 14px; color: #999">漏桶</a> <a href="/tags/%E7%83%AD%E7%82%B9-key/" style="font-size: 14px; color: #999">热点 key</a> <a href="/tags/%E7%B4%A2%E5%BC%95/" style="font-size: 14px; color: #999">索引</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 14px; color: #999">缓存</a> <a href="/tags/%E8%84%8F%E9%A1%B5/" style="font-size: 14px; color: #999">脏页</a> <a href="/tags/%E8%B4%AA%E5%BF%83/" style="font-size: 14px; color: #999">贪心</a> <a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 14px; color: #999">链表</a> <a href="/tags/%E9%98%9F%E5%88%97/" style="font-size: 14px; color: #999">队列</a> <a href="/tags/%E9%99%90%E6%B5%81/" style="font-size: 14px; color: #999">限流</a>
-    </div>
-  </section>
-
-
-    
-  
-
   
 
 
 <div class="widget-sticky pjax">
 
+  
+  
+
+
+  <section class="widget toc-wrapper desktop mobile " id="toc-div" >
+    
+  <header>
+    
+      <i class="fa-solid fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-text">简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E5%B8%A6%E7%BC%93%E5%86%B2%E7%9A%84%E9%80%9A%E9%81%93"><span class="toc-text">不带缓冲的通道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%A6%E7%BC%93%E5%86%B2%E7%9A%84%E9%80%9A%E9%81%93"><span class="toc-text">带缓冲的通道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%97%AD%E9%80%9A%E9%81%93"><span class="toc-text">关闭通道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#select-%E9%80%9A%E9%81%93"><span class="toc-text">select 通道</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">应用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%94%9F%E4%BA%A7-%E6%B6%88%E8%B4%B9%E6%A8%A1%E5%9E%8B"><span class="toc-text">1. 生产-消费模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%99%90%E5%88%B6%E5%B9%B6%E5%8F%91%E6%95%B0"><span class="toc-text">2. 限制并发数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%B6%85%E6%97%B6%E6%8E%A7%E5%88%B6"><span class="toc-text">3. 超时控制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E5%85%B3%E9%97%AD%E9%80%9A%E9%81%93"><span class="toc-text">如何优雅关闭通道</span></a></li></ol>
+    </div>
+  </section>
+
+  
+
 </div>
 
 
 <!-- 没有 pjax 占位会报错 万恶的 pjax -->
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
 
   <div class="pjax">
     <!-- pjax占位 -->
@@ -3117,13 +2849,14 @@ insert操作引起
 </aside>
 
 
+
           <!--此文件用来存放一些不方便取值的变量-->
 <!--思路大概是将值藏到重加载的区域内-->
 
 <pjax>
 <script>
   window.pdata={}
-  pdata.ispage=false;
+  pdata.ispage=true;
   pdata.commentPath="";
   pdata.commentPlaceholder="";
   pdata.commentConfig={};
@@ -3669,7 +3402,7 @@ insert操作引起
 </script>
 
 
-  <script type="application/ld+json">[{"@context":"http://schema.org","@type":"Organization","name":"Harry 的个人空间","url":"https://harryzhang.cn/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},{"@context":"http://schema.org","@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhang.cn/","sameAs":["https://github.com/harryzhz"],"description":"一个后端开发工程师的技术博客"},{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https://harryzhang.cn/","name":"Harry 的个人空间"}},{"@type":"ListItem","position":2,"item":{"@id":"https://harryzhang.cn/tags/MySQL/","name":"MySQL"}}]},{"@context":"http://schema.org","@type":"WebSite","name":"Harry 的个人空间","url":"https://harryzhang.cn/","keywords":["技术博客","后端开发"],"description":"一个后端开发工程师的技术博客","author":{"@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhang.cn/","description":"一个后端开发工程师的技术博客"},"publisher":{"@type":"Organization","name":"Harry 的个人空间","url":"https://harryzhang.cn/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"potentialAction":{"@type":"SearchAction","name":"Site Search","target":{"@type":"EntryPoint","urlTemplate":"https://harryzhang.cn?s={search_term_string}"},"query-input":"required name=search_term_string"}},{"@context":"http://schema.org","@type":"BlogPosting","description":"一个后端开发工程师的技术博客","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage"},"author":{"@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhang.cn/"},"publisher":{"@type":"Organization","name":"Harry 的个人空间","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"wordCount":0,"image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}}]</script>
+  <script type="application/ld+json">[{"@context":"http://schema.org","@type":"Organization","name":"Harry 的个人空间","url":"https://harryzhang.cn/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},{"@context":"http://schema.org","@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhang.cn/","sameAs":["https://github.com/harryzhz"],"description":"一个后端开发工程师的技术博客"},{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https://harryzhang.cn/","name":"Harry 的个人空间"}},{"@type":"ListItem","position":2,"item":{"@id":"https://harryzhang.cn/categories/Golang/","name":"Golang"}},{"@type":"ListItem","position":3,"item":{"@id":"https://harryzhang.cn/2023/05/14/Go-语言-Channel-最佳实践/","name":"Go 语言 Channel 最佳实践"}}]},{"@context":"http://schema.org","@type":"WebSite","name":"Harry 的个人空间","url":"https://harryzhang.cn/","keywords":["技术博客","后端开发"],"description":"一个后端开发工程师的技术博客","author":{"@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhang.cn/","description":"一个后端开发工程师的技术博客"},"publisher":{"@type":"Organization","name":"Harry 的个人空间","url":"https://harryzhang.cn/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"potentialAction":{"@type":"SearchAction","name":"Site Search","target":{"@type":"EntryPoint","urlTemplate":"https://harryzhang.cn?s={search_term_string}"},"query-input":"required name=search_term_string"}},{"@context":"http://schema.org","@type":"BlogPosting","headline":"Go 语言 Channel 最佳实践","description":"一个后端开发工程师的技术博客","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https://harryzhang.cn/2023/05/14/Go-%E8%AF%AD%E8%A8%80-Channel-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/"},"author":{"@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhang.cn/"},"publisher":{"@type":"Organization","name":"Harry 的个人空间","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"url":"https://harryzhang.cn/2023/05/14/Go-%E8%AF%AD%E8%A8%80-Channel-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/","wordCount":0,"datePublished":"2023-05-14T09:31:52.000Z","dateModified":"2023-05-14T16:39:05.259Z","articleSection":"Golang","keywords":"Go","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}}]</script>
 
 
 

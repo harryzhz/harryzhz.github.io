@@ -6,7 +6,7 @@
   <link href="https://harryzhang.cn/atom.xml" rel="self"/>
   
   <link href="https://harryzhang.cn/"/>
-  <updated>2023-05-14T09:25:53.540Z</updated>
+  <updated>2023-05-14T16:39:05.259Z</updated>
   <id>https://harryzhang.cn/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Go 语言 Channel 最佳实践</title>
+    <link href="https://harryzhang.cn/2023/05/14/Go-%E8%AF%AD%E8%A8%80-Channel-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/"/>
+    <id>https://harryzhang.cn/2023/05/14/Go-%E8%AF%AD%E8%A8%80-Channel-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</id>
+    <published>2023-05-14T09:31:52.000Z</published>
+    <updated>2023-05-14T16:39:05.259Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><blockquote><p>Channel 基本概念介绍</p><p>基本使用方法参见 <a href="https://tour.go-zh.org/concurrency/2">Go指南</a></p></blockquote><p>Go 语言中的通道（channel）是一种特殊的类型。通道像一个传送带或者队列，总是遵循先入先出（First In First Out）的规则，保证收发数据的顺序。每一个通道都是一个具体类型的导管，也就是声明channel的时候需要为其指定元素类型。</p><h3 id="不带缓冲的通道"><a href="#不带缓冲的通道" class="headerlink" title="不带缓冲的通道"></a>不带缓冲的通道</h3><p>创建不带缓冲的通道语法如下</p><pre><code class="go">ch := make(chan int)</code></pre><p>不带缓冲的通道发送和接收操作在另一端准备好之前都会阻塞，可以想象为是直接由发送者将数据传给接收者，没有中间缓冲区。这使得 Go 程可以在没有显式的锁或竞态变量的情况下进行同步。</p><h3 id="带缓冲的通道"><a href="#带缓冲的通道" class="headerlink" title="带缓冲的通道"></a>带缓冲的通道</h3><p>将缓冲长度作为第二个参数提供给 make 来初始化一个带缓冲的信道</p><pre><code class="go">ch := make(chan int, 100)</code></pre><p>仅当信道的缓冲区填满后，向其发送数据时才会阻塞。当缓冲区为空时，接受方会阻塞。</p><h3 id="关闭通道"><a href="#关闭通道" class="headerlink" title="关闭通道"></a>关闭通道</h3><pre><code class="go">close(ch)</code></pre><p>发送者可通过 close 关闭一个信道来表示没有需要发送的值了。接收者可以通过为接收表达式分配第二个参数来测试信道是否被关闭：若没有值可以接收且信道已被关闭，那么在执行完 <code>v, ok := &lt;-ch</code><br>之后 ok 会被设置为 false。</p><p>循环 <code>for i := range ch</code> 会不断从通道接收数据直到它被关闭</p><p><strong>注意：</strong> 信道通常情况无需关闭，只有在必须告诉接收者不在有要发送的数据时才有必要关闭，不合理的关闭反而会带来各种问题，比如往一个已关闭的通道里写入数据导致 panic。因此很多 Channel 的使用教程会建议不要关闭通道，或者说只有发送者才能关闭通道</p><h3 id="select-通道"><a href="#select-通道" class="headerlink" title="select 通道"></a>select 通道</h3><p>select 语句使一个 Go 程可以等待多个通信操作。select 会阻塞到某个分支可以继续执行为止，这时就会执行该分支。当多个分支都准备好时会随机选择一个执行。</p><pre><code class="go">select &#123;case v &lt;- ch1:case v &lt;- ch2:case &lt;-quit:    return&#125;</code></pre><h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><blockquote><p>Channel 的几种经典应用场景及示例</p></blockquote><p>Channel 用于 Goroutine 之间的通信，常用于交换数据、并发控制、协程同步、超时控制等场景</p><h3 id="1-生产-消费模型"><a href="#1-生产-消费模型" class="headerlink" title="1. 生产-消费模型"></a>1. 生产-消费模型</h3><p>用来在生产者和消费者之前的数据传输，生产者协程将结果发送到通道，消费者协程从通道读取结果，生产者和消费者是并发进行的</p><pre><code class="go">func producer(ch chan&lt;- int) &#123;    defer close(ch)    for i := 0; i &lt; 5; i++ &#123;        time.Sleep(time.Second)        fmt.Printf(&quot;[%s] Produced: %d\n&quot;, time.Now().Format(time.DateTime), i)        ch &lt;- i    &#125;&#125;func consumer(ch &lt;-chan int) &#123;    for &#123;        if v, ok := &lt;-ch; ok &#123;            time.Sleep(time.Second)            fmt.Printf(&quot;[%s] Consumed: %d\n&quot;, time.Now().Format(time.DateTime), v)        &#125; else &#123;            break        &#125;    &#125;&#125;func TestProdConsume(t *testing.T) &#123;    ch := make(chan int, 5)    go producer(ch)    go consumer(ch)    time.Sleep(10 * time.Second)&#125;</code></pre><p>执行结果如下：</p><pre><code class="md">=== RUN   TestProdConsume[2023-05-15 00:35:58] Produced: 0[2023-05-15 00:35:59] Produced: 1[2023-05-15 00:35:59] Consumed: 0[2023-05-15 00:36:00] Consumed: 1[2023-05-15 00:36:00] Produced: 2[2023-05-15 00:36:01] Consumed: 2[2023-05-15 00:36:01] Produced: 3[2023-05-15 00:36:02] Consumed: 3[2023-05-15 00:36:02] Produced: 4[2023-05-15 00:36:03] Consumed: 4--- PASS: TestProdConsume (10.00s)</code></pre><h3 id="2-限制并发数"><a href="#2-限制并发数" class="headerlink" title="2. 限制并发数"></a>2. 限制并发数</h3><p>当你有大量任务想通过 Goroutine 并发处理，但又不希望同时起太多 Goroutine 导致负载过高，可以通过 Channel 控制并发数量。</p><p>以下代码示例中，TotalNum 表示任务总数，ParallelNum 表示并发数</p><pre><code class="go">func TestConcurrencyNumberLimit(t *testing.T) &#123;    const TotalNum = 10    const ParallelNum = 2    wg := &amp;sync.WaitGroup&#123;&#125;    // 限制并发数，缓冲区大小即为最大并发数    ch := make(chan struct&#123;&#125;, ParallelNum)    for i := 0; i &lt; TotalNum; i++ &#123;        wg.Add(1)        // 通道满时写入操作阻塞在这里，则不会继续起新的协程        ch &lt;- struct&#123;&#125;&#123;&#125;        go func(idx int) &#123;            defer func() &#123;                wg.Done()                &lt;-ch            &#125;()            fmt.Printf(&quot;[%s] process: %d/%d\n&quot;, time.Now().Format(time.DateTime), idx, TotalNum)            time.Sleep(1 * time.Second)        &#125;(i + 1)    &#125;    wg.Wait()&#125;</code></pre><p>执行结果如下，可以看到并发数设置为 2 时每秒完成两个任务，10 个任务总共耗时 5 秒</p><pre><code class="md">=== RUN   TestConcurrencyNumber[2023-05-15 00:07:42] process: 2/10[2023-05-15 00:07:42] process: 1/10[2023-05-15 00:07:43] process: 3/10[2023-05-15 00:07:43] process: 4/10[2023-05-15 00:07:44] process: 5/10[2023-05-15 00:07:44] process: 6/10[2023-05-15 00:07:45] process: 7/10[2023-05-15 00:07:45] process: 8/10[2023-05-15 00:07:46] process: 9/10[2023-05-15 00:07:46] process: 10/10--- PASS: TestConcurrencyNumber (5.00s)</code></pre><h3 id="3-超时控制"><a href="#3-超时控制" class="headerlink" title="3. 超时控制"></a>3. 超时控制</h3><pre><code class="go">func TestTimeout(t *testing.T) &#123;    ch := make(chan int, 1)    // 执行一个耗时的任务    go func() &#123;        time.Sleep(2 * time.Second)        ch &lt;- 1    &#125;()    select &#123;    case res := &lt;-ch:        // 任务执行完毕        fmt.Println(&quot;result: &quot;, res)    case &lt;-time.After(1 * time.Second):        // 任务执行超时        fmt.Println(&quot;timeout&quot;)    &#125;&#125;</code></pre><p>当任务耗时 2 秒，超时时间 1 秒时输出如下：</p><pre><code class="md">=== RUN   TestTimeouttimeout--- PASS: TestTimeout (1.00s)</code></pre><p>当任务耗时 2 秒，超时时间 3 秒时输出如下：</p><pre><code class="md">=== RUN   TestTimeoutresult:  1--- PASS: TestTimeout (2.00s)</code></pre><h2 id="如何优雅关闭通道"><a href="#如何优雅关闭通道" class="headerlink" title="如何优雅关闭通道"></a>如何优雅关闭通道</h2><p>关于 “只能发送者关闭通道” 只是一种口头的约束，你可以在任何地方调用 <code>close</code> 方法来关闭通道，程序也可以编译运行。</p><p>实际上是发送者还是接收者关闭通道并没有太大影响，重点是通道的所有者，通常是创建通道的 Goroutine 做为所有者，负责管理通道的生命周期。</p><p>如果是一个发送者，可以直接由发送者关闭。<br>如果是多个发送者，希望所有发送者发送完毕再关闭通道，则需要有个额外的 Goroutine 来管理所有发送者，并在所有发送者结束后来关闭通道。代码示例如下：</p><pre><code class="go">func TestCh(t *testing.T) &#123;    ch := make(chan int, 10)    // 启动所有发送者协程    wg := &amp;sync.WaitGroup&#123;&#125;    for i := 1; i &lt; 10; i++ &#123;        wg.Add(1)        go func(v int) &#123;            defer wg.Done()            ch &lt;- v            fmt.Println(&quot;send:&quot;, v)        &#125;(i)    &#125;    // 启动接受者协程    quit := make(chan struct&#123;&#125;)    go func() &#123;        // 接收数据直到通道关闭        for v := range ch &#123;            fmt.Println(&quot;receive:&quot;, v)        &#125;        quit &lt;- struct&#123;&#125;&#123;&#125;    &#125;()    // 等待所有发送者协程结束，关闭通道    wg.Wait()    fmt.Println(&quot;send over...&quot;)    close(ch)    // 等待接收者协程结束    &lt;-quit    fmt.Println(&quot;receive over!!!&quot;)&#125;</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;Channel 基本概念介绍&lt;/p&gt;
+&lt;p&gt;基本使用方法参见 &lt;a href=&quot;https://tour.go-z</summary>
+      
+    
+    
+    
+    <category term="Golang" scheme="https://harryzhang.cn/categories/Golang/"/>
+    
+    
+    <category term="Go" scheme="https://harryzhang.cn/tags/Go/"/>
+    
+  </entry>
   
   <entry>
     <title>Go 语言中的值方法和指针方法</title>
@@ -529,33 +555,6 @@
     
     
     <category term="MySQL" scheme="https://harryzhang.cn/tags/MySQL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Redis 集群架构</title>
-    <link href="https://harryzhang.cn/2023/03/25/Redis-%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84/"/>
-    <id>https://harryzhang.cn/2023/03/25/Redis-%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84/</id>
-    <published>2023-03-25T07:04:57.000Z</published>
-    <updated>2023-03-25T07:07:54.828Z</updated>
-    
-    <content type="html"><![CDATA[<p>单实例往往不能满足生产环境的需求，需要引入Redis集群，比较常见的Redis集群方案有主从复制、哨兵模式、官网的Redis Cluster，另外还有一些Proxy模式，各大厂商也有自己的方案。</p><h2 id="主从复制模式"><a href="#主从复制模式" class="headerlink" title="主从复制模式"></a>主从复制模式</h2><h4 id="基本架构"><a href="#基本架构" class="headerlink" title="基本架构"></a>基本架构</h4><p><img src="https://upload-images.jianshu.io/upload_images/14151453-e32695d0c4b0efc5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" class="lazyload" data-srcset="https://upload-images.jianshu.io/upload_images/14151453-e32695d0c4b0efc5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p><h4 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h4><ol><li>slave向master发送SYNC命令，master接收到命令后通过bgsave保存快照（RDB持久化），并使用缓冲区记录保存快照期间执行的写命令</li><li>master将快照文件发送给slave，继续往缓冲区记录写命令</li><li>slave收到快照文件后载入数据</li><li>master快照发送完成后想slave发送缓冲去的写命令，slave接收命令并执行，完成复制初始化</li><li>此后每次执行一个写命令都会同步发送给slave，保持master于slave之间的数据一致性</li></ol><h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h4><p>最简单的一种集群方案，本质上写入还是单实例（Master节点），读可以在主节点或从节点，能够实现读写分离。缺点是容量依赖单节点，无法实现分区，不具备自动容错与恢复。</p><h2 id="哨兵模式"><a href="#哨兵模式" class="headerlink" title="哨兵模式"></a>哨兵模式</h2><p>为了解决主从复制模式不能自动进行故障恢复的不足，引入特殊的哨兵节点（Sentinel），用来监控Redis节点，在发生故障时选举出领头哨兵，由领头哨兵从所有的Slave节点中选一个作为新的Master节点，完成故障转移。</p><h4 id="基本架构-1"><a href="#基本架构-1" class="headerlink" title="基本架构"></a>基本架构</h4><p><img src="https://upload-images.jianshu.io/upload_images/14151453-85d5f5a9c7b7a142.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" class="lazyload" data-srcset="https://upload-images.jianshu.io/upload_images/14151453-85d5f5a9c7b7a142.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p><p>Sentinel内部互相有连接，用于监控其他Sentinel和通信，同时每个Sentinel和每个Redis节点之间有两条连接，一个连接用来发送命令通信，一个连接用来订阅Redis节点的<code>_sentinel_:hello</code>频道和获取监控该节点其他Sentinel的信息。</p><h4 id="工作原理-1"><a href="#工作原理-1" class="headerlink" title="工作原理"></a>工作原理</h4><p>与Master建立连接后，Sentinel会执行以下操作：</p><ol><li>定期向Master和Slave发送INFO命令，发送INFO命令可以获取当前数据库节点信息，如果当前是Master节点，能自动发现Master的Slave节点。</li><li>定期向Master和Slave的<code>_sentinel_:hello</code>频道发送自己的信息</li><li>定期向Master、Slave和其他Sentinel发送PING命令</li></ol><h4 id="故障转移"><a href="#故障转移" class="headerlink" title="故障转移"></a>故障转移</h4><p>如果Sentinel向数据库节点发送的PING命令超时，Sentinel认为其主管下线，如果该节点是主节点，Sentinel会向其他Sentinel发送命令询问他们是否也认为改Master主观下线，如果达到一定数量的投票，Sentinel会认为改Master客观下线，并开启选举领头节点进行故障恢复，选举采用Raft算法：</p><ol><li>认为Master客观下线的Sentinel-1向每个Sentinel发送命令，要求对方选自己为领头哨兵。</li><li>如果目标Sentinel节点没有选过其他人，则会同意选举Sentinel-1为领头哨兵</li><li>如果有超过一半的Sentinel统一Sentinel-1当选领头，则Sentinel-1成为领头。</li><li>如果有多个Sentinel同时竞选，导致一轮投票没有选出领头，则开启下一轮竞选，直到选出领头。</li></ol><p>领头哨兵从故障Master的Slave节点选出一个当选新的Master，选择的规则如下：</p><ol><li>所有在线的Slave选优先级最高的，优先级通过slave-priority配置</li><li>如果有多个高优先级的Slave，则选取复制偏移量最大的（数据最完整的）</li><li>如果以上条件都一样，选取id最小的</li></ol><p>挑选出要升级的Slave后，领头Sentinel向该节点发送命令使其成为Master，然后再向其他Slave发送命令接收新的Master，其他Slave收到命令后向新的Master节点发送命令进行数据同步，将故障的Master更新为新的Master的Slave节点。</p><h4 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a>特点</h4><p>能够自动故障转移，提高了可用性，但是同样还是存在主从复制模式的难以扩容，受限于Redis单机能力的缺点。</p><h2 id="Redis-Cluster"><a href="#Redis-Cluster" class="headerlink" title="Redis Cluster"></a>Redis Cluster</h2><h4 id="基本架构-2"><a href="#基本架构-2" class="headerlink" title="基本架构"></a>基本架构</h4><p><img src="https://upload-images.jianshu.io/upload_images/14151453-2f8e053a25c9dd4d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" class="lazyload" data-srcset="https://upload-images.jianshu.io/upload_images/14151453-2f8e053a25c9dd4d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p><p>Cluster采用无中心架构</p><ol><li>所有Redis节点彼此互联，内部使用二进制协议优化传输速度和带宽</li><li>节点的fail是通过集群中半数以上节点检测失效判定的</li><li>客户端与key所在的Redis节点不需要直连，内部会做重定向；不需要中间代理层，客户端连接集群任意一个节点即可。</li></ol><h4 id="工作原理-2"><a href="#工作原理-2" class="headerlink" title="工作原理"></a>工作原理</h4><ol><li>Redis Cluster引入了槽位slot的概念（取值0-16383），每个节点均分这些slot</li><li>当对某个key操作的时候，Redis会计算key的crc16值，然后对16384取模，这样每个key都会对应一个0-16383范围的哈希槽，根据哈希槽找到负责对应槽位的节点，然后自动跳转到这个槽位上进行存取操作</li><li>为了提高可用性，Cluster同时支持主从复制，每个Master对应一个或多个Slave节点，当主节点宕机的时候启动从节点</li><li>如果一个集群半数以上的Master节点认为某个Master节点疑似下线，那么这个Master将被标记为已下线。</li></ol><p>故障转移的方法和Sentinel模式类似：</p><ol><li>从复制故障Master节点的所有Slave节点选一个作为新的Master</li><li>被选中的Slave节点执行<code>SLAVEOF no one</code>命令，成为新的Master节点</li><li>新的Master节点会撤销所有对已下线Master节点的槽指派，将这些槽指派给自己</li><li>新的Master节点向集群广播一条PONG消息，让集群中的其他节点知道这个节点已经由Slave变成了Master节点，并且已接管了槽位</li><li>新的主节点开始接受和自己负责处理的slot有关的命令请求，故障转移完成。</li></ol><h4 id="特点-2"><a href="#特点-2" class="headerlink" title="特点"></a>特点</h4><h5 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h5><ul><li>无中心架构，不存在单点故障</li><li>不需要中间代理，减少依赖</li><li>支持横向扩展，伸缩性更好，能提供的并发能力更高</li><li>能自动故障转移，高可用</li></ul><h5 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h5><ul><li>客户端实现复杂</li><li>数据异步复制，不保证数据强一致性</li><li>Slave作为冷备不提供服务</li><li>批量操作限制</li><li>事务支持有限，只支持多key在同一节点的事务操作</li></ul><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>【1】书籍：Redis设计与实现<br>【2】 <a href="https://segmentfault.com/a/1190000022028642">一文掌握Redis的三种集群方案</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;单实例往往不能满足生产环境的需求，需要引入Redis集群，比较常见的Redis集群方案有主从复制、哨兵模式、官网的Redis Cluster，另外还有一些Proxy模式，各大厂商也有自己的方案。&lt;/p&gt;
-&lt;h2 id=&quot;主从复制模式&quot;&gt;&lt;a href=&quot;#主从复制模式&quot; c</summary>
-      
-    
-    
-    
-    <category term="缓存" scheme="https://harryzhang.cn/categories/%E7%BC%93%E5%AD%98/"/>
-    
-    
-    <category term="Redis" scheme="https://harryzhang.cn/tags/Redis/"/>
-    
-    <category term="Redis 集群" scheme="https://harryzhang.cn/tags/Redis-%E9%9B%86%E7%BE%A4/"/>
     
   </entry>
   
