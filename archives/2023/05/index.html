@@ -6,8 +6,8 @@
   <meta name="Volantis" content="5.7.7">
   <meta charset="utf-8">
   <!-- SEO相关 -->
-  <meta name="robots" content="noindex,follow">
-  <link rel="canonical" href="https://harryzhang.cn/tags/tcp/"/>
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://harryzhang.cn/archives/2023/05/"/>
   <!-- 渲染优化 -->
     <meta http-equiv='x-dns-prefetch-control' content='on' />
       <link rel='dns-prefetch' href='https://unpkg.com'>
@@ -34,13 +34,13 @@
   <!-- feed -->
       <link rel="alternate" href="/atom.xml" title="Harry 的个人空间" type="application/atom+xml">
   <!-- 页面元数据 -->
-  <title>标签：TCP - Harry 的个人空间</title>
+  <title>归档：2023/5 - Harry 的个人空间</title>
   <meta name="keywords" content="技术博客,后端开发">
   <meta desc name="description" content="一个后端开发工程师的技术博客 - harry zhang - Harry 的个人空间">
   
 <meta property="og:type" content="website">
 <meta property="og:title" content="Harry 的个人空间">
-<meta property="og:url" content="https://harryzhang.cn/tags/TCP/index.html">
+<meta property="og:url" content="https://harryzhang.cn/archives/2023/05/index.html">
 <meta property="og:site_name" content="Harry 的个人空间">
 <meta property="og:description" content="一个后端开发工程师的技术博客">
 <meta property="og:locale" content="zh_CN">
@@ -2365,11 +2365,9 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       <div id="safearea">
         <div class="body-wrapper">
           
-
 <div id="l_main" class=''>
-  
-    
-      
+	
+		
   <section class="post-list">
     
       
@@ -2383,7 +2381,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
         
           <div class='post-wrapper'>
             <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
-  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/03/25/TCP是如何实现可靠传输的？/">
+  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/05/14/Go-语言中的值方法和指针方法/">
   <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
     <meta itemprop="name" content="Harry 的个人空间">
   </span>
@@ -2401,16 +2399,23 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
     <h2 class="article-title"  itemprop="name headline">
-      <a href="/2023/03/25/TCP%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93%E7%9A%84%EF%BC%9F/"  itemprop="url">
-        TCP是如何实现可靠传输的？
+      <a href="/2023/05/14/Go-%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%80%BC%E6%96%B9%E6%B3%95%E5%92%8C%E6%8C%87%E9%92%88%E6%96%B9%E6%B3%95/"  itemprop="url">
+        Go 语言中的值方法和指针方法
       </a>
     </h2>
   
   <div class='md article-desc' itemprop="articleBody">
     
       
-        在计算机网络的经典五层协议中，TCP属于运输层，实现了进程间的通信，保证了数据的可靠传输，属于计算机网络协议族中最重要的协议之一，那么TCP是如何实现可靠数据传输的呢？
-底层实现运输层的进程间通信是通过socket实现的，socket是一个抽象的概念，在Linux系统中以文件的形式存在。网络层通过IP来区分主机，运输层则增加了端口的概念来区分进程。TCP协议中使用目标IP、目标端口、源IP、...
+        概念函数和方法在 Go 语言中，我们可以为自定义类型定义方法。方法是一个与特定类型关联的函数。方法可以被定义在值类型上或指针类型上。这两种方法分别称为值方法和指针方法。
+// 函数
+func Hello() &#123;
+    fmt.Println(&quot;Hello World!&quot;)
+&#125;
+
+type Welcome struct&#123;&#125;
+
+// ...
       
     
   </div>
@@ -2418,20 +2423,20 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     <div class='meta-v3' line_style='solid'>
       <div>
         
-        <time itemprop="dateCreated datePublished" datetime="2023-03-25T14:43:37+08:00">2023-03-25</time>
+        <time itemprop="dateCreated datePublished" datetime="2023-05-14T16:21:05+08:00">2023-05-14</time>
         
           <span class="dot"></span>
-          <a class="category-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+          <a class="category-link" href="/categories/Golang/">Golang</a>
           
             <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
-              <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url"><span itemprop="name">计算机网络</span></a>
+              <a href="/categories/Golang/" itemprop="url"><span itemprop="name">Golang</span></a>
             </span>
           
         
       </div>
       
         <div>
-          <a class='readmore' href='/2023/03/25/TCP%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93%E7%9A%84%EF%BC%9F/' itemprop="url">
+          <a class='readmore' href='/2023/05/14/Go-%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%80%BC%E6%96%B9%E6%B3%95%E5%92%8C%E6%8C%87%E9%92%88%E6%96%B9%E6%B3%95/' itemprop="url">
             阅读全文
           </a>
         </div>
@@ -2451,8 +2456,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
 
 
-    
-  
+	
 </div>
 <aside id='l_side' itemscope itemtype="http://schema.org/WPSideBar">
   
@@ -3208,7 +3212,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
 </script>
 
 
-  <script type="application/ld+json">[{"@context":"http://schema.org","@type":"Organization","name":"Harry 的个人空间","url":"https://harryzhang.cn/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},{"@context":"http://schema.org","@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhang.cn/","sameAs":["https://github.com/harryzhz"],"description":"一个后端开发工程师的技术博客"},{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https://harryzhang.cn/","name":"Harry 的个人空间"}},{"@type":"ListItem","position":2,"item":{"@id":"https://harryzhang.cn/tags/TCP/","name":"TCP"}}]},{"@context":"http://schema.org","@type":"WebSite","name":"Harry 的个人空间","url":"https://harryzhang.cn/","keywords":["技术博客","后端开发"],"description":"一个后端开发工程师的技术博客","author":{"@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhang.cn/","description":"一个后端开发工程师的技术博客"},"publisher":{"@type":"Organization","name":"Harry 的个人空间","url":"https://harryzhang.cn/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"potentialAction":{"@type":"SearchAction","name":"Site Search","target":{"@type":"EntryPoint","urlTemplate":"https://harryzhang.cn?s={search_term_string}"},"query-input":"required name=search_term_string"}},{"@context":"http://schema.org","@type":"BlogPosting","description":"一个后端开发工程师的技术博客","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage"},"author":{"@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhang.cn/"},"publisher":{"@type":"Organization","name":"Harry 的个人空间","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"wordCount":0,"image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}}]</script>
+  <script type="application/ld+json">[{"@context":"http://schema.org","@type":"Organization","name":"Harry 的个人空间","url":"https://harryzhang.cn/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},{"@context":"http://schema.org","@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhang.cn/","sameAs":["https://github.com/harryzhz"],"description":"一个后端开发工程师的技术博客"},{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https://harryzhang.cn/","name":"Harry 的个人空间"}},{"@type":"ListItem","position":2,"item":{"@id":"https://harryzhang.cn/archives/","name":"Archive"}},{"@type":"ListItem","position":3,"item":{"@id":"https://harryzhang.cn/archives/2023/","name":"2023年"}},{"@type":"ListItem","position":4,"item":{"@id":"https://harryzhang.cn/archives/2023/5/","name":"5月"}}]},{"@context":"http://schema.org","@type":"WebSite","name":"Harry 的个人空间","url":"https://harryzhang.cn/","keywords":["技术博客","后端开发"],"description":"一个后端开发工程师的技术博客","author":{"@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhang.cn/","description":"一个后端开发工程师的技术博客"},"publisher":{"@type":"Organization","name":"Harry 的个人空间","url":"https://harryzhang.cn/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"potentialAction":{"@type":"SearchAction","name":"Site Search","target":{"@type":"EntryPoint","urlTemplate":"https://harryzhang.cn?s={search_term_string}"},"query-input":"required name=search_term_string"}},{"@context":"http://schema.org","@type":"BlogPosting","description":"一个后端开发工程师的技术博客","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage"},"author":{"@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhang.cn/"},"publisher":{"@type":"Organization","name":"Harry 的个人空间","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"wordCount":0,"image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}}]</script>
 
 
 

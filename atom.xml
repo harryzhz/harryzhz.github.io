@@ -6,7 +6,7 @@
   <link href="https://harryzhang.cn/atom.xml" rel="self"/>
   
   <link href="https://harryzhang.cn/"/>
-  <updated>2023-04-02T09:51:52.961Z</updated>
+  <updated>2023-05-14T09:25:53.540Z</updated>
   <id>https://harryzhang.cn/</id>
   
   <author>
@@ -17,11 +17,35 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Go 语言中的值方法和指针方法</title>
+    <link href="https://harryzhang.cn/2023/05/14/Go-%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%80%BC%E6%96%B9%E6%B3%95%E5%92%8C%E6%8C%87%E9%92%88%E6%96%B9%E6%B3%95/"/>
+    <id>https://harryzhang.cn/2023/05/14/Go-%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%80%BC%E6%96%B9%E6%B3%95%E5%92%8C%E6%8C%87%E9%92%88%E6%96%B9%E6%B3%95/</id>
+    <published>2023-05-14T08:21:05.000Z</published>
+    <updated>2023-05-14T09:25:53.540Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><h3 id="函数和方法"><a href="#函数和方法" class="headerlink" title="函数和方法"></a>函数和方法</h3><p>在 Go 语言中，我们可以为自定义类型定义方法。方法是一个与特定类型关联的函数。方法可以被定义在值类型上或指针类型上。这两种方法分别称为值方法和指针方法。</p><pre><code class="go">// 函数func Hello() &#123;    fmt.Println(&quot;Hello World!&quot;)&#125;type Welcome struct&#123;&#125;// 方法func (w Welcome) Hello() &#123;    fmt.Println(&quot;Hello World!&quot;)&#125;</code></pre><h3 id="接收者"><a href="#接收者" class="headerlink" title="接收者"></a>接收者</h3><ul><li>值方法: 是定义在值类型上的方法，它们使用值作为接收器（即方法调用的目标对象）。</li><li>指针方法: 是定义在指针类型上的方法，它们使用指针作为接收器。</li></ul><pre><code class="go">// 指针方法func (w *Welcome) SetName(name string) &#123;    w.name = name&#125;// 值方法func (w Welcome) Welcome() &#123;    fmt.Printf(&quot;Welcome %s&quot;, w.name)&#125;</code></pre><h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><ul><li>如果你在类型上定义了一个值方法，那么它不会修改接收者的原始值，如果定义了指针方法，则可以修改接收者的原始值</li><li>值方法可以通过指针和值类型的变量调用</li><li>指针方法只能通过指针变量来调用，但是如果某个值是可寻址的（addressable，或者说左值），那么编译器会在值调用指针方法时自动插入取地址符，使得在此情形下看起来像指针方法也可以通过值来调用</li></ul><pre><code class="go">func TestWelcome(t *testing.T) &#123;    // 正确: 值类型调用值类型的方法    NewWelcome().Hello()    // 正确: 指针类型的变量可以调用指针方法和值方法    NewWelcomePtr().SetName(&quot;Harry&quot;)    NewWelcomePtr().Welcome()    // 正常: w 为值类型的变量，但是因为 w 是可寻址的，所以编译器会自动转换    w := NewWelcome()    w.SetName(&quot;Harry&quot;)    w.Welcome()    // 报错: cannot call pointer method SetName on Welcome    // 函数返回值是不可寻址的    NewWelcome().SetName(&quot;Harry&quot;)&#125;</code></pre><h2 id="如何选择"><a href="#如何选择" class="headerlink" title="如何选择"></a>如何选择</h2><ul><li>如果需要修改接收者的原始值，则必须使用指针方法</li><li>当不希望方法修改接收者的原始值时使用值方法</li><li>当不需要修改原始值且对象比较大时希望避免因值传递带来的性能开销时，使用指针方法。</li><li>当不需要修改原始值且对象比较简单时使用值方法</li></ul><h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><h3 id="自动转换"><a href="#自动转换" class="headerlink" title="自动转换"></a>自动转换</h3><p>Go 语言会自动处理值和指针之间的转换。即使定义了指针方法，也可以通过值调用它（Go 会自动转换为指针）；同样，定义了值方法，也可以通过指针调用它（Go 会自动解引用）。</p><h3 id="左值和右值"><a href="#左值和右值" class="headerlink" title="左值和右值"></a>左值和右值</h3><table><thead><tr><th>值类型</th><th align="left">区别</th></tr></thead><tbody><tr><td>左值</td><td align="left">可寻址，可通过 <code>&amp;</code> 取地址符获取内存地址</td></tr><tr><td>右值</td><td align="left">不可寻址，没有分配内存地址</td></tr></tbody></table><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol><li>值方法内的修改不会影响接收者原始值，指针方法可以</li><li>指针类型可以调用指针方法和值方法</li><li>值类型只能调用值方法，但是如果该值是可寻址的情况编译器会自动转换，使得看起来像值类型调用了指针方法</li></ol>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;概念&quot;&gt;&lt;a href=&quot;#概念&quot; class=&quot;headerlink&quot; title=&quot;概念&quot;&gt;&lt;/a&gt;概念&lt;/h2&gt;&lt;h3 id=&quot;函数和方法&quot;&gt;&lt;a href=&quot;#函数和方法&quot; class=&quot;headerlink&quot; title=&quot;函数和方法&quot;&gt;&lt;/a&gt;函数和方</summary>
+      
+    
+    
+    
+    <category term="Golang" scheme="https://harryzhang.cn/categories/Golang/"/>
+    
+    
+    <category term="Go" scheme="https://harryzhang.cn/tags/Go/"/>
+    
+  </entry>
+  
+  <entry>
     <title>数据结构（6）: 单调栈</title>
     <link href="https://harryzhang.cn/2023/04/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-6-%E5%8D%95%E8%B0%83%E6%A0%88/"/>
     <id>https://harryzhang.cn/2023/04/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-6-%E5%8D%95%E8%B0%83%E6%A0%88/</id>
     <published>2023-04-02T08:29:44.000Z</published>
-    <updated>2023-04-02T09:51:52.961Z</updated>
+    <updated>2023-04-22T14:15:12.779Z</updated>
     
     <content type="html"><![CDATA[<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><p>单调栈是一种特殊的栈数据结构，它满足元素的单调性（单调递增或单调递减）。与普通栈相比，单调栈在出栈时有一定的规则，使得出栈后栈中的元素仍然保持单调性。</p><p>单调栈主要有两个操作：入栈和出栈。入栈时，先判断栈顶元素是否符合单调性，如果不符合，则将其弹出，一直重复此过程直到符合单调性后再入栈；出栈时，弹出栈顶元素即可。</p><h2 id="算法应用"><a href="#算法应用" class="headerlink" title="算法应用"></a>算法应用</h2><p>单调栈在算法中有许多应用，例如在求解 Next Greater Element（下一个更大元素）等问题中。</p><p>以求解 Next Greater Element 问题为例，给定一个数组 nums，要求找出每个元素的下一个更大元素（即在数组中右边第一个比它大的数），若不存在则为-1。我们可以使用单调栈来解决这个问题。</p><p>具体的实现步骤如下：</p><ol><li>遍历数组 nums，依次将元素入栈</li><li>当栈顶元素小于当前元素时，弹出栈顶元素，将其下一个更大元素设为当前元素，并继续弹出栈顶元素，直到栈为空或栈顶元素大于等于当前元素</li><li>当遍历完数组后，栈中剩余的元素的下一个更大元素均为-1</li></ol><p>实例代码：</p><pre><code class="go">func nextGreaterElement(nums []int) []int &#123;    stack := []int&#123;&#125;    res := make([]int, len(nums))    for i := range res &#123;        res[i] = -1    &#125;    for i := 0; i &lt; len(nums); i++ &#123;        for len(stack) &gt; 0 &amp;&amp; nums[stack[len(stack)-1]] &lt; nums[i] &#123;            res[stack[len(stack)-1]] = nums[i]            stack = stack[:len(stack)-1]        &#125;        stack = append(stack, i)    &#125;    return res&#125;</code></pre><h2 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h2><h3 id="1-每日温度"><a href="#1-每日温度" class="headerlink" title="1. 每日温度"></a>1. 每日温度</h3><blockquote><p><a href="https://leetcode.cn/problems/daily-temperatures/">LeetCode 739. 每日温度</a></p><p>给定一个整数数组 temperatures ，表示每天的温度，返回一个数组 answer ，其中 answer[i] 是指对于第 i 天，下一个更高温度出现在几天后。如果气温在这之后都不会升高，请在该位置用 0 来代替。</p></blockquote><p>该问题就是典型的 <strong>Next Greater Element（下一个更大元素）</strong> 问题，题目等价于找出右边第一个比当前元素大的距离。</p><p><code>示例代码:</code></p><pre><code class="go">func dailyTemperatures(temperatures []int) []int &#123;    n := len(temperatures)    ans := make([]int, n)    stk := []int&#123;&#125;    for i := 0; i &lt; n; i++ &#123;        for len(stk) &gt; 0 &amp;&amp; temperatures[i] &gt; temperatures[stk[len(stk)-1]] &#123;            top := stk[len(stk)-1]            stk = stk[:len(stk)-1]            ans[top] = i - top        &#125;        stk = append(stk, i)    &#125;    return ans&#125;</code></pre><h3 id="2-循环数组下一个更大元素"><a href="#2-循环数组下一个更大元素" class="headerlink" title="2. 循环数组下一个更大元素"></a>2. 循环数组下一个更大元素</h3><blockquote><p><a href="https://leetcode.cn/problems/next-greater-element-ii/">LeetCode 503. 下一个更大元素 II</a></p><p>给定一个循环数组 nums （ nums[nums.length - 1] 的下一个元素是 nums[0] ），返回 nums 中每个元素的 下一个更大元素 。<br>数字 x 的 下一个更大的元素 是按数组遍历顺序，这个数字之后的第一个比它更大的数，这意味着你应该循环地搜索它的下一个更大的数。如果不存在，则输出 -1 。</p></blockquote><p>该问题和题目 <code>739. 每日温度</code> 类似，不同点在于该问题是循环数组，遍历到最后一个元素后要循环变量一次，因此只需要将遍历的次数改为 <code>2 * n</code> ，取下标改成 <code>i % n</code> 即可</p><p><code>示例代码:</code></p><pre><code class="go">func nextGreaterElements(nums []int) []int &#123;    n := len(nums)    ans := make([]int, n)    for i := range ans &#123;        ans[i] = -1    &#125;    stk := []int&#123;&#125;    for i := 0; i &lt; 2*n; i++ &#123;        for len(stk) &gt; 0 &amp;&amp; nums[i%n] &gt; nums[stk[len(stk)-1]] &#123;            top := stk[len(stk)-1]            stk = stk[:len(stk)-1]            ans[top] = nums[i%n]        &#125;        stk = append(stk, i%n)    &#125;    return ans&#125;</code></pre><h3 id="3-接雨水"><a href="#3-接雨水" class="headerlink" title="3. 接雨水"></a>3. 接雨水</h3><blockquote><p><a href="https://leetcode.cn/problems/trapping-rain-water/">LeetCode 42. 接雨水</a><br>给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。</p></blockquote><p><code>示例代码：</code></p><pre><code class="go">func trap(height []int) int &#123;    stk := []int&#123;&#125;    ans := 0    for i := 0; i &lt; len(height); i++ &#123;        for len(stk) &gt; 0 &amp;&amp; height[stk[len(stk)-1]] &lt; height[i] &#123;            top := stk[len(stk)-1]            stk = stk[:len(stk)-1]            if len(stk) &gt; 0 &#123;                // 弹出的栈顶元素、当前栈顶元素、当前元素构成凹槽区域                // 高：当前元素和当前栈顶元素的较小值 - 弹出的栈顶元素                // 宽：当前元素下标 - 当前栈顶元素下表 - 1                ans += (min(height[i], height[stk[len(stk)-1]]) - height[top]) * (i - stk[len(stk) - 1] - 1)            &#125;        &#125;        stk = append(stk, i)    &#125;    return ans&#125;func min(x, y int) int &#123;    if x &lt; y &#123;        return x    &#125;    return y&#125;</code></pre><h3 id="4-柱状图中最大矩形"><a href="#4-柱状图中最大矩形" class="headerlink" title="4. 柱状图中最大矩形"></a>4. 柱状图中最大矩形</h3><blockquote><p><a href="https://leetcode.cn/problems/largest-rectangle-in-histogram/">LeetCode 84. 柱状图中最大的矩形</a><br>给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。求在该柱状图中，能够勾勒出来的矩形的最大面积。</p></blockquote><p>该问题比 <code>42. 接雨水</code> 问题难的点在于要注意边界条件，为方便处理输入本身单调递增和单调递减的边界情况，在输入列表头和尾各添加一个 0。</p><p><code>示例代码：</code></p><pre><code class="go">func largestRectangleArea(heights []int) int &#123;    ans := 0    // 头尾各加一个 0 处理边界 case    heights = append([]int&#123;0&#125;, heights...)    heights = append(heights, 0)    stk := []int&#123;0&#125;    for i := 1; i &lt; len(heights); i++ &#123;        for heights[i] &lt; heights[stk[len(stk)-1]] &#123;            top := stk[len(stk)-1]            stk = stk[:len(stk)-1]            // 高：弹出的栈顶元素            // 宽：当前元素下标 - 当前栈顶下标 - 1            h := heights[top]            w := i - stk[len(stk)-1] - 1            ans = max(ans, h*w)        &#125;        stk = append(stk, i)    &#125;    return ans&#125;func max(x, y int) int &#123;    if x &gt; y &#123;        return x    &#125;    return y&#125;</code></pre><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>使用单调栈解决算法问题的关键点有一下几点：</p><ol><li>找到需要维护单调性的数组。通常是需要找到比当前位置大或小的元素。</li><li>根据需要维护的单调性，选择递增栈或递减栈。</li><li>确定每个元素的入栈和出栈条件。入栈条件通常是当前元素与栈顶元素的比较关系，出栈条件通常是满足当前单调性的元素。</li><li>对于每个入栈的元素，计算其对应的答案。通常是栈顶元素对应的答案，即找到比当前元素大或小的元素。</li><li>根据具体情况，确定栈中存储的是元素的下标还是元素本身。</li><li>单调栈算法通常需要先对数组进行预处理，以便在计算过程中能够快速获取需要的信息。另外，在使用单调栈解决算法问题时，需要特别注意边界条件和特殊情况的处理，以保证算法的正确性和稳定性。</li></ol>]]></content>
     
@@ -532,32 +556,6 @@
     <category term="Redis" scheme="https://harryzhang.cn/tags/Redis/"/>
     
     <category term="Redis 集群" scheme="https://harryzhang.cn/tags/Redis-%E9%9B%86%E7%BE%A4/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Redis 热点 key 问题如何解决?</title>
-    <link href="https://harryzhang.cn/2023/03/25/Redis-%E7%83%AD%E7%82%B9-key-%E9%97%AE%E9%A2%98%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3/"/>
-    <id>https://harryzhang.cn/2023/03/25/Redis-%E7%83%AD%E7%82%B9-key-%E9%97%AE%E9%A2%98%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3/</id>
-    <published>2023-03-25T07:04:18.000Z</published>
-    <updated>2023-03-25T07:08:22.815Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="什么是热点key？"><a href="#什么是热点key？" class="headerlink" title="什么是热点key？"></a>什么是热点key？</h2><p>对于web应用来说，用户消费的数据远远大于生产的数据，大多人使用都只是进行浏览，少数的人才会进行评论。对于web服务来说，某些热门的内容，读请求的量级可能是非常大的，数据库无法支持这么高并发的请求，基本都会使用Redis集群做缓存，但是如果如果热点数据的请求量过大，导致热点key所在Redis节点无法支撑，这种情况就需要采用额外的措施解决。当然Redis的性能还是非常好的，大多数业务量级都可以撑住，除非业务体量很大。</p><h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="服务端缓存"><a href="#服务端缓存" class="headerlink" title="服务端缓存"></a>服务端缓存</h3><p>这种方式就是将热点数据同时缓存在服务器的内存中，增加一级缓存，如果数据在内存缓存中，就直接读，不用去请求Redis。如果数据没有再请求Redis，获取到数据再写入内存缓存中。这样就大大减少了Redis的压力，而且直接读内存的速度会更快。</p><h3 id="备份热点key"><a href="#备份热点key" class="headerlink" title="备份热点key"></a>备份热点key</h3><p>为了不让热点key只请求到某一个redis节点，可以在热点key后面加一个随机数，这样热点数据可能就hash到不同的槽位，从而请求到不同的Redis节点，相当于一个key有了多个不同的备份，分散在多个Redis节点上。</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>【1】<a href="https://juejin.cn/post/6844903886667382798">关于Redis热点key的一些思考</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;什么是热点key？&quot;&gt;&lt;a href=&quot;#什么是热点key？&quot; class=&quot;headerlink&quot; title=&quot;什么是热点key？&quot;&gt;&lt;/a&gt;什么是热点key？&lt;/h2&gt;&lt;p&gt;对于web应用来说，用户消费的数据远远大于生产的数据，大多人使用都只是进行浏览，少数</summary>
-      
-    
-    
-    
-    <category term="缓存" scheme="https://harryzhang.cn/categories/%E7%BC%93%E5%AD%98/"/>
-    
-    
-    <category term="Redis" scheme="https://harryzhang.cn/tags/Redis/"/>
-    
-    <category term="热点 key" scheme="https://harryzhang.cn/tags/%E7%83%AD%E7%82%B9-key/"/>
     
   </entry>
   
