@@ -6,7 +6,7 @@
   <link href="https://harryzhang.cn/atom.xml" rel="self"/>
   
   <link href="https://harryzhang.cn/"/>
-  <updated>2023-05-14T16:39:05.259Z</updated>
+  <updated>2023-07-01T04:34:25.369Z</updated>
   <id>https://harryzhang.cn/</id>
   
   <author>
@@ -17,11 +17,39 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>VSCode 项目多窗口改为多 Tab 样式</title>
+    <link href="https://harryzhang.cn/2023/07/01/VSCode-%E9%A1%B9%E7%9B%AE%E5%A4%9A%E7%AA%97%E5%8F%A3%E6%94%B9%E4%B8%BA%E5%A4%9A-Tab-%E6%A0%B7%E5%BC%8F/"/>
+    <id>https://harryzhang.cn/2023/07/01/VSCode-%E9%A1%B9%E7%9B%AE%E5%A4%9A%E7%AA%97%E5%8F%A3%E6%94%B9%E4%B8%BA%E5%A4%9A-Tab-%E6%A0%B7%E5%BC%8F/</id>
+    <published>2023-07-01T04:07:04.000Z</published>
+    <updated>2023-07-01T04:34:25.369Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul><li>macOS Ventura 13.4</li><li>VSCode 1.79.2</li></ul><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>当打开多个项目时，每个项目都占一个新的窗口，日常工作经常会打开至少五个以上项目，多窗口切换不方便，个人更习惯只开一个窗口，多个项目分多个 Tab 的模式<br><img src="/2023/07/01/VSCode-%E9%A1%B9%E7%9B%AE%E5%A4%9A%E7%AA%97%E5%8F%A3%E6%94%B9%E4%B8%BA%E5%A4%9A-Tab-%E6%A0%B7%E5%BC%8F/vscode-multi-window.png" class="lazyload" data-srcset="/2023/07/01/VSCode-%E9%A1%B9%E7%9B%AE%E5%A4%9A%E7%AA%97%E5%8F%A3%E6%94%B9%E4%B8%BA%E5%A4%9A-Tab-%E6%A0%B7%E5%BC%8F/vscode-multi-window.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p><h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>按如下方式可以切换到分 Tab 模式：</p><ol><li><p>打开 Mac 系统偏好设置，找到「桌面与程序坞」选项（低版本系统在「通用」里），将「打开文稿时首选标签页」选项改为 <strong>始终</strong><br><img src="/2023/07/01/VSCode-%E9%A1%B9%E7%9B%AE%E5%A4%9A%E7%AA%97%E5%8F%A3%E6%94%B9%E4%B8%BA%E5%A4%9A-Tab-%E6%A0%B7%E5%BC%8F/macos-setting.png" class="lazyload" data-srcset="/2023/07/01/VSCode-%E9%A1%B9%E7%9B%AE%E5%A4%9A%E7%AA%97%E5%8F%A3%E6%94%B9%E4%B8%BA%E5%A4%9A-Tab-%E6%A0%B7%E5%BC%8F/macos-setting.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p></li><li><p>打开 VSCode 偏好设置（快捷键 cmd + ,）<br><img src="/2023/07/01/VSCode-%E9%A1%B9%E7%9B%AE%E5%A4%9A%E7%AA%97%E5%8F%A3%E6%94%B9%E4%B8%BA%E5%A4%9A-Tab-%E6%A0%B7%E5%BC%8F/vscode-setting.png" class="lazyload" data-srcset="/2023/07/01/VSCode-%E9%A1%B9%E7%9B%AE%E5%A4%9A%E7%AA%97%E5%8F%A3%E6%94%B9%E4%B8%BA%E5%A4%9A-Tab-%E6%A0%B7%E5%BC%8F/vscode-setting.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p></li><li><p>搜索 native tab 结果如下，将选项设为开启状态（需要重启 VSCode）<br><img src="/2023/07/01/VSCode-%E9%A1%B9%E7%9B%AE%E5%A4%9A%E7%AA%97%E5%8F%A3%E6%94%B9%E4%B8%BA%E5%A4%9A-Tab-%E6%A0%B7%E5%BC%8F/vscode-setting-native-tab.png" class="lazyload" data-srcset="/2023/07/01/VSCode-%E9%A1%B9%E7%9B%AE%E5%A4%9A%E7%AA%97%E5%8F%A3%E6%94%B9%E4%B8%BA%E5%A4%9A-Tab-%E6%A0%B7%E5%BC%8F/vscode-setting-native-tab.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p></li><li><p>重启后效果窗口效果变成如下样式<br><img src="/macos-multi-tab.png" class="lazyload" data-srcset="/macos-multi-tab.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p></li></ol><p>至此即可通过开关「Native Tab」设置切换 VS Code 的窗口样式。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;环境&quot;&gt;&lt;a href=&quot;#环境&quot; class=&quot;headerlink&quot; title=&quot;环境&quot;&gt;&lt;/a&gt;环境&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;macOS Ventura 13.4&lt;/li&gt;
+&lt;li&gt;VSCode 1.79.2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;问题&quot;</summary>
+      
+    
+    
+    
+    <category term="工具" scheme="https://harryzhang.cn/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+    <category term="VSCode" scheme="https://harryzhang.cn/tags/VSCode/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Go 语言 Channel 最佳实践</title>
     <link href="https://harryzhang.cn/2023/05/14/Go-%E8%AF%AD%E8%A8%80-Channel-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/"/>
     <id>https://harryzhang.cn/2023/05/14/Go-%E8%AF%AD%E8%A8%80-Channel-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</id>
     <published>2023-05-14T09:31:52.000Z</published>
-    <updated>2023-05-14T16:39:05.259Z</updated>
+    <updated>2023-06-09T15:21:34.246Z</updated>
     
     <content type="html"><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><blockquote><p>Channel 基本概念介绍</p><p>基本使用方法参见 <a href="https://tour.go-zh.org/concurrency/2">Go指南</a></p></blockquote><p>Go 语言中的通道（channel）是一种特殊的类型。通道像一个传送带或者队列，总是遵循先入先出（First In First Out）的规则，保证收发数据的顺序。每一个通道都是一个具体类型的导管，也就是声明channel的时候需要为其指定元素类型。</p><h3 id="不带缓冲的通道"><a href="#不带缓冲的通道" class="headerlink" title="不带缓冲的通道"></a>不带缓冲的通道</h3><p>创建不带缓冲的通道语法如下</p><pre><code class="go">ch := make(chan int)</code></pre><p>不带缓冲的通道发送和接收操作在另一端准备好之前都会阻塞，可以想象为是直接由发送者将数据传给接收者，没有中间缓冲区。这使得 Go 程可以在没有显式的锁或竞态变量的情况下进行同步。</p><h3 id="带缓冲的通道"><a href="#带缓冲的通道" class="headerlink" title="带缓冲的通道"></a>带缓冲的通道</h3><p>将缓冲长度作为第二个参数提供给 make 来初始化一个带缓冲的信道</p><pre><code class="go">ch := make(chan int, 100)</code></pre><p>仅当信道的缓冲区填满后，向其发送数据时才会阻塞。当缓冲区为空时，接受方会阻塞。</p><h3 id="关闭通道"><a href="#关闭通道" class="headerlink" title="关闭通道"></a>关闭通道</h3><pre><code class="go">close(ch)</code></pre><p>发送者可通过 close 关闭一个信道来表示没有需要发送的值了。接收者可以通过为接收表达式分配第二个参数来测试信道是否被关闭：若没有值可以接收且信道已被关闭，那么在执行完 <code>v, ok := &lt;-ch</code><br>之后 ok 会被设置为 false。</p><p>循环 <code>for i := range ch</code> 会不断从通道接收数据直到它被关闭</p><p><strong>注意：</strong> 信道通常情况无需关闭，只有在必须告诉接收者不在有要发送的数据时才有必要关闭，不合理的关闭反而会带来各种问题，比如往一个已关闭的通道里写入数据导致 panic。因此很多 Channel 的使用教程会建议不要关闭通道，或者说只有发送者才能关闭通道</p><h3 id="select-通道"><a href="#select-通道" class="headerlink" title="select 通道"></a>select 通道</h3><p>select 语句使一个 Go 程可以等待多个通信操作。select 会阻塞到某个分支可以继续执行为止，这时就会执行该分支。当多个分支都准备好时会随机选择一个执行。</p><pre><code class="go">select &#123;case v &lt;- ch1:case v &lt;- ch2:case &lt;-quit:    return&#125;</code></pre><h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><blockquote><p>Channel 的几种经典应用场景及示例</p></blockquote><p>Channel 用于 Goroutine 之间的通信，常用于交换数据、并发控制、协程同步、超时控制等场景</p><h3 id="1-生产-消费模型"><a href="#1-生产-消费模型" class="headerlink" title="1. 生产-消费模型"></a>1. 生产-消费模型</h3><p>用来在生产者和消费者之前的数据传输，生产者协程将结果发送到通道，消费者协程从通道读取结果，生产者和消费者是并发进行的</p><pre><code class="go">func producer(ch chan&lt;- int) &#123;    defer close(ch)    for i := 0; i &lt; 5; i++ &#123;        time.Sleep(time.Second)        fmt.Printf(&quot;[%s] Produced: %d\n&quot;, time.Now().Format(time.DateTime), i)        ch &lt;- i    &#125;&#125;func consumer(ch &lt;-chan int) &#123;    for &#123;        if v, ok := &lt;-ch; ok &#123;            time.Sleep(time.Second)            fmt.Printf(&quot;[%s] Consumed: %d\n&quot;, time.Now().Format(time.DateTime), v)        &#125; else &#123;            break        &#125;    &#125;&#125;func TestProdConsume(t *testing.T) &#123;    ch := make(chan int, 5)    go producer(ch)    go consumer(ch)    time.Sleep(10 * time.Second)&#125;</code></pre><p>执行结果如下：</p><pre><code class="md">=== RUN   TestProdConsume[2023-05-15 00:35:58] Produced: 0[2023-05-15 00:35:59] Produced: 1[2023-05-15 00:35:59] Consumed: 0[2023-05-15 00:36:00] Consumed: 1[2023-05-15 00:36:00] Produced: 2[2023-05-15 00:36:01] Consumed: 2[2023-05-15 00:36:01] Produced: 3[2023-05-15 00:36:02] Consumed: 3[2023-05-15 00:36:02] Produced: 4[2023-05-15 00:36:03] Consumed: 4--- PASS: TestProdConsume (10.00s)</code></pre><h3 id="2-限制并发数"><a href="#2-限制并发数" class="headerlink" title="2. 限制并发数"></a>2. 限制并发数</h3><p>当你有大量任务想通过 Goroutine 并发处理，但又不希望同时起太多 Goroutine 导致负载过高，可以通过 Channel 控制并发数量。</p><p>以下代码示例中，TotalNum 表示任务总数，ParallelNum 表示并发数</p><pre><code class="go">func TestConcurrencyNumberLimit(t *testing.T) &#123;    const TotalNum = 10    const ParallelNum = 2    wg := &amp;sync.WaitGroup&#123;&#125;    // 限制并发数，缓冲区大小即为最大并发数    ch := make(chan struct&#123;&#125;, ParallelNum)    for i := 0; i &lt; TotalNum; i++ &#123;        wg.Add(1)        // 通道满时写入操作阻塞在这里，则不会继续起新的协程        ch &lt;- struct&#123;&#125;&#123;&#125;        go func(idx int) &#123;            defer func() &#123;                wg.Done()                &lt;-ch            &#125;()            fmt.Printf(&quot;[%s] process: %d/%d\n&quot;, time.Now().Format(time.DateTime), idx, TotalNum)            time.Sleep(1 * time.Second)        &#125;(i + 1)    &#125;    wg.Wait()&#125;</code></pre><p>执行结果如下，可以看到并发数设置为 2 时每秒完成两个任务，10 个任务总共耗时 5 秒</p><pre><code class="md">=== RUN   TestConcurrencyNumber[2023-05-15 00:07:42] process: 2/10[2023-05-15 00:07:42] process: 1/10[2023-05-15 00:07:43] process: 3/10[2023-05-15 00:07:43] process: 4/10[2023-05-15 00:07:44] process: 5/10[2023-05-15 00:07:44] process: 6/10[2023-05-15 00:07:45] process: 7/10[2023-05-15 00:07:45] process: 8/10[2023-05-15 00:07:46] process: 9/10[2023-05-15 00:07:46] process: 10/10--- PASS: TestConcurrencyNumber (5.00s)</code></pre><h3 id="3-超时控制"><a href="#3-超时控制" class="headerlink" title="3. 超时控制"></a>3. 超时控制</h3><pre><code class="go">func TestTimeout(t *testing.T) &#123;    ch := make(chan int, 1)    // 执行一个耗时的任务    go func() &#123;        time.Sleep(2 * time.Second)        ch &lt;- 1    &#125;()    select &#123;    case res := &lt;-ch:        // 任务执行完毕        fmt.Println(&quot;result: &quot;, res)    case &lt;-time.After(1 * time.Second):        // 任务执行超时        fmt.Println(&quot;timeout&quot;)    &#125;&#125;</code></pre><p>当任务耗时 2 秒，超时时间 1 秒时输出如下：</p><pre><code class="md">=== RUN   TestTimeouttimeout--- PASS: TestTimeout (1.00s)</code></pre><p>当任务耗时 2 秒，超时时间 3 秒时输出如下：</p><pre><code class="md">=== RUN   TestTimeoutresult:  1--- PASS: TestTimeout (2.00s)</code></pre><h2 id="如何优雅关闭通道"><a href="#如何优雅关闭通道" class="headerlink" title="如何优雅关闭通道"></a>如何优雅关闭通道</h2><p>关于 “只能发送者关闭通道” 只是一种口头的约束，你可以在任何地方调用 <code>close</code> 方法来关闭通道，程序也可以编译运行。</p><p>实际上是发送者还是接收者关闭通道并没有太大影响，重点是通道的所有者，通常是创建通道的 Goroutine 做为所有者，负责管理通道的生命周期。</p><p>如果是一个发送者，可以直接由发送者关闭。<br>如果是多个发送者，希望所有发送者发送完毕再关闭通道，则需要有个额外的 Goroutine 来管理所有发送者，并在所有发送者结束后来关闭通道。代码示例如下：</p><pre><code class="go">func TestCh(t *testing.T) &#123;    ch := make(chan int, 10)    // 启动所有发送者协程    wg := &amp;sync.WaitGroup&#123;&#125;    for i := 1; i &lt; 10; i++ &#123;        wg.Add(1)        go func(v int) &#123;            defer wg.Done()            ch &lt;- v            fmt.Println(&quot;send:&quot;, v)        &#125;(i)    &#125;    // 启动接受者协程    quit := make(chan struct&#123;&#125;)    go func() &#123;        // 接收数据直到通道关闭        for v := range ch &#123;            fmt.Println(&quot;receive:&quot;, v)        &#125;        quit &lt;- struct&#123;&#125;&#123;&#125;    &#125;()    // 等待所有发送者协程结束，关闭通道    wg.Wait()    fmt.Println(&quot;send over...&quot;)    close(ch)    // 等待接收者协程结束    &lt;-quit    fmt.Println(&quot;receive over!!!&quot;)&#125;</code></pre>]]></content>
     
@@ -168,9 +196,9 @@
     <category term="Golang" scheme="https://harryzhang.cn/categories/Golang/"/>
     
     
-    <category term="Socket" scheme="https://harryzhang.cn/tags/Socket/"/>
-    
     <category term="Go" scheme="https://harryzhang.cn/tags/Go/"/>
+    
+    <category term="Socket" scheme="https://harryzhang.cn/tags/Socket/"/>
     
   </entry>
   
@@ -524,37 +552,6 @@
     <category term="MySQL" scheme="https://harryzhang.cn/tags/MySQL/"/>
     
     <category term="NoSQL" scheme="https://harryzhang.cn/tags/NoSQL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>数据库基础知识概述</title>
-    <link href="https://harryzhang.cn/2023/03/25/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%A6%82%E8%BF%B0/"/>
-    <id>https://harryzhang.cn/2023/03/25/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%A6%82%E8%BF%B0/</id>
-    <published>2023-03-25T07:10:28.000Z</published>
-    <updated>2023-03-25T07:25:00.729Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h3><ul><li><p>ACID</p><ul><li><p>原子性</p></li><li><p>隔离性</p></li><li><p>一致性</p></li><li><p>持久性</p><ul><li>应对系统崩溃，可以用Redo Log恢复</li></ul></li></ul></li><li><p>AUTOCOMMIT：MySQL默认采用自动提交，不显示start transaction，每个查询都会被当成一个事务执行并自动提交</p></li></ul><h3 id="并发一致性问题"><a href="#并发一致性问题" class="headerlink" title="并发一致性问题"></a>并发一致性问题</h3><ul><li><p>丢失修改</p></li><li><p>脏读</p></li><li><p>不可重复读</p></li><li><p>幻读</p><ul><li>insert操作引起</li></ul></li></ul><h3 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h3><ul><li><p>锁粒度</p><ul><li>行锁</li><li>表锁</li></ul></li><li><p>锁类型</p><ul><li><p>读写锁</p><ul><li>互斥锁（X锁、写锁）</li><li>共享锁（S锁、读锁）</li><li>一个事务对数据A加了X锁，期间其他事务不能对A加任何锁</li></ul></li></ul></li></ul><p>一个事务对数据A加了S锁，其他事务可以对A加S锁，但是不能加X锁</p><pre><code>- 意向锁    - 可以更容易支持多粒度加锁    - IX/IS锁，表示一个事务想要再表中的某个数据行上加X/S锁        - 一个事务再获得某个数据行的S锁之前，必须先获得表的IS锁或更强的锁        - 一个事务在获得某个数据行的X锁之前，必须先获得表的IX锁        - 任意IS/IX锁之间都是兼容的</code></pre><ul><li><p>封锁协议</p><ul><li>一级：事务T要修改A时必须加X锁，直到T结束才释放（解决丢失修改问题）</li><li>二级：在一级基础上事务T要读取A时必须加S锁，读取完立即释放锁（解决脏读问题）</li><li>三级：在二级的基础上，要求读取A时必须加S锁，直到事务结束才释放（解决不可重复读问题）</li><li>两段锁协议：加锁和解锁分两个阶段进行，保证可串行化调度</li></ul></li></ul><h3 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h3><ul><li>读未提交（RU）</li><li>读提交（RC）</li><li>可重复度（RR）</li><li>可串行化（Serializable）</li></ul><h3 id="多版本并发控制（MVCC）"><a href="#多版本并发控制（MVCC）" class="headerlink" title="多版本并发控制（MVCC）"></a>多版本并发控制（MVCC）</h3><ul><li><p>版本号</p><ul><li>系统版本号SYS_ID:每开启一个新事务时递增</li><li>事务版本号TRX_ID:事务开启时的系统版本号</li></ul></li><li><p>ReadView</p><ul><li>当前系统未提交的事务列表，以及最大ID和最小ID</li></ul></li><li><p>快照读：SELECT，不需要进行加锁</p></li><li><p>当前读：INSERT、UPDATE、DELETE，需要加锁</p></li><li><p>SELECT时可以显式指定加锁</p><ul><li>select * from table where ? lock in share mode;(S锁)</li><li>select * from table where ? for update;(X锁)</li></ul></li></ul><h3 id="Next-Key-Locks"><a href="#Next-Key-Locks" class="headerlink" title="Next-Key Locks"></a>Next-Key Locks</h3><ul><li>可重复读级别下，使用MVCC+Next-Key Lock可以解决幻读</li><li>Record Locks: 锁定一个记录上的索引</li><li>Gap Locks：锁定索引之间的间隙，但是不包括索引本身</li></ul><h3 id="关系数据库"><a href="#关系数据库" class="headerlink" title="关系数据库"></a>关系数据库</h3><ul><li><p>异常</p><ul><li>冗余数据、修改异常、删除异常、插入异常</li></ul></li><li><p>范式</p><ul><li>为了解决异常</li><li>第一范式：属性不可分割</li><li>第二范式：非主属性完全依赖于键码</li><li>第三范式：非主属性不传递函数依赖于键码</li></ul></li></ul><p><a href="https://github.com/CyC2018/CS-Notes">【参考文章】GitHub-CyC2018&#x2F;CS-Notes</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h3 id=&quot;事务&quot;&gt;&lt;a href=&quot;#事务&quot; class=&quot;headerlink&quot; title=&quot;事务&quot;&gt;&lt;/a&gt;事务&lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;ACID&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;原子性&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;隔离性&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;</summary>
-      
-    
-    
-    
-    <category term="数据库" scheme="https://harryzhang.cn/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-    
-    <category term="MySQL" scheme="https://harryzhang.cn/tags/MySQL/"/>
     
   </entry>
   
