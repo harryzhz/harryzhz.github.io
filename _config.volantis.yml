@@ -277,7 +277,7 @@ article:
       # 默认文章作者（可在 _data/author.yaml 中增加其他作者，并在 front-matter 中设置）
       # https://volantis.js.org/advanced-settings/#多人协同
       author:
-        avatar: https://upload.jianshu.io/users/upload_avatars/14151453/0f03d78b-5b29-466c-8b21-e61b0a356aa7.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240 # https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/favicon/apple-touch-icon.png
+        avatar: https://lh3.googleusercontent.com/ogw/AOLn63EtZ-gMYkg5y48BXXmYCi916DjUz-4Apjq238_y=s64-c-mo # https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/favicon/apple-touch-icon.png
         name: harry zhang
         url: /
       # 文章创建日期
@@ -521,7 +521,7 @@ sidebar:
     blogger:
       class: blogger
       display: [desktop, mobile] # [desktop, mobile]
-      avatar: https://upload.jianshu.io/users/upload_avatars/14151453/0f03d78b-5b29-466c-8b21-e61b0a356aa7.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240 # https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png
+      avatar: /assets/images/avatar.jpeg # https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png
       shape: circle # circle, rectangle
       url: /about/
       title:

@@ -9,8 +9,8 @@ description: '一个后端开发工程师的技术博客'
 keywords: ['技术博客', '后端开发']
 author: harry zhang
 language: zh-CN
-timezone: ''
-favicon: "https://upload.jianshu.io/users/upload_avatars/14151453/0f03d78b-5b29-466c-8b21-e61b0a356aa7.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/20/h/20"
+timezone: 'Asia/Shanghai'
+favicon: "https://lh3.googleusercontent.com/ogw/AOLn63EtZ-gMYkg5y48BXXmYCi916DjUz-4Apjq238_y=s64-c-mo"
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
@@ -42,7 +42,10 @@ external_link:
   exclude: ''
 filename_case: 0
 render_drafts: false
-post_asset_folder: false
+post_asset_folder: true # 文档素材目录
+marked: # Markdown 文章素材路径渲染
+  prependRoot: true
+  postAsset: true
 relative_link: false
 future: true
 highlight:
