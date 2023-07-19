@@ -1597,7 +1597,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     debug: "env",
     cdn: {"js":{"app":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/app.js","parallax":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/parallax.js","rightMenu":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenu.js","rightMenus":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/rightMenus.js","sites":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/sites.js","friends":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/friends.js","contributors":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/plugins/tags/contributors.js","search":"https://unpkg.com/hexo-theme-volantis@5.7.7/source/js/search/hexo.js"},"css":{"style":"/css/style.css"}},
     default: {"avatar":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/avatar/round/3442075.svg","link":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/link/8f277b4ee0ecd.svg","cover":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/cover/76b86c0226ffd.svg","image":"https://unpkg.com/volantis-static@0.0.1654736714924/media/placeholder/image/2659360.svg"},
-    lastupdate: new Date(1688186176640),
+    lastupdate: new Date(1689781260313),
     sidebar: {
       for_page: ["blogger","category","tagcloud","donate"],
       for_post: ["toc"],
@@ -2375,6 +2375,76 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
         
           <div class='post-wrapper'>
             <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
+  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/03/25/限流算法有哪些/">
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Harry 的个人空间">
+  </span>
+  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
+    <meta itemprop="name" content="Harry 的个人空间">
+    <meta itemprop="description" content="一个后端开发工程师的技术博客">
+  </span>
+  
+  
+  
+    <span hidden>
+      <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
+    </span>
+  
+  
+    
+    <h2 class="article-title"  itemprop="name headline">
+      <a href="/2023/03/25/%E9%99%90%E6%B5%81%E7%AE%97%E6%B3%95%E6%9C%89%E5%93%AA%E4%BA%9B/"  itemprop="url">
+        限流算法有哪些?
+      </a>
+    </h2>
+  
+  <div class='md article-desc' itemprop="articleBody">
+    
+      
+        为什么要限流？由于Web服务无法控制调用方的行为，当遇到请求并发量超过系统的容量阈值，会导致服务器资源耗尽从而导致服务异常或宕机，而且某个服务的请求量突增还会影响到上游的服务，如DB或者是其他的公共服务，导致整个系统瘫痪。可能导致流量突增的原因有以下几点：
+
+热点业务的突发请求（如大型活动）
+调用方bug导致的请求量倍增
+恶意攻击的请求
+
+为了对服务进行保护，就需要对请求进行限流。
+常见算法...
+      
+    
+  </div>
+  
+    <div class='meta-v3' line_style='solid'>
+      <div>
+        
+        <time itemprop="dateCreated datePublished" datetime="2023-03-25T15:24:13+08:00">2023-03-25</time>
+        
+          <span class="dot"></span>
+          <a class="category-link" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/">分布式系统</a>
+          
+            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
+              <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" itemprop="url"><span itemprop="name">分布式系统</span></a>
+            </span>
+          
+        
+      </div>
+      
+        <div>
+          <a class='readmore' href='/2023/03/25/%E9%99%90%E6%B5%81%E7%AE%97%E6%B3%95%E6%9C%89%E5%93%AA%E4%BA%9B/' itemprop="url">
+            阅读全文
+          </a>
+        </div>
+      
+    </div>
+  
+
+</div>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
   <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/03/25/分布式全局唯一-ID-生成方案有哪些？/">
   <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
     <meta itemprop="name" content="Harry 的个人空间">
@@ -3027,81 +3097,6 @@ B+树B+数据的基本结构如下图
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
-  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/03/25/MySQL-和-NoSQL基础知识概述/">
-  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Harry 的个人空间">
-  </span>
-  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
-    <meta itemprop="name" content="Harry 的个人空间">
-    <meta itemprop="description" content="一个后端开发工程师的技术博客">
-  </span>
-  
-  
-  
-    <span hidden>
-      <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
-    </span>
-  
-  
-    
-    <h2 class="article-title"  itemprop="name headline">
-      <a href="/2023/03/25/MySQL-%E5%92%8C-NoSQL%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%A6%82%E8%BF%B0/"  itemprop="url">
-        MySQL 和 NoSQL基础知识概述
-      </a>
-    </h2>
-  
-  <div class='md article-desc' itemprop="articleBody">
-    
-      
-        MySQL索引
-B+Tree
-
-平衡树，查找树，所有叶子节点位于同一层
-
-进行查找时首先再根节点进行二分查找，找到一个key所在的指针，然后递归的在指针所指向的节点进行查找，直到查到叶子节点，然后在叶子节点二分查找，找出key所对应的data
-
-插入删除操作会破坏数的平衡性，需要进行分裂、合并、旋转等操作来维护平衡性
-
-与红黑树相比
-
-B+树的高度更低
-更适合磁盘访问，节点大小设置和磁盘页大...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time itemprop="dateCreated datePublished" datetime="2023-03-25T15:10:58+08:00">2023-03-25</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
-          
-            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
-              <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url"><span itemprop="name">数据库</span></a>
-            </span>
-          
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2023/03/25/MySQL-%E5%92%8C-NoSQL%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%A6%82%E8%BF%B0/' itemprop="url">
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
     
   </section>
   
@@ -3662,7 +3657,7 @@ B+树的高度更低
 
 
   <script>
-  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp"];
+  let imgs = ["https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/016.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/006.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/001.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/003.webp","https://unpkg.com/volantis-static@0.0.1654736714924/media/wallpaper/minimalist/2020/056.webp"];
   let index = 0;
   let IntervalParallax = null;
 

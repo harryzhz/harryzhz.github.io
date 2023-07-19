@@ -6,8 +6,8 @@
   <meta name="Volantis" content="5.7.7">
   <meta charset="utf-8">
   <!-- SEO相关 -->
-  <meta name="robots" content="noindex,follow">
-  <link rel="canonical" href="https://harryzhang.cn/tags/leetcode/"/>
+  
+  <link rel="canonical" href="https://harryzhang.cn/2023/07/19/依赖反转-dip-原则在整洁架构中的应用/"/>
   <!-- 渲染优化 -->
     <meta http-equiv='x-dns-prefetch-control' content='on' />
       <link rel='dns-prefetch' href='https://unpkg.com'>
@@ -34,17 +34,19 @@
   <!-- feed -->
       <link rel="alternate" href="/atom.xml" title="Harry 的个人空间" type="application/atom+xml">
   <!-- 页面元数据 -->
-  <title>标签：leetcode - Harry 的个人空间</title>
+  <title>依赖反转(DIP)原则在整洁架构中的应用 - Harry 的个人空间</title>
   <meta name="keywords" content="技术博客,后端开发">
   <meta desc name="description" content="一个后端开发工程师的技术博客 - harry zhang - Harry 的个人空间">
   
-<meta property="og:type" content="website">
-<meta property="og:title" content="Harry 的个人空间">
-<meta property="og:url" content="https://harryzhang.cn/tags/leetcode/index.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="依赖反转(DIP)原则在整洁架构中的应用">
+<meta property="og:url" content="https://harryzhang.cn/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/index.html">
 <meta property="og:site_name" content="Harry 的个人空间">
-<meta property="og:description" content="一个后端开发工程师的技术博客">
+<meta property="og:description" content="整洁架构简介 直接上图 整洁架构从外到内分为四层，源码中的依赖关系必须只指向同心圆的内侧，即由底层机制指向高层策略   业务实体这一层封装整个系统的关系业务逻辑，能被系统中的其他不同应用复用。对应领域驱动设计中的概念就是领域模型。 用例用例通常包含的是特定应用场景下的业务逻辑，这一层封装了整个系统所有用例。这些用例引导了数据在业务实体之间的流入&#x2F;流出，通过编排业务实体中的关键方法来实现业">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
+<meta property="article:published_time" content="2023-07-19T14:47:52.000Z">
+<meta property="article:modified_time" content="2023-07-19T15:40:45.092Z">
 <meta property="article:author" content="harry zhang">
 <meta property="article:tag" content="技术博客">
 <meta property="article:tag" content="后端开发">
@@ -2290,7 +2292,7 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
   
     
       <!-- see: /layout/_partial/scripts/_ctrl/coverCtrl.ejs -->
-      <div id="half" class='cover-wrapper  search' style="display: ;">
+      <div id="half" class='cover-wrapper post search' style="display: ;">
         
   <div id="parallax-window"></div>
 
@@ -2365,43 +2367,9 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
       <div id="safearea">
         <div class="body-wrapper">
           
-
 <div id="l_main" class=''>
-  
-    
-      
-  <section class="post-list">
-    
-      
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-      
-    
-    
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
-  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/04/02/数据结构-6-单调栈/">
+  <article itemscope itemtype="http://schema.org/Article" class="article post white-box reveal md shadow floatable blur article-type-post" id="post" itemscope itemprop="blogPost">
+  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/07/19/依赖反转-DIP-原则在整洁架构中的应用/">
   <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
     <meta itemprop="name" content="Harry 的个人空间">
   </span>
@@ -2410,694 +2378,245 @@ if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMo
     <meta itemprop="description" content="一个后端开发工程师的技术博客">
   </span>
   
-  
+
+
   
     <span hidden>
       <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
     </span>
   
-  
+  <div class="article-meta" id="top">
     
-    <h2 class="article-title"  itemprop="name headline">
-      <a href="/2023/04/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-6-%E5%8D%95%E8%B0%83%E6%A0%88/"  itemprop="url">
-        数据结构（6）: 单调栈
-      </a>
-    </h2>
-  
-  <div class='md article-desc' itemprop="articleBody">
     
-      
-        特性单调栈是一种特殊的栈数据结构，它满足元素的单调性（单调递增或单调递减）。与普通栈相比，单调栈在出栈时有一定的规则，使得出栈后栈中的元素仍然保持单调性。
-单调栈主要有两个操作：入栈和出栈。入栈时，先判断栈顶元素是否符合单调性，如果不符合，则将其弹出，一直重复此过程直到符合单调性后再入栈；出栈时，弹出栈顶元素即可。
-算法应用单调栈在算法中有许多应用，例如在求解 Next Greater El...
-      
+    
+      <h1 class="title" itemprop="name headline">
+        依赖反转(DIP)原则在整洁架构中的应用
+      </h1>
+      <div class='new-meta-box'>
+        
+          
+            
+<div class='new-meta-item author' itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <a itemprop="url" class='author' href="/" rel="nofollow">
+    <img itemprop="image" src="https://lh3.googleusercontent.com/ogw/AOLn63EtZ-gMYkg5y48BXXmYCi916DjUz-4Apjq238_y=s64-c-mo" class="lazyload" data-srcset="https://lh3.googleusercontent.com/ogw/AOLn63EtZ-gMYkg5y48BXXmYCi916DjUz-4Apjq238_y=s64-c-mo" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+    <p itemprop="name">harry zhang</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+
+          
+        
+          
+            <div class="new-meta-item date" itemprop="dateCreated datePublished" datetime="2023-07-19T22:47:52+08:00">
+  <a class='notlink'>
+    <i class="fa-solid fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2023年7月19日</p>
+  </a>
+</div>
+
+          
+        
+        <!-- Custom Files topMeta begin-->
+        
+        <!-- Custom Files topMeta end-->
+      </div>
     
   </div>
+
+
+  <div id="layoutHelper-page-plugins"></div>
+  <div id="post-body" itemprop="articleBody">
+    <h2 id="整洁架构简介"><a href="#整洁架构简介" class="headerlink" title="整洁架构简介"></a>整洁架构简介</h2><blockquote>
+<p>直接上图</p>
+<p><strong>整洁架构从外到内分为四层，源码中的依赖关系必须只指向同心圆的内侧，即由底层机制指向高层策略</strong></p>
+</blockquote>
+<p><img src="/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/clean-arch.png" class="lazyload" data-srcset="/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/clean-arch.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p>
+<h3 id="业务实体"><a href="#业务实体" class="headerlink" title="业务实体"></a>业务实体</h3><p>这一层封装整个系统的关系业务逻辑，能被系统中的其他不同应用复用。<br>对应领域驱动设计中的概念就是领域模型。</p>
+<h3 id="用例"><a href="#用例" class="headerlink" title="用例"></a>用例</h3><p>用例通常包含的是特定应用场景下的业务逻辑，这一层封装了整个系统所有用例。<br>这些用例引导了数据在业务实体之间的流入&#x2F;流出，通过编排业务实体中的关键方法来实现业务用例的目标。</p>
+<p>这一层发生的改变不应该影响业务实体，同时也不应该受外部因素（比如数据库、UI<br>框架）的影响。该层的变化应该只和应用本身的行为变化有关。</p>
+<h3 id="接口适配器"><a href="#接口适配器" class="headerlink" title="接口适配器"></a>接口适配器</h3><p>接口适配器层通常是一组数据转换器，负责将数据从对用例和业务实体最方便操作的格式转换为外部系统最方便的操作格式。例如这一层应该包含整个 GUI MVC 框架，展示器、视图、控制器都应该属于接口适配层，而模型部分则应该由控制器传给用例，用例再传回展示器和视图。</p>
+<p>同样这一层也会负责将数据从对业务实体与用例方便的格式转换为数据持久化最方便的格式。</p>
+<p>这一层也会负责将来自外部服务的数据转换为系统用例和业务实体所需的格式。</p>
+<h3 id="框架与驱动程序"><a href="#框架与驱动程序" class="headerlink" title="框架与驱动程序"></a>框架与驱动程序</h3><p>这一层一般是由工具、工具、Web 框架等组成，包含了所有的实现细节，Web、数据库都是实现细节。<br>这一层也是最容易和频繁可能改变的，将其放在最外层就很难影响到其他层了。</p>
+<h2 id="依赖反转"><a href="#依赖反转" class="headerlink" title="依赖反转"></a>依赖反转</h2><p>代码如何保证整洁架构所约束的依赖关系原则呢，通常是通过依赖反转来实现。<br>比如需要将业务数据持久化，那直觉上来看肯定用例层需要调用接口适配层提供的数据库持久化方法，这就违反了只允许外层依赖内层的原则。</p>
+<p><img src="/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/dip-demo.png" class="lazyload" data-srcset="/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/dip-demo.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p>
+<p>如上图所示，通过依赖反转，在用例层提供数据持久化需要的接口（Data Access Interface），由适配层提供具体的实现（MySQL Access），这样持久化时用例层不关注具体的实现，只需要调用用例层定义的接口即可。通过这种方法即将业务逻辑和具体的持久化方式解耦，又满足了只能外层依赖内层的原则。</p>
+<h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><blockquote>
+<p>一个简单的文件存储服务，核心功能包括：文件上传、文件下载</p>
+</blockquote>
+<p>组件依赖关系如下所示：</p>
+<p><img src="/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/filesvc-demo.png" class="lazyload" data-srcset="/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/filesvc-demo.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p>
+<p>按照整洁架构的分层，简单分析上述文件存储服务 demo（上图省略了 Web 框架等处于最外层的组件）。</p>
+<h3 id="1-实体层"><a href="#1-实体层" class="headerlink" title="1. 实体层"></a>1. 实体层</h3><p>实体层包含了两个核心实体：文件实体、文件配置实体。</p>
+<ul>
+<li>文件实体：包含增、删、改查文件 DB 记录等方法，以及获取文件存储类型、存储 Key 的方法</li>
+<li>文件配置实体：包含获取上传文件大小限制等配置的方法</li>
+</ul>
+<h3 id="2-用例层"><a href="#2-用例层" class="headerlink" title="2. 用例层"></a>2. 用例层</h3><p>用例层包含了文件服务的两个核心业务用例：上传文件和下载文件，还包括了用于操作配置、数据库、对象存储、消息队列的一系列接口。</p>
+<ul>
+<li>上传用例：调用文件配置实体获取上传配置，通过 StorageAccess 接口将文件内容持久化到对象存储或其他介质，再调用 DBAccess 的方法保存文件记录，最后通过 MQAccess 的方法发送一条上传文件的消息。</li>
+<li>下载用例：调用文件实体的方法查询到文件的存储 Key，再调用 StorageAccess 的方法下载文件内容。</li>
+</ul>
+<h3 id="3-接口适配层"><a href="#3-接口适配层" class="headerlink" title="3. 接口适配层"></a>3. 接口适配层</h3><p>接口适配层则实现了四个适配器。</p>
+<ul>
+<li>ACM: 用于管理动态配置</li>
+<li>OSS: 用于上传、下载文件对象</li>
+<li>MySQL: 用于增删改查文件记录</li>
+<li>RocketMQ: 用于发送文件上传消息</li>
+</ul>
+<p>可以看到通过按照整洁架构的分层方式和依赖反转原则，文件服务的组件依赖关系非常清晰（图中三层只存在从下到上方向的依赖），而且将业务逻辑和存储介质等基础设施解耦，底层组件的替换完全不会影响到业务用例的逻辑。</p>
+
+  </div>
   
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time itemprop="dateCreated datePublished" datetime="2023-04-02T16:29:44+08:00">2023-04-02</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
-          
-            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
-              <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url"><span itemprop="name">数据结构</span></a>
-            </span>
-          
-        
-      </div>
+  
+    
+    <div class='footer'>
+       <!-- 参考资料、相关资料等 -->
       
-        <div>
-          <a class='readmore' href='/2023/04/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-6-%E5%8D%95%E8%B0%83%E6%A0%88/' itemprop="url">
-            阅读全文
-          </a>
-        </div>
+       <!-- 相关文章 -->
+      
+        
+  <div class="related_posts">
+    <section class='header'>
+      <i class="fa-solid fa-bookmark fa-fw" aria-hidden="true"></i><span>相关文章</span>
+    </section>
+    <section class='body'>
+      <div class="vlts-rps"><a class="item" href="/2023/03/13/Linux进程管理-supervisor和nohup原理及使用/" title="Linux进程管理:supervisor和nohup原理及使用" rel="bookmark "><span class="title">Linux进程管理:supervisor和nohup原理及使用</span></a></div></section></div>
+      
+      <!-- 版权声明组件 -->
+      
+      <!-- 打赏组件 -->
       
     </div>
   
+  
+    
 
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateModified" datetime="2023-07-19T23:40:45+08:00">
+  <a class='notlink'>
+    <i class="fa-solid fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2023年7月19日</p>
+  </a>
 </div>
 
-          </div>
         
       
         
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
-  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/03/19/算法-8-LRU-策略/">
-  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Harry 的个人空间">
-  </span>
-  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
-    <meta itemprop="name" content="Harry 的个人空间">
-    <meta itemprop="description" content="一个后端开发工程师的技术博客">
-  </span>
+          
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://harryzhang.cn/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/&title=依赖反转(DIP)原则在整洁架构中的应用 - Harry 的个人空间&summary="
+          
+          >
+          
+            <img src="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/logo/128/qq.png" class="lazyload" data-srcset="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/logo/128/qq.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://harryzhang.cn/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/&title=依赖反转(DIP)原则在整洁架构中的应用 - Harry 的个人空间&summary="
+          
+          >
+          
+            <img src="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/logo/128/qzone.png" class="lazyload" data-srcset="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/logo/128/qzone.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=https://harryzhang.cn/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/&title=依赖反转(DIP)原则在整洁架构中的应用 - Harry 的个人空间&summary="
+          
+          >
+          
+            <img src="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/logo/128/weibo.png" class="lazyload" data-srcset="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/logo/128/weibo.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+          
+        </a>
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+    <!-- Custom Files bottomMeta begin -->
+    
+    <!-- Custom Files bottomMeta end -->
+  </div>
+
+
   
   
+
   
+    <div class="prev-next">
+      
+      
+        <a class='next' href='/2023/07/01/VSCode-%E9%A1%B9%E7%9B%AE%E5%A4%9A%E7%AA%97%E5%8F%A3%E6%94%B9%E4%B8%BA%E5%A4%9A-Tab-%E6%A0%B7%E5%BC%8F/'>
+          <p class='title'>VSCode 项目多窗口改为多 Tab 样式<i class="fa-solid fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>环境
+macOS Ventura 13.4
+VSCode 1.79.2
+
+问题当打开多个项目时，每个项目都占一个新的窗口，日常工作经常会打开至少五个以上项目，多窗口切换不方便，个人更习惯只开一个...</p>
+        </a>
+      
+    </div>
+  
+  <!-- Custom Files postEnd begin-->
+  
+  <!-- Custom Files postEnd end-->
+</article>
+
+
+  
+
+
+  <article class="post white-box shadow floatable blur" id="comments">
     <span hidden>
-      <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
+      <meta itemprop="discussionUrl" content="/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/index.html#comments">
     </span>
-  
-  
+    <p ct><i class='fa-solid fa-comments'></i> 评论</p>
     
-    <h2 class="article-title"  itemprop="name headline">
-      <a href="/2023/03/19/%E7%AE%97%E6%B3%95-8-LRU-%E7%AD%96%E7%95%A5/"  itemprop="url">
-        算法(8): LRU 策略
-      </a>
-    </h2>
-  
-  <div class='md article-desc' itemprop="articleBody">
-    
-      
-        LeetCode No.146 LRU缓存机制
-LRU（Least Recent Used）策略：优先淘汰最近最少使用的数据，常用于缓存淘汰机制，如Linux系统的内存淘汰、Redis的缓存淘汰等。
-基于哈希表和双向链表实现LRU核心思路是，利用双向链表存储键值对，哈希表存储键在链表中对应的节点指针，如下图所示
-这样的好处是使访问和更新操作时间复杂度都在O(1)。
-PUT操作
-判断哈希表中k...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time itemprop="dateCreated datePublished" datetime="2023-03-19T21:58:05+08:00">2023-03-19</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-          
-            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
-              <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url"><span itemprop="name">算法</span></a>
-            </span>
-          
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2023/03/19/%E7%AE%97%E6%B3%95-8-LRU-%E7%AD%96%E7%95%A5/' itemprop="url">
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
 
-</div>
+    <div id="layoutHelper-comments"></div>
 
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
-  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/03/19/算法-7-动态规划/">
-  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Harry 的个人空间">
-  </span>
-  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
-    <meta itemprop="name" content="Harry 的个人空间">
-    <meta itemprop="description" content="一个后端开发工程师的技术博客">
-  </span>
-  
-  
-  
-    <span hidden>
-      <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
-    </span>
-  
-  
-    
-    <h2 class="article-title"  itemprop="name headline">
-      <a href="/2023/03/19/%E7%AE%97%E6%B3%95-7-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"  itemprop="url">
-        算法(7): 动态规划
-      </a>
-    </h2>
-  
-  <div class='md article-desc' itemprop="articleBody">
-    
-      
-        
-动态规划的关键思想在于将问题转换成较小的子问题，然后根据子问题的结果总结出一个状态转移方程，最后得到整个问题的解
-
-7.1 打家劫舍LeetCode No.198
-
-问题描述：你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。给定一个代表每个房屋存放金额的非...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time itemprop="dateCreated datePublished" datetime="2023-03-19T21:56:37+08:00">2023-03-19</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-          
-            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
-              <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url"><span itemprop="name">算法</span></a>
-            </span>
-          
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2023/03/19/%E7%AE%97%E6%B3%95-7-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/' itemprop="url">
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
-  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/03/19/算法-6-贪心算法/">
-  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Harry 的个人空间">
-  </span>
-  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
-    <meta itemprop="name" content="Harry 的个人空间">
-    <meta itemprop="description" content="一个后端开发工程师的技术博客">
-  </span>
-  
-  
-  
-    <span hidden>
-      <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
-    </span>
-  
-  
-    
-    <h2 class="article-title"  itemprop="name headline">
-      <a href="/2023/03/19/%E7%AE%97%E6%B3%95-6-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/"  itemprop="url">
-        算法(6): 贪心算法
-      </a>
-    </h2>
-  
-  <div class='md article-desc' itemprop="articleBody">
-    
-      
-        分治的思想为将大问题分解为子问题，子问题再分解为更小的子问题，直到不能再拆分，然后再合并子问题的结果，通常需要用到递归。关键是要找对如何拆解问题。
-5.1 不同的二叉搜索树LeetCode No.95
-
-问题描述：给定一个整数 n，生成所有由 1 … n 为节点所组成的 二叉搜索树 。
-
-思路：根据二叉搜索树的特点，左子树的所有节点值均小于根节点，右子树的所有节点值均大于根节点，同时对于每一...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time itemprop="dateCreated datePublished" datetime="2023-03-19T21:55:40+08:00">2023-03-19</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-          
-            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
-              <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url"><span itemprop="name">算法</span></a>
-            </span>
-          
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2023/03/19/%E7%AE%97%E6%B3%95-6-%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/' itemprop="url">
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
-  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/03/19/算法-5-分治-归并/">
-  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Harry 的个人空间">
-  </span>
-  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
-    <meta itemprop="name" content="Harry 的个人空间">
-    <meta itemprop="description" content="一个后端开发工程师的技术博客">
-  </span>
-  
-  
-  
-    <span hidden>
-      <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
-    </span>
-  
-  
-    
-    <h2 class="article-title"  itemprop="name headline">
-      <a href="/2023/03/19/%E7%AE%97%E6%B3%95-5-%E5%88%86%E6%B2%BB-%E5%BD%92%E5%B9%B6/"  itemprop="url">
-        算法(5): 分治/归并
-      </a>
-    </h2>
-  
-  <div class='md article-desc' itemprop="articleBody">
-    
-      
-        分治的思想为将大问题分解为子问题，子问题再分解为更小的子问题，直到不能再拆分，然后再合并子问题的结果，通常需要用到递归。关键是要找对如何拆解问题。
-5.1 不同的二叉搜索树LeetCode No.95
-
-问题描述：给定一个整数 n，生成所有由 1 … n 为节点所组成的 二叉搜索树 。
-
-思路：根据二叉搜索树的特点，左子树的所有节点值均小于根节点，右子树的所有节点值均大于根节点，同时对于每一...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time itemprop="dateCreated datePublished" datetime="2023-03-19T21:54:37+08:00">2023-03-19</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-          
-            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
-              <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url"><span itemprop="name">算法</span></a>
-            </span>
-          
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2023/03/19/%E7%AE%97%E6%B3%95-5-%E5%88%86%E6%B2%BB-%E5%BD%92%E5%B9%B6/' itemprop="url">
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
-  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/03/19/算法-4-搜索/">
-  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Harry 的个人空间">
-  </span>
-  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
-    <meta itemprop="name" content="Harry 的个人空间">
-    <meta itemprop="description" content="一个后端开发工程师的技术博客">
-  </span>
-  
-  
-  
-    <span hidden>
-      <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
-    </span>
-  
-  
-    
-    <h2 class="article-title"  itemprop="name headline">
-      <a href="/2023/03/19/%E7%AE%97%E6%B3%95-4-%E6%90%9C%E7%B4%A2/"  itemprop="url">
-        算法(4): 搜索
-      </a>
-    </h2>
-  
-  <div class='md article-desc' itemprop="articleBody">
-    
-      
-        3.1 深度优先DFS
-问题1：给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。Input: “23”Output: [“ad”, “ae”, “af”, “bd”, “be”, “bf”, “cd”, “ce”, “cf”]
-
-思路：深度优先搜索，从根节点到每个叶子节点的所有路径即结果，深度为子串的长度...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time itemprop="dateCreated datePublished" datetime="2023-03-19T21:52:31+08:00">2023-03-19</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-          
-            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
-              <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url"><span itemprop="name">算法</span></a>
-            </span>
-          
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2023/03/19/%E7%AE%97%E6%B3%95-4-%E6%90%9C%E7%B4%A2/' itemprop="url">
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
-  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/03/19/算法-3-二分查找/">
-  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Harry 的个人空间">
-  </span>
-  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
-    <meta itemprop="name" content="Harry 的个人空间">
-    <meta itemprop="description" content="一个后端开发工程师的技术博客">
-  </span>
-  
-  
-  
-    <span hidden>
-      <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
-    </span>
-  
-  
-    
-    <h2 class="article-title"  itemprop="name headline">
-      <a href="/2023/03/19/%E7%AE%97%E6%B3%95-3-%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/"  itemprop="url">
-        算法(3): 二分查找
-      </a>
-    </h2>
-  
-  <div class='md article-desc' itemprop="articleBody">
-    
-      
-        二分查找是一种在有序列表中查找元素的高效方法，时间复杂度（logN），二分查找思路和时间都比较简单，但是实际问题中的细节不可忽视。
-3.1 搜索插入位置LeetCode No.35
-
-问题描述：给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置，你可以假设数组中无重复元素。
-
-思路：按照二分查找法，定义low，high两个指...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time itemprop="dateCreated datePublished" datetime="2023-03-19T21:51:01+08:00">2023-03-19</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-          
-            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
-              <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url"><span itemprop="name">算法</span></a>
-            </span>
-          
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2023/03/19/%E7%AE%97%E6%B3%95-3-%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/' itemprop="url">
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
-  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/03/19/算法-1-双指针/">
-  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Harry 的个人空间">
-  </span>
-  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
-    <meta itemprop="name" content="Harry 的个人空间">
-    <meta itemprop="description" content="一个后端开发工程师的技术博客">
-  </span>
-  
-  
-  
-    <span hidden>
-      <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
-    </span>
-  
-  
-    
-    <h2 class="article-title"  itemprop="name headline">
-      <a href="/2023/03/19/%E7%AE%97%E6%B3%95-1-%E5%8F%8C%E6%8C%87%E9%92%88/"  itemprop="url">
-        算法(1): 双指针
-      </a>
-    </h2>
-  
-  <div class='md article-desc' itemprop="articleBody">
-    
-      
-        双指针通常用在有序数组，链表的数据结构上，根据题目条件移动对应的指针。比如判断子串、链表是否有环的问题。
-1.1 最长子串LeetCode No.524
-
-题目描述：给定一个字符串和一个字符串字典，找到字典里面最长的字符串，该字符串可以通过删除给定字符串的某些字符来得到。如果答案不止一个，返回长度最长且字典顺序最小的字符串。如果答案不存在，则返回空字符串输入:s &#x3D; “abpcpl...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time itemprop="dateCreated datePublished" datetime="2023-03-19T21:41:00+08:00">2023-03-19</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-          
-            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
-              <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url"><span itemprop="name">算法</span></a>
-            </span>
-          
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2023/03/19/%E7%AE%97%E6%B3%95-1-%E5%8F%8C%E6%8C%87%E9%92%88/' itemprop="url">
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
-  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/03/19/数据结构-5-栈-队列-堆/">
-  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Harry 的个人空间">
-  </span>
-  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
-    <meta itemprop="name" content="Harry 的个人空间">
-    <meta itemprop="description" content="一个后端开发工程师的技术博客">
-  </span>
-  
-  
-  
-    <span hidden>
-      <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
-    </span>
-  
-  
-    
-    <h2 class="article-title"  itemprop="name headline">
-      <a href="/2023/03/19/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-5-%E6%A0%88-%E9%98%9F%E5%88%97-%E5%A0%86/"  itemprop="url">
-        数据结构(5): 栈|队列|堆
-      </a>
-    </h2>
-  
-  <div class='md article-desc' itemprop="articleBody">
-    
-      
-        6.1 栈6.1.1用两个栈实现一个队列LeetCode No.232
-
-题目描述：请你仅使用两个栈实现先入先出队列。队列应当支持一般队列的支持的所有操作（push、pop、peek、empty）：
-
-思路： 两个栈一个栈做队头（出元素），另一个栈做队尾（入元素）
-
-每次push只需要push到尾栈
-pop时如果头栈为空则将尾栈全部“倒入”头栈，如果头栈不为空取出栈顶元素返回，否则返回失败（...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time itemprop="dateCreated datePublished" datetime="2023-03-19T21:39:14+08:00">2023-03-19</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
-          
-            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
-              <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url"><span itemprop="name">数据结构</span></a>
-            </span>
-          
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2023/03/19/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-5-%E6%A0%88-%E9%98%9F%E5%88%97-%E5%A0%86/' itemprop="url">
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <div class="post post-v3 white-box reveal shadow floatable blur"  itemscope itemtype="http://schema.org/Article" >
-  <link itemprop="mainEntityOfPage" href="https://harryzhang.cn/2023/03/19/数据结构-4-树/">
-  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Harry 的个人空间">
-  </span>
-  <span hidden itemprop="post" itemscope itemtype="http://schema.org/Post">
-    <meta itemprop="name" content="Harry 的个人空间">
-    <meta itemprop="description" content="一个后端开发工程师的技术博客">
-  </span>
-  
-  
-  
-    <span hidden>
-      <meta itemprop="image" content="https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png">
-    </span>
-  
-  
-    
-    <h2 class="article-title"  itemprop="name headline">
-      <a href="/2023/03/19/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-4-%E6%A0%91/"  itemprop="url">
-        数据结构(4): 树
-      </a>
-    </h2>
-  
-  <div class='md article-desc' itemprop="articleBody">
-    
-      
-        4.1 根据前序与中序序列构造二叉树LeetCode No.105
-
-问题描述：根据一棵树的前序遍历与中序遍历构造二叉树。
-
-思路：根据二叉树的前序和中序（或后序和中序）的序列可唯一构造一棵二叉树，必须要有中序。前序遍历的第一个为根节点，找到根节点在中序中的位置，中序左边的节点都是根节点的左子树，右边的同理，然后可以用递归的方式求解。
-示例代码：
-type TreeNode struct &...
-      
-    
-  </div>
-  
-    <div class='meta-v3' line_style='solid'>
-      <div>
-        
-        <time itemprop="dateCreated datePublished" datetime="2023-03-19T21:36:55+08:00">2023-03-19</time>
-        
-          <span class="dot"></span>
-          <a class="category-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
-          
-            <span hidden itemprop="about" itemscope itemtype="http://schema.org/Thing">
-              <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url"><span itemprop="name">数据结构</span></a>
-            </span>
-          
-        
-      </div>
-      
-        <div>
-          <a class='readmore' href='/2023/03/19/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-4-%E6%A0%91/' itemprop="url">
-            阅读全文
-          </a>
-        </div>
-      
-    </div>
-  
-
-</div>
-
-          </div>
-        
-      
-    
-  </section>
-  
-    
-      <br>
-      <div class="prev-next">
-        
-        <p class="current">
-          1 / 2
-        </p>
-        
-          <a class="next" rel="next" href="/tags/leetcode/page/2/">
-            <section class="post next white-box shadow floatable blur">
-              &nbsp;下一页&nbsp;<i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
-            </section>
-          </a>
-        
-      </div>
-    
-  
+  </article>
 
 
-    
-  
+
+
+
+
 </div>
 <aside id='l_side' itemscope itemtype="http://schema.org/WPSideBar">
   
@@ -3106,179 +2625,48 @@ type TreeNode struct &...
     
     
       
-<section class="widget blogger desktop mobile pjax">
-  <div class='content'>
     
-      
-        <a class='avatar flat-box circle' href='/about/'>
-          <img no-lazy src='/assets/images/avatar.jpeg'/>
-        </a>
-      
-    
-    
-      <div class='text'>
-        
-        
-        
-          <p><span id="jinrishici-sentence">Harry 的个人空间</span></p>
-          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
-        
-      </div>
-    
-    
-      <div class="social-wrapper">
-        
-          
-            <a href="/atom.xml"
-              class="social fa-solid fa-rss flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="mailto:me@xxx.com"
-              class="social fa-solid fa-envelope flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="https://github.com/harryzhz"
-              class="social fab fa-github flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-          
-            <a href="/"
-              class="social fa-solid fa-headphones-alt flat-btn"
-              target="_blank"
-              rel="external nofollow noopener noreferrer">
-              
-            </a>
-          
-        
-      </div>
-    
-  </div>
-</section>
-
-    
-  
-
-  
-    
-    
-      
-  
-  <section class="widget category desktop pjax">
-    
-  <header>
-    
-      <a href='/categories/'><i class="fa-solid fa-folder-open fa-fw" aria-hidden="true"></i><span class='name'>文章分类</span></a>
-    
-  </header>
-
-
-    <div class='content'>
-      <ul class="entry navigation">
-        
-          <li><a class="flat-box"
-            title="/categories/Golang/" href="/categories/Golang/"
-            active-action="action-categoriesGolang"
-            ><div class='name'>Golang</div><div class='badge'>(5)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/"
-            active-action="action-categoriesE58886E5B883E5BC8FE7B3BBE7BB9F"
-            ><div class='name'>分布式系统</div><div class='badge'>(7)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E5%B7%A5%E5%85%B7/" href="/categories/%E5%B7%A5%E5%85%B7/"
-            active-action="action-categoriesE5B7A5E585B7"
-            ><div class='name'>工具</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"
-            active-action="action-categoriesE5BEAEE69C8DE58AA1"
-            ><div class='name'>微服务</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"
-            active-action="action-categoriesE6938DE4BD9CE7B3BBE7BB9F"
-            ><div class='name'>操作系统</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"
-            active-action="action-categoriesE695B0E68DAEE5BA93"
-            ><div class='name'>数据库</div><div class='badge'>(7)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"
-            active-action="action-categoriesE695B0E68DAEE7BB93E69E84"
-            ><div class='name'>数据结构</div><div class='badge'>(6)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E7%AE%97%E6%B3%95/" href="/categories/%E7%AE%97%E6%B3%95/"
-            active-action="action-categoriesE7AE97E6B395"
-            ><div class='name'>算法</div><div class='badge'>(8)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E7%BC%93%E5%AD%98/" href="/categories/%E7%BC%93%E5%AD%98/"
-            active-action="action-categoriesE7BC93E5AD98"
-            ><div class='name'>缓存</div><div class='badge'>(3)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"
-            active-action="action-categoriesE8AEA1E7AE97E69CBAE7BD91E7BB9C"
-            ><div class='name'>计算机网络</div><div class='badge'>(5)</div></a></li>
-        
-      </ul>
-    </div>
-  </section>
-
-
-    
-  
-
-  
-    
-    
-      
-  
-  <section class="widget tagcloud desktop mobile pjax">
-    
-  <header>
-    
-      <a href='/tags/'><i class="fa-solid fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
-    
-  </header>
-
-
-    <div class='content'>
-      <a href="/tags/BASE/" style="font-size: 14px; color: #999">BASE</a> <a href="/tags/CAP/" style="font-size: 14px; color: #999">CAP</a> <a href="/tags/Cache-Aside/" style="font-size: 14px; color: #999">Cache-Aside</a> <a href="/tags/Cookie/" style="font-size: 14px; color: #999">Cookie</a> <a href="/tags/GMP/" style="font-size: 14px; color: #999">GMP</a> <a href="/tags/Go/" style="font-size: 20px; color: #707070">Go</a> <a href="/tags/Goroutine/" style="font-size: 14px; color: #999">Goroutine</a> <a href="/tags/HTTPS/" style="font-size: 14px; color: #999">HTTPS</a> <a href="/tags/I-O%E6%A8%A1%E5%9E%8B/" style="font-size: 14px; color: #999">I/O模型</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/LRU/" style="font-size: 14px; color: #999">LRU</a> <a href="/tags/Linux/" style="font-size: 16px; color: #8b8b8b">Linux</a> <a href="/tags/MQ/" style="font-size: 14px; color: #999">MQ</a> <a href="/tags/MySQL/" style="font-size: 22px; color: #636363">MySQL</a> <a href="/tags/NoSQL/" style="font-size: 14px; color: #999">NoSQL</a> <a href="/tags/RPC/" style="font-size: 14px; color: #999">RPC</a> <a href="/tags/RabbitMQ/" style="font-size: 14px; color: #999">RabbitMQ</a> <a href="/tags/Redis/" style="font-size: 18px; color: #7e7e7e">Redis</a> <a href="/tags/Redis-%E9%9B%86%E7%BE%A4/" style="font-size: 14px; color: #999">Redis 集群</a> <a href="/tags/RocketMQ/" style="font-size: 14px; color: #999">RocketMQ</a> <a href="/tags/SQL%E8%AF%AD%E5%8F%A5/" style="font-size: 14px; color: #999">SQL语句</a> <a href="/tags/Session/" style="font-size: 14px; color: #999">Session</a> <a href="/tags/Socket/" style="font-size: 14px; color: #999">Socket</a> <a href="/tags/TCP/" style="font-size: 14px; color: #999">TCP</a> <a href="/tags/Thrift/" style="font-size: 14px; color: #999">Thrift</a> <a href="/tags/VSCode/" style="font-size: 14px; color: #999">VSCode</a> <a href="/tags/WebSocket/" style="font-size: 14px; color: #999">WebSocket</a> <a href="/tags/leaf/" style="font-size: 14px; color: #999">leaf</a> <a href="/tags/leetcode/" style="font-size: 24px; color: #555">leetcode</a> <a href="/tags/select-poll-epoll/" style="font-size: 14px; color: #999">select/poll/epoll</a> <a href="/tags/snowflake/" style="font-size: 14px; color: #999">snowflake</a> <a href="/tags/%E4%B8%80%E8%87%B4%E6%80%A7/" style="font-size: 14px; color: #999">一致性</a> <a href="/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C/" style="font-size: 14px; color: #999">一致性哈希</a> <a href="/tags/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/" style="font-size: 14px; color: #999">二分查找</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/" style="font-size: 14px; color: #999">二叉搜索树</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 14px; color: #999">二叉树</a> <a href="/tags/%E4%BB%A4%E7%89%8C%E6%A1%B6/" style="font-size: 14px; color: #999">令牌桶</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 14px; color: #999">分布式</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 14px; color: #999">动态规划</a> <a href="/tags/%E5%8D%95%E8%B0%83%E6%A0%88/" style="font-size: 14px; color: #999">单调栈</a> <a href="/tags/%E5%94%AF%E4%B8%80ID/" style="font-size: 14px; color: #999">唯一ID</a> <a href="/tags/%E5%A0%86/" style="font-size: 14px; color: #999">堆</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 14px; color: #999">字符串</a> <a href="/tags/%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/" style="font-size: 14px; color: #999">守护进程</a> <a href="/tags/%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2/" style="font-size: 14px; color: #999">广度优先搜索</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" style="font-size: 14px; color: #999">快速排序</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 14px; color: #999">排序</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 14px; color: #999">数组</a> <a href="/tags/%E6%A0%88/" style="font-size: 14px; color: #999">栈</a> <a href="/tags/%E6%A0%91/" style="font-size: 14px; color: #999">树</a> <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" style="font-size: 14px; color: #999">消息队列</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2/" style="font-size: 14px; color: #999">深度优先搜索</a> <a href="/tags/%E6%BC%8F%E6%A1%B6/" style="font-size: 14px; color: #999">漏桶</a> <a href="/tags/%E7%83%AD%E7%82%B9-key/" style="font-size: 14px; color: #999">热点 key</a> <a href="/tags/%E7%B4%A2%E5%BC%95/" style="font-size: 14px; color: #999">索引</a> <a href="/tags/%E7%BC%93%E5%AD%98/" style="font-size: 14px; color: #999">缓存</a> <a href="/tags/%E8%84%8F%E9%A1%B5/" style="font-size: 14px; color: #999">脏页</a> <a href="/tags/%E8%B4%AA%E5%BF%83/" style="font-size: 14px; color: #999">贪心</a> <a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 14px; color: #999">链表</a> <a href="/tags/%E9%98%9F%E5%88%97/" style="font-size: 14px; color: #999">队列</a> <a href="/tags/%E9%99%90%E6%B5%81/" style="font-size: 14px; color: #999">限流</a>
-    </div>
-  </section>
-
-
-    
-  
-
   
 
 
 <div class="widget-sticky pjax">
 
+  
+  
+
+
+  <section class="widget toc-wrapper desktop mobile " id="toc-div" >
+    
+  <header>
+    
+      <i class="fa-solid fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E7%AE%80%E4%BB%8B"><span class="toc-text">整洁架构简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%9A%E5%8A%A1%E5%AE%9E%E4%BD%93"><span class="toc-text">业务实体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E4%BE%8B"><span class="toc-text">用例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E5%8F%A3%E9%80%82%E9%85%8D%E5%99%A8"><span class="toc-text">接口适配器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%86%E6%9E%B6%E4%B8%8E%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F"><span class="toc-text">框架与驱动程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC"><span class="toc-text">依赖反转</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-text">应用示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%9E%E4%BD%93%E5%B1%82"><span class="toc-text">1. 实体层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%94%A8%E4%BE%8B%E5%B1%82"><span class="toc-text">2. 用例层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%8E%A5%E5%8F%A3%E9%80%82%E9%85%8D%E5%B1%82"><span class="toc-text">3. 接口适配层</span></a></li></ol></li></ol>
+    </div>
+  </section>
+
+  
+
 </div>
 
 
 <!-- 没有 pjax 占位会报错 万恶的 pjax -->
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
+
+  <div class="pjax">
+    <!-- pjax占位 -->
+  </div>
 
   <div class="pjax">
     <!-- pjax占位 -->
@@ -3306,13 +2694,14 @@ type TreeNode struct &...
 </aside>
 
 
+
           <!--此文件用来存放一些不方便取值的变量-->
 <!--思路大概是将值藏到重加载的区域内-->
 
 <pjax>
 <script>
   window.pdata={}
-  pdata.ispage=false;
+  pdata.ispage=true;
   pdata.commentPath="";
   pdata.commentPlaceholder="";
   pdata.commentConfig={};
@@ -3858,7 +3247,7 @@ type TreeNode struct &...
 </script>
 
 
-  <script type="application/ld+json">[{"@context":"http://schema.org","@type":"Organization","name":"Harry 的个人空间","url":"https://harryzhang.cn/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},{"@context":"http://schema.org","@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhang.cn/","sameAs":["https://github.com/harryzhz"],"description":"一个后端开发工程师的技术博客"},{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https://harryzhang.cn/","name":"Harry 的个人空间"}},{"@type":"ListItem","position":2,"item":{"@id":"https://harryzhang.cn/tags/leetcode/","name":"leetcode"}}]},{"@context":"http://schema.org","@type":"WebSite","name":"Harry 的个人空间","url":"https://harryzhang.cn/","keywords":["技术博客","后端开发"],"description":"一个后端开发工程师的技术博客","author":{"@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhang.cn/","description":"一个后端开发工程师的技术博客"},"publisher":{"@type":"Organization","name":"Harry 的个人空间","url":"https://harryzhang.cn/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"potentialAction":{"@type":"SearchAction","name":"Site Search","target":{"@type":"EntryPoint","urlTemplate":"https://harryzhang.cn?s={search_term_string}"},"query-input":"required name=search_term_string"}},{"@context":"http://schema.org","@type":"BlogPosting","description":"一个后端开发工程师的技术博客","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage"},"author":{"@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhang.cn/"},"publisher":{"@type":"Organization","name":"Harry 的个人空间","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"wordCount":0,"image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}}]</script>
+  <script type="application/ld+json">[{"@context":"http://schema.org","@type":"Organization","name":"Harry 的个人空间","url":"https://harryzhang.cn/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},{"@context":"http://schema.org","@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhang.cn/","sameAs":["https://github.com/harryzhz"],"description":"一个后端开发工程师的技术博客"},{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https://harryzhang.cn/","name":"Harry 的个人空间"}},{"@type":"ListItem","position":3,"item":{"@id":"https://harryzhang.cn/2023/07/19/依赖反转-DIP-原则在整洁架构中的应用/","name":"依赖反转(DIP)原则在整洁架构中的应用"}}]},{"@context":"http://schema.org","@type":"WebSite","name":"Harry 的个人空间","url":"https://harryzhang.cn/","keywords":["技术博客","后端开发"],"description":"一个后端开发工程师的技术博客","author":{"@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhang.cn/","description":"一个后端开发工程师的技术博客"},"publisher":{"@type":"Organization","name":"Harry 的个人空间","url":"https://harryzhang.cn/","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"potentialAction":{"@type":"SearchAction","name":"Site Search","target":{"@type":"EntryPoint","urlTemplate":"https://harryzhang.cn?s={search_term_string}"},"query-input":"required name=search_term_string"}},{"@context":"http://schema.org","@type":"BlogPosting","headline":"依赖反转(DIP)原则在整洁架构中的应用","description":"一个后端开发工程师的技术博客","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https://harryzhang.cn/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/"},"author":{"@type":"Person","name":"harry zhang","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png"},"url":"https://harryzhang.cn/"},"publisher":{"@type":"Organization","name":"Harry 的个人空间","logo":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}},"url":"https://harryzhang.cn/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/","wordCount":0,"datePublished":"2023-07-19T14:47:52.000Z","dateModified":"2023-07-19T15:40:45.092Z","image":{"@type":"ImageObject","url":"https://unpkg.com/volantis-static@0.0.1654736714924/media/org.volantis/blog/favicon/android-chrome-192x192.png","width":192,"height":192}}]</script>
 
 
 

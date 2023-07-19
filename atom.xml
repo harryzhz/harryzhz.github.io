@@ -6,7 +6,7 @@
   <link href="https://harryzhang.cn/atom.xml" rel="self"/>
   
   <link href="https://harryzhang.cn/"/>
-  <updated>2023-07-01T04:34:25.369Z</updated>
+  <updated>2023-07-19T15:40:45.092Z</updated>
   <id>https://harryzhang.cn/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>依赖反转(DIP)原则在整洁架构中的应用</title>
+    <link href="https://harryzhang.cn/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/"/>
+    <id>https://harryzhang.cn/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/</id>
+    <published>2023-07-19T14:47:52.000Z</published>
+    <updated>2023-07-19T15:40:45.092Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="整洁架构简介"><a href="#整洁架构简介" class="headerlink" title="整洁架构简介"></a>整洁架构简介</h2><blockquote><p>直接上图</p><p><strong>整洁架构从外到内分为四层，源码中的依赖关系必须只指向同心圆的内侧，即由底层机制指向高层策略</strong></p></blockquote><p><img src="/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/clean-arch.png" class="lazyload" data-srcset="/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/clean-arch.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p><h3 id="业务实体"><a href="#业务实体" class="headerlink" title="业务实体"></a>业务实体</h3><p>这一层封装整个系统的关系业务逻辑，能被系统中的其他不同应用复用。<br>对应领域驱动设计中的概念就是领域模型。</p><h3 id="用例"><a href="#用例" class="headerlink" title="用例"></a>用例</h3><p>用例通常包含的是特定应用场景下的业务逻辑，这一层封装了整个系统所有用例。<br>这些用例引导了数据在业务实体之间的流入&#x2F;流出，通过编排业务实体中的关键方法来实现业务用例的目标。</p><p>这一层发生的改变不应该影响业务实体，同时也不应该受外部因素（比如数据库、UI<br>框架）的影响。该层的变化应该只和应用本身的行为变化有关。</p><h3 id="接口适配器"><a href="#接口适配器" class="headerlink" title="接口适配器"></a>接口适配器</h3><p>接口适配器层通常是一组数据转换器，负责将数据从对用例和业务实体最方便操作的格式转换为外部系统最方便的操作格式。例如这一层应该包含整个 GUI MVC 框架，展示器、视图、控制器都应该属于接口适配层，而模型部分则应该由控制器传给用例，用例再传回展示器和视图。</p><p>同样这一层也会负责将数据从对业务实体与用例方便的格式转换为数据持久化最方便的格式。</p><p>这一层也会负责将来自外部服务的数据转换为系统用例和业务实体所需的格式。</p><h3 id="框架与驱动程序"><a href="#框架与驱动程序" class="headerlink" title="框架与驱动程序"></a>框架与驱动程序</h3><p>这一层一般是由工具、工具、Web 框架等组成，包含了所有的实现细节，Web、数据库都是实现细节。<br>这一层也是最容易和频繁可能改变的，将其放在最外层就很难影响到其他层了。</p><h2 id="依赖反转"><a href="#依赖反转" class="headerlink" title="依赖反转"></a>依赖反转</h2><p>代码如何保证整洁架构所约束的依赖关系原则呢，通常是通过依赖反转来实现。<br>比如需要将业务数据持久化，那直觉上来看肯定用例层需要调用接口适配层提供的数据库持久化方法，这就违反了只允许外层依赖内层的原则。</p><p><img src="/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/dip-demo.png" class="lazyload" data-srcset="/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/dip-demo.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p><p>如上图所示，通过依赖反转，在用例层提供数据持久化需要的接口（Data Access Interface），由适配层提供具体的实现（MySQL Access），这样持久化时用例层不关注具体的实现，只需要调用用例层定义的接口即可。通过这种方法即将业务逻辑和具体的持久化方式解耦，又满足了只能外层依赖内层的原则。</p><h2 id="应用示例"><a href="#应用示例" class="headerlink" title="应用示例"></a>应用示例</h2><blockquote><p>一个简单的文件存储服务，核心功能包括：文件上传、文件下载</p></blockquote><p>组件依赖关系如下所示：</p><p><img src="/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/filesvc-demo.png" class="lazyload" data-srcset="/2023/07/19/%E4%BE%9D%E8%B5%96%E5%8F%8D%E8%BD%AC-DIP-%E5%8E%9F%E5%88%99%E5%9C%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/filesvc-demo.png" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p><p>按照整洁架构的分层，简单分析上述文件存储服务 demo（上图省略了 Web 框架等处于最外层的组件）。</p><h3 id="1-实体层"><a href="#1-实体层" class="headerlink" title="1. 实体层"></a>1. 实体层</h3><p>实体层包含了两个核心实体：文件实体、文件配置实体。</p><ul><li>文件实体：包含增、删、改查文件 DB 记录等方法，以及获取文件存储类型、存储 Key 的方法</li><li>文件配置实体：包含获取上传文件大小限制等配置的方法</li></ul><h3 id="2-用例层"><a href="#2-用例层" class="headerlink" title="2. 用例层"></a>2. 用例层</h3><p>用例层包含了文件服务的两个核心业务用例：上传文件和下载文件，还包括了用于操作配置、数据库、对象存储、消息队列的一系列接口。</p><ul><li>上传用例：调用文件配置实体获取上传配置，通过 StorageAccess 接口将文件内容持久化到对象存储或其他介质，再调用 DBAccess 的方法保存文件记录，最后通过 MQAccess 的方法发送一条上传文件的消息。</li><li>下载用例：调用文件实体的方法查询到文件的存储 Key，再调用 StorageAccess 的方法下载文件内容。</li></ul><h3 id="3-接口适配层"><a href="#3-接口适配层" class="headerlink" title="3. 接口适配层"></a>3. 接口适配层</h3><p>接口适配层则实现了四个适配器。</p><ul><li>ACM: 用于管理动态配置</li><li>OSS: 用于上传、下载文件对象</li><li>MySQL: 用于增删改查文件记录</li><li>RocketMQ: 用于发送文件上传消息</li></ul><p>可以看到通过按照整洁架构的分层方式和依赖反转原则，文件服务的组件依赖关系非常清晰（图中三层只存在从下到上方向的依赖），而且将业务逻辑和存储介质等基础设施解耦，底层组件的替换完全不会影响到业务用例的逻辑。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;整洁架构简介&quot;&gt;&lt;a href=&quot;#整洁架构简介&quot; class=&quot;headerlink&quot; title=&quot;整洁架构简介&quot;&gt;&lt;/a&gt;整洁架构简介&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;直接上图&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;整洁架构从外到内分为四层，源码中的依赖关系</summary>
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>VSCode 项目多窗口改为多 Tab 样式</title>
@@ -196,9 +218,9 @@
     <category term="Golang" scheme="https://harryzhang.cn/categories/Golang/"/>
     
     
-    <category term="Go" scheme="https://harryzhang.cn/tags/Go/"/>
-    
     <category term="Socket" scheme="https://harryzhang.cn/tags/Socket/"/>
+    
+    <category term="Go" scheme="https://harryzhang.cn/tags/Go/"/>
     
   </entry>
   
@@ -526,32 +548,6 @@
     <category term="MySQL" scheme="https://harryzhang.cn/tags/MySQL/"/>
     
     <category term="SQL语句" scheme="https://harryzhang.cn/tags/SQL%E8%AF%AD%E5%8F%A5/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MySQL 和 NoSQL基础知识概述</title>
-    <link href="https://harryzhang.cn/2023/03/25/MySQL-%E5%92%8C-NoSQL%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%A6%82%E8%BF%B0/"/>
-    <id>https://harryzhang.cn/2023/03/25/MySQL-%E5%92%8C-NoSQL%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%A6%82%E8%BF%B0/</id>
-    <published>2023-03-25T07:10:58.000Z</published>
-    <updated>2023-03-25T07:18:51.284Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h2><h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><ul><li><p>B+Tree</p><ul><li><p>平衡树，查找树，所有叶子节点位于同一层</p></li><li><p>进行查找时首先再根节点进行二分查找，找到一个key所在的指针，然后递归的在指针所指向的节点进行查找，直到查到叶子节点，然后在叶子节点二分查找，找出key所对应的data</p></li><li><p>插入删除操作会破坏数的平衡性，需要进行分裂、合并、旋转等操作来维护平衡性</p></li><li><p>与红黑树相比</p><ul><li>B+树的高度更低</li><li>更适合磁盘访问，节点大小设置和磁盘页大小一致</li><li>磁盘预读，减少I&#x2F;O</li></ul></li></ul></li><li><p>MySQL索引</p><ul><li><p>索引类型</p><ul><li><p>B+Tree索引</p><ul><li><p>大多数MySQL存储引擎的默认索引类型</p></li><li><p>有序性保证查找、排序、分组效率更高</p></li><li><p>可以指定多个列为索引列，多个索引列共同组成键</p></li><li><p>适用于全键值、键值范围和键前缀（只支持最左前缀）查找</p></li><li><p>主索引和辅助索引</p><ul><li>主索引的叶子节点data域记录着完整的数据记录，称为聚簇索引，一个表只能有一个聚簇索引</li><li>辅助索引的叶子节点域记录着主键的值，因此使用辅助索引要先查到主键的值，再到主索引查数据</li></ul></li></ul></li><li><p>哈希索引</p><ul><li><p>O(1)查找，但失去了有序性</p><ul><li>无法用于排序和分组</li><li>只支持精确查找，不能用于部分查找和范围查找</li></ul></li><li><p>InnoDB自适应哈希索引，当某个索引值被使用的非常频繁时，会在B+Tree索引只上再建一个哈希索引，以实现快速的哈希查找</p></li></ul></li><li><p>全文索引</p><ul><li>查找文本中的关键字而不是等值比较</li></ul></li><li><p>空间数据索引</p></li></ul></li><li><p>索引优化</p><ul><li><p>独立的列：索引列不能是表达式的一部分，也不能是函数的参数，否则不会使用索引</p></li><li><p>多列索引：需要使用多个列作为条件查询时，使用多列索引比使用单列索引性能更好</p></li><li><p>索引列的顺序：选择性强的索引列放在前面</p></li><li><p>前缀索引：对于BLOB、TEXT、VARCHAR类型的数据，必须使用前缀索引，只索引开始的部分字符</p></li><li><p>覆盖索引：索引包含所有需要查询的字段的值</p><ul><li>索引通常远小于数据行的大小，只读取索引能减少数据访问量</li><li>一些存储引擎（MyISAM）在内存中只缓存索引，只访问索引可以不使用系统调用</li><li>对于InnoDB引擎，若辅助索引能够覆盖查询，则无需访问主索引</li></ul></li></ul></li><li><p>优点</p><ul><li>大大减少需要扫描的数据行数</li><li>帮助服务器避免进行排序和分组，以及避免创建临时表</li><li>将随机I&#x2F;O变为顺序I&#x2F;O</li></ul></li><li><p>使用条件</p><ul><li><p>对于非常小的表大部分情况下全表扫描更高效（如用来保存配置信息的表）</p></li><li><p>对于中型大型的表，使用索引的效果非常明显</p></li><li><p>对于特大型的表，建立和维护索引的代价会随之增长</p><ul><li>分区</li><li>分库分表</li></ul></li></ul></li></ul></li></ul><h3 id="查询性能优化"><a href="#查询性能优化" class="headerlink" title="查询性能优化"></a>查询性能优化</h3><ul><li><p>使用Explain进行分析</p><ul><li>Select_type：查询类型，如简单查询，联合查询、子查询</li><li>key：使用的索引</li><li>Rows：扫描的行数</li></ul></li><li><p>优化数据访问</p><ul><li><p>减少请求的数据量</p><ul><li>只返回必要的列，拒绝无脑select * from…</li><li>只返回必要的行，使用limit限制返回的数据数量</li><li>缓存重复查询的数据</li></ul></li><li><p>减少扫描的行数</p><ul><li>用索引覆盖查询</li></ul></li></ul></li><li><p>重构查询方式</p><ul><li>切分大查询</li><li>分解大连接查询（将一个大连接查询分解成对每个表进行</li></ul></li></ul><p>一次单表查询，然后在应用程序中进行关联）<br>      - 让缓存更高效，分解后多个查询，即使一个表发生改变，其他表的缓存仍然可以使用<br>      - 单表查询的结果可能被其他查询用到，减少冗余记录的查询<br>      - 减少锁竞争<br>      - 应用层进行连接，更容易对数据库进行拆分，从而更容易做到高性能和可伸缩<br>      - 查询本身效率提升</p><h3 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h3><ul><li><p>InnoDB</p><ul><li>MySQL默认的事务型存储引擎</li><li>实现了四个标准的事务隔离级别</li><li>主索引是聚簇索引，在索引中保存了数据，对查询性能很大提升</li><li>内部做了优化，比如磁盘读取数据时采用可预测性读，自动创建自适应哈希索引，能加快插入操作的插入缓冲区</li><li>支持真正的在线热备份</li></ul></li><li><p>MyISAM</p><ul><li>设计简单，提供了很多特性，如压缩表、空间数据索引</li><li>不支持事务、不支持行级锁</li></ul></li><li><p>如果不是特殊特性需要，建议都使用InnoDB引擎</p></li></ul><h3 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h3><ul><li><p>主从复制</p><ul><li><p>binlog线程：负责将主服务器上的数据更改写入二进制日志中</p></li><li><p>I&#x2F;O线程：负责从主服务器上读取binlog，并写入从服务器的中继日志（Relay Log）</p></li><li><p>SQL线程：负责读取中继日志，解析出SQL更改并在从服务器中重放（Replay）</p></li><li><p>主从复制不是强一致性，只能保证最终一致性</p></li><li><p>复制模式</p><ul><li><p>异步模式</p><ul><li>主节点不会主动push binlog，同步不及时</li></ul></li><li><p>半同步复制</p><ul><li>主节点只需要接收到一台从节点的返回信息就会commit，否则会等到超时然后切换成异步模式再提交，不保证从节点写入db。减少了数据延迟，响应时间会变长</li></ul></li><li><p>全同步复制</p><ul><li>全同步模式是主节点和从节点全部执行了commit并确认才会想客户端返回成功。响应时间最长</li></ul></li></ul></li></ul></li><li><p>读写分离</p><ul><li><p>优点</p><ul><li>主从服务器负责各自的读写，减少锁竞争</li><li>增加冗余，提高可用性</li></ul></li><li><p>中间件</p><ul><li>MySQL-Proxy</li><li>MySQL-Router</li><li>MyCat</li></ul></li></ul></li></ul><h3 id="binlog的业务应用"><a href="#binlog的业务应用" class="headerlink" title="binlog的业务应用"></a>binlog的业务应用</h3><ul><li><p>数据异构</p><ul><li>随着业务发展，一些表各个业务都关注，但是对字段的使用场景不同。如订单表，可以通过binlog解析成用户维度的订单信息供用户中心查询、商户维度的订单表供运营管理、审计等</li></ul></li><li><p>缓存更新</p><ul><li>客户端更新了数据，缓存还未过期，可以通过binlog获取数据变更，并同步到缓存中</li></ul></li><li><p>任务分发</p><ul><li>多个系统依赖同一块重要数据，当数据发生变化需要通知其他系统。可以由调度系统订阅binlog进行相应的任务分发、消息发送</li></ul></li></ul><h2 id="NoSQL"><a href="#NoSQL" class="headerlink" title="NoSQL"></a>NoSQL</h2><h3 id="not-only-sql"><a href="#not-only-sql" class="headerlink" title="not only sql"></a>not only sql</h3><h3 id="KV型"><a href="#KV型" class="headerlink" title="KV型"></a>KV型</h3><ul><li>Redis</li></ul><h3 id="搜索型"><a href="#搜索型" class="headerlink" title="搜索型"></a>搜索型</h3><ul><li>ElasticSearch</li></ul><h3 id="列式"><a href="#列式" class="headerlink" title="列式"></a>列式</h3><ul><li><p>HBase</p><ul><li>海量数据存储，数据持久化</li><li>读写性能好</li><li>横向扩展再关系型数据库中最方便的之一</li><li>本身没有单点故障，高可用</li><li>可存储结构化或半结构化的数据</li><li>比较重，依赖Hadoop组件，运维成本高</li><li>KV式，条件查询弱</li><li>不支持分页查询</li></ul></li></ul><h3 id="文档型"><a href="#文档型" class="headerlink" title="文档型"></a>文档型</h3><ul><li>MongoDB</li></ul><p><a href="https://github.com/CyC2018/CS-Notes">【参考资料】GitHub-CyC2018&#x2F;CS-Notes</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;MySQL&quot;&gt;&lt;a href=&quot;#MySQL&quot; class=&quot;headerlink&quot; title=&quot;MySQL&quot;&gt;&lt;/a&gt;MySQL&lt;/h2&gt;&lt;h3 id=&quot;索引&quot;&gt;&lt;a href=&quot;#索引&quot; class=&quot;headerlink&quot; title=&quot;索引&quot;&gt;&lt;/a&gt;索</summary>
-      
-    
-    
-    
-    <category term="数据库" scheme="https://harryzhang.cn/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-    
-    <category term="MySQL" scheme="https://harryzhang.cn/tags/MySQL/"/>
-    
-    <category term="NoSQL" scheme="https://harryzhang.cn/tags/NoSQL/"/>
     
   </entry>
   
