@@ -1,6 +1,5 @@
-.github/
-.idea/
-public/
-.deploy_git/
-node_modules/
-db.json
+/public/
+/resources/_gen/
+/.hugo_build.lock
+/.DS_Store
+hexo/

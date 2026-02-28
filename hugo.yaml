@@ -1,0 +1,82 @@
+baseURL: "https://harryzhang.cn/"
+languageCode: "zh-cn"
+defaultContentLanguage: "zh-cn"
+title: "Harry 的个人空间"
+theme: "PaperMod"
+
+permalinks:
+  posts: "/:year/:month/:day/:title/"
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON # for Search
+
+taxonomies:
+  category: "categories"
+  tag: "tags"
+
+params:
+  env: "production"
+  author: "harry zhang"
+  description: "一个后端开发工程师的技术博客"
+  ShowReadingTime: true
+  ShowShareButtons: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+
+  fuseConfig:
+    isCaseSensitive: false
+    threshold: 0.4
+    location: 0
+    distance: 100
+    maxPatternLength: 32
+    minMatchCharLength: 1
+    keys: ["title", "permalink", "summary", "content"]
+
+  profileMode:
+    enabled: true
+    title: "Harry 的个人空间"
+    subtitle: "一个后端开发工程师的技术博客"
+    imageUrl: "https://lh3.googleusercontent.com/ogw/AOLn63EtZ-gMYkg5y48BXXmYCi916DjUz-4Apjq238_y=s64-c-mo"
+    imageWidth: 120
+    imageHeight: 120
+    imageTitle: "Avatar"
+    buttons:
+      - name: "文章列表"
+        url: "/posts/"
+      - name: "分类"
+        url: "/categories/"
+      - name: "标签"
+        url: "/tags/"
+      - name: "关于"
+        url: "/about/"
+
+menu:
+  main:
+    - identifier: "posts"
+      name: "文章"
+      url: "/posts/"
+      weight: 10
+    - identifier: "categories"
+      name: "分类"
+      url: "/categories/"
+      weight: 20
+    - identifier: "tags"
+      name: "标签"
+      url: "/tags/"
+      weight: 30
+    - identifier: "about"
+      name: "关于"
+      url: "/about/"
+      weight: 40
+    - identifier: "archives"
+      name: "归档"
+      url: "/archives/"
+      weight: 45
+    - identifier: "search"
+      name: "搜索"
+      url: "/search/"
+      weight: 50
