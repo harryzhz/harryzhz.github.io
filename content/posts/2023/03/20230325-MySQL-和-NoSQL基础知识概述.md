@@ -1,5 +1,6 @@
 ---
 title: MySQL 和 NoSQL基础知识概述
+slug: mysql-nosql-overview
 date: 2023-03-25 15:10:58
 categories:
 - 数据库

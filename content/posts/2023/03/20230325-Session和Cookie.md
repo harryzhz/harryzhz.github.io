@@ -1,5 +1,6 @@
 ---
 title: Session和Cookie
+slug: session-cookie
 date: 2023-03-25 14:43:05
 categories:
 - 计算机网络

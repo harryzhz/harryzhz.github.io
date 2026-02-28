@@ -1,5 +1,6 @@
 ---
 title: Linux 系统 I/O 模型及 select/poll/epoll 详解
+slug: linux-io-model-select-poll-epoll
 date: 2023-03-19 22:06:15
 categories:
 - 操作系统

@@ -1,5 +1,6 @@
 ---
 title: 什么是WebSocket？
+slug: websocket-intro
 date: 2023-03-25 14:42:47
 categories:
 - 计算机网络

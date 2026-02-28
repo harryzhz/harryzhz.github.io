@@ -1,5 +1,6 @@
 ---
 title: 依赖反转(DIP)原则在整洁架构中的应用
+slug: dip-in-clean-architecture
 date: 2023-07-19 22:47:52
 categories:
 - 架构设计

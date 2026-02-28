@@ -1,5 +1,6 @@
 ---
 title: VSCode 项目多窗口改为多 Tab 样式
+slug: vscode-multi-tab
 date: 2023-07-01 12:07:04
 categories:
 - 工具

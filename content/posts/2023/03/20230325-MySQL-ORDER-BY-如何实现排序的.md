@@ -1,5 +1,6 @@
 ---
 title: MySQL ORDER BY 如何实现排序的?
+slug: mysql-order-by-sorting
 date: 2023-03-25 15:12:42
 categories:
 - 数据库

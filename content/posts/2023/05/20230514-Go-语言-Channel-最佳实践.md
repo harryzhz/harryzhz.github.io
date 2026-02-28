@@ -1,5 +1,6 @@
 ---
 title: Go 语言 Channel 最佳实践
+slug: go-channel-best-practices
 date: 2023-05-14 17:31:52
 categories:
 - Golang

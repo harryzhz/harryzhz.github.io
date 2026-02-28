@@ -1,5 +1,6 @@
 ---
 title: 'Go 实战: 基于Thrift框架的 RPC 服务 Demo'
+slug: go-thrift-rpc-demo
 date: 2023-03-25 15:40:58
 categories:
 - Golang
