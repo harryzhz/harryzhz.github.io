@@ -5,7 +5,7 @@ title: "Harry 的个人空间"
 theme: "PaperMod"
 
 permalinks:
-  posts: "/:year/:month/:day/:title/"
+  posts: "/:year/:month/:day/:slug/"
 
 outputs:
   home:
@@ -44,15 +44,6 @@ params:
     imageWidth: 120
     imageHeight: 120
     imageTitle: "Avatar"
-    buttons:
-      - name: "文章列表"
-        url: "/posts/"
-      - name: "分类"
-        url: "/categories/"
-      - name: "标签"
-        url: "/tags/"
-      - name: "关于"
-        url: "/about/"
 
 menu:
   main:

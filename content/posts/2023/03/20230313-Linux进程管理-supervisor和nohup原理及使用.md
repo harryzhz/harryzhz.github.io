@@ -1,5 +1,6 @@
 ---
 title: 'Linux进程管理:supervisor和nohup原理及使用'
+slug: linux-process-management-supervisor-nohup
 date: 2023-03-13 08:49:37
 categories:
 - 操作系统
