@@ -32,6 +32,6 @@ tags:
 ![](vscode-setting-native-tab.png)
 
 4. 重启后效果窗口效果变成如下样式
-![](macos-multi-tab.png)
+![](vscode-multi-tab.png)
 
 至此即可通过开关「Native Tab」设置切换 VS Code 的窗口样式。

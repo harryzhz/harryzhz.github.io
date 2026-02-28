@@ -2,7 +2,8 @@ baseURL: "https://harryzhang.cn/"
 languageCode: "zh-cn"
 defaultContentLanguage: "zh-cn"
 title: "Harry 的个人空间"
-theme: "PaperMod"
+theme: "hugo-theme-stack"
+hasCJKLanguage: true
 
 permalinks:
   posts: "/:year/:month/:day/:slug/"
@@ -11,39 +12,47 @@ outputs:
   home:
     - HTML
     - RSS
-    - JSON # for Search
 
 taxonomies:
   category: "categories"
   tag: "tags"
 
 params:
-  env: "production"
-  author: "harry zhang"
   description: "一个后端开发工程师的技术博客"
-  ShowReadingTime: true
-  ShowShareButtons: true
-  ShowPostNavLinks: true
-  ShowBreadCrumbs: true
-  ShowCodeCopyButtons: true
+  mainSections:
+    - "posts"
+  rssFullContent: true
 
-  fuseConfig:
-    isCaseSensitive: false
-    threshold: 0.4
-    location: 0
-    distance: 100
-    maxPatternLength: 32
-    minMatchCharLength: 1
-    keys: ["title", "permalink", "summary", "content"]
-
-  profileMode:
-    enabled: true
-    title: "Harry 的个人空间"
+  sidebar:
+    emoji: "👨‍💻"
     subtitle: "一个后端开发工程师的技术博客"
-    imageUrl: "https://lh3.googleusercontent.com/ogw/AOLn63EtZ-gMYkg5y48BXXmYCi916DjUz-4Apjq238_y=s64-c-mo"
-    imageWidth: 120
-    imageHeight: 120
-    imageTitle: "Avatar"
+    avatar: "https://lh3.googleusercontent.com/ogw/AOLn63EtZ-gMYkg5y48BXXmYCi916DjUz-4Apjq238_y=s64-c-mo"
+
+  article:
+    toc: true
+    readingTime: true
+
+  widgets:
+    homepage:
+      - type: "search"
+      - type: "archives"
+        params:
+          limit: 5
+      - type: "categories"
+        params:
+          limit: 10
+      - type: "tag-cloud"
+        params:
+          limit: 10
+    page:
+      - type: "toc"
+
+  colorScheme:
+    toggle: true
+    default: "auto"
+
+pagination:
+  pagerSize: 5
 
 menu:
   main:
