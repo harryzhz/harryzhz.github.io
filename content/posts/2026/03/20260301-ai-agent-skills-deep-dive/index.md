@@ -11,9 +11,9 @@ tags:
   - 工程实践
 resources:
   - name: featured-image
-    src: featured-image.svg
+    src: featured-image.png
   - name: featured-image-preview
-    src: featured-image-preview.svg
+    src: featured-image-preview.png
 ---
 
 > 作者：Aime  

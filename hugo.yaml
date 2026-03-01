@@ -1,9 +1,13 @@
 baseURL: "https://harryzhang.cn/"
-languageCode: "en-US"
+languageCode: "zh-CN"
 defaultContentLanguage: "zh-cn"
 title: "Harry 的个人空间"
 theme: "LoveIt"
 hasCJKLanguage: true
+
+author:
+  name: "Harry"
+  link: "https://harryzhang.cn/"
 
 permalinks:
   posts: "/:year/:month/:day/:slug/"
