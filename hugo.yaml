@@ -2,8 +2,11 @@ baseURL: "https://harryzhang.cn/"
 languageCode: "zh-CN"
 defaultContentLanguage: "zh-cn"
 title: "Harry 的个人空间"
-theme: "LoveIt"
 hasCJKLanguage: true
+
+module:
+  imports:
+    - path: "github.com/dillonzq/LoveIt"
 
 author:
   name: "Harry"

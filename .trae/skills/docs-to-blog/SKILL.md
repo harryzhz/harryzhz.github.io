@@ -18,17 +18,17 @@ description: "Converts Feishu/Lark doc content into Hugo blog posts with proper 
 1. 读取飞书文档内容，提取标题、摘要与结构层级。
 2. 将内容整理为 Markdown，替换 HTML 标签与冗余样式。
 3. 为每篇文章生成 Hugo Page Bundle：
-    - 目录：`content/posts/YYYY/MM/YYYYMMDD-简短主题英文slug/`
-    - 文件：`index.md`
+   - 目录：`content/posts/YYYY/MM/YYYYMMDD-简短主题英文slug/`
+   - 文件：`index.md`
 4. 生成 front matter，字段参考已有文章：
-    - `title`
-    - `slug`
-    - `date`
-    - `categories`
-    - `tags`
+   - `title`
+   - `slug`
+   - `date`
+   - `categories`
+   - `tags`
 5. 添加封面图资源：
-    - `resources` 中声明 `featured-image` 与 `featured-image-preview`
-    - 在同目录创建 `featured-image.svg` 与 `featured-image-preview.svg`
+   - `resources` 中声明 `featured-image` 与 `featured-image-preview`
+   - 在同目录创建 `featured-image.png` 与 `featured-image-preview.png`
 6. 把清洗后的 Markdown 内容写入 `index.md` 正文。
 7. 如需验证，执行 `hugo` 或站点构建命令，确认无报错。
 
@@ -47,14 +47,14 @@ title: 示例标题
 slug: example-slug
 date: 2026-03-01 10:00:00
 categories:
-- AI
+  - AI
 tags:
   - AI Agent
   - LLM
 resources:
   - name: featured-image
-    src: featured-image.svg
+    src: featured-image.png
   - name: featured-image-preview
-    src: featured-image-preview.svg
+    src: featured-image-preview.png
 ---
 ```
