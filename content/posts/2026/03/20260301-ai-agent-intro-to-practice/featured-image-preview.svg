@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="940" cy="120" r="170" fill="#22d3ee" opacity="0.2"/>
+  <circle cx="220" cy="520" r="200" fill="#38bdf8" opacity="0.18"/>
+  <text x="90" y="300" fill="#ffffff" font-size="52" font-family="PingFang SC, Helvetica, Arial, sans-serif" font-weight="600">AI Agent 从入门到实践</text>
+  <text x="90" y="370" fill="#cbd5f5" font-size="26" font-family="PingFang SC, Helvetica, Arial, sans-serif">感知 · 规划 · 行动</text>
+</svg>

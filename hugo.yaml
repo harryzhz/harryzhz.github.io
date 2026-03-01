@@ -1,8 +1,8 @@
 baseURL: "https://harryzhang.cn/"
-languageCode: "zh-cn"
+languageCode: "en-US"
 defaultContentLanguage: "zh-cn"
 title: "Harry 的个人空间"
-theme: "hugo-theme-stack"
+theme: "LoveIt"
 hasCJKLanguage: true
 
 permalinks:
@@ -12,71 +12,91 @@ outputs:
   home:
     - HTML
     - RSS
+    - JSON
+  page:
+    - HTML
+  section:
+    - HTML
+    - RSS
+  taxonomy:
+    - HTML
+    - RSS
 
 taxonomies:
   category: "categories"
   tag: "tags"
 
 params:
+  title: "Harry 的个人空间"
   description: "一个后端开发工程师的技术博客"
-  mainSections:
-    - "posts"
-  rssFullContent: true
+  dateFormat: "2006-01-02"
 
-  sidebar:
-    emoji: "👨‍💻"
-    subtitle: "一个后端开发工程师的技术博客"
-    avatar: "https://lh3.googleusercontent.com/ogw/AOLn63EtZ-gMYkg5y48BXXmYCi916DjUz-4Apjq238_y=s64-c-mo"
+  author:
+    name: "Harry"
 
-  article:
-    toc: true
-    readingTime: true
+  header:
+    desktopMode: "fixed"
+    mobileMode: "auto"
+    title:
+      logo: ""
+      name: "Harry"
+      pre: "<i class='far fa-kiss-wink-heart' aria-hidden='true'></i>"
+      post: ""
+      typeit: false
 
-  widgets:
-    homepage:
-      - type: "search"
-      - type: "archives"
-        params:
-          limit: 5
-      - type: "categories"
-        params:
-          limit: 10
-      - type: "tag-cloud"
-        params:
-          limit: 10
-    page:
-      - type: "toc"
+  footer:
+    enable: true
+    custom: ""
+    hugo: true
+    copyright: true
+    author: true
 
-  colorScheme:
-    toggle: true
-    default: "auto"
+  home:
+    rss: 10
+    profile:
+      enable: true
+      gravatarEmail: ""
+      avatarURL: "/assets/images/avatar.jpeg"
+      title: "Harry"
+      subtitle: "一个后端开发工程师的技术博客"
+      typeit: true
+      social: true
+      disclaimer: ""
+    posts:
+      enable: true
+      paginate: 6
+
+  search:
+    enable: true
+    type: "lunr"
+    contentLength: 4000
+    placeholder: "搜索"
+    maxResultLength: 10
+    snippetLength: 30
+    highlightTag: "em"
+    absoluteURL: false
+
+  social:
+    GitHub: "harryzhz"
 
 pagination:
-  pagerSize: 5
+  pagerSize: 10
 
 menu:
   main:
     - identifier: "posts"
-      name: "文章"
+      name: "Posts"
       url: "/posts/"
       weight: 10
     - identifier: "categories"
-      name: "分类"
+      name: "Categories"
       url: "/categories/"
       weight: 20
     - identifier: "tags"
-      name: "标签"
+      name: "Tags"
       url: "/tags/"
       weight: 30
     - identifier: "about"
-      name: "关于"
+      name: "About"
       url: "/about/"
       weight: 40
-    - identifier: "archives"
-      name: "归档"
-      url: "/archives/"
-      weight: 45
-    - identifier: "search"
-      name: "搜索"
-      url: "/search/"
-      weight: 50
