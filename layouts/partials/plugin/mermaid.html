@@ -1,0 +1,47 @@
+{{- $id := printf "mermaid-%d" now.UnixNano -}}
+{{- if not (.Page.Scratch.Get "customMermaidLoaded") -}}
+  {{- .Page.Scratch.Set "customMermaidLoaded" true -}}
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+    const getTheme = () =>
+      document.body?.getAttribute('theme') === 'dark' ? 'dark' : 'default';
+
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: 'loose',
+      theme: getTheme(),
+    });
+
+    const renderMermaid = async () => {
+      const nodes = document.querySelectorAll('.mermaid');
+
+      for (const node of nodes) {
+        if (node.dataset.mermaidRendered === 'true') {
+          continue;
+        }
+
+        const sourceNode = node.querySelector('.mermaid-source');
+        const source = sourceNode?.textContent?.trim();
+        if (!source) {
+          continue;
+        }
+
+        try {
+          node.textContent = source;
+          await mermaid.run({ nodes: [node] });
+          node.dataset.mermaidRendered = 'true';
+        } catch (error) {
+          node.innerHTML = `<pre>${source}</pre>`;
+          node.dataset.mermaidRendered = 'error';
+          console.error('Mermaid render failed:', error);
+        }
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', renderMermaid);
+  </script>
+{{- end -}}
+<div class="mermaid" id="{{ $id }}">
+  <pre class="mermaid-source" hidden>{{- .Content -}}</pre>
+</div>
