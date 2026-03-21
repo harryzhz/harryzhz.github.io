@@ -11,9 +11,9 @@ tags:
   - Developer Productivity
 resources:
   - name: featured-image
-    src: featured-image.png
+    src: featured-image.webp
   - name: featured-image-preview
-    src: featured-image-preview.png
+    src: featured-image-preview.webp
 draft: false
 ---
 

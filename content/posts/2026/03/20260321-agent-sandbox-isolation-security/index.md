@@ -12,9 +12,9 @@ tags:
   - 工程实践
 resources:
   - name: featured-image
-    src: featured-image.png
+    src: featured-image.webp
   - name: featured-image-preview
-    src: featured-image-preview.png
+    src: featured-image-preview.webp
 draft: false
 ---
 
