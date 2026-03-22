@@ -1,0 +1,257 @@
+{{- partial "init.html" . -}}
+
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>{{ .Title }} - {{ .Site.Title }}</title>
+        {{- partial "head/meta.html" . -}}
+        {{- partial "head/link.html" . -}}
+        {{- partial "head/seo.html" . -}}
+        <style>
+          .about-wrap {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 2rem 1rem 4rem;
+            font-size: 1rem;
+            line-height: 1.8;
+          }
+          .about-profile {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 2rem;
+            border-radius: 12px;
+            background: rgba(128, 128, 128, 0.06);
+            border: 1px solid rgba(128, 128, 128, 0.12);
+          }
+          .about-avatar {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 3px solid rgba(128, 128, 128, 0.2);
+          }
+          .about-identity h1 {
+            margin: 0 0 0.25rem;
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            border: none;
+            padding: 0;
+          }
+          .about-identity p {
+            margin: 0 0 0.75rem;
+            opacity: 0.65;
+            font-size: 0.9rem;
+          }
+          .about-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+          }
+          .about-tag {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.65rem;
+            border-radius: 20px;
+            background: rgba(128, 128, 128, 0.12);
+            opacity: 0.8;
+            font-family: monospace;
+          }
+          .about-quote {
+            margin: 2rem 0;
+            padding: 1rem 1.5rem;
+            border-left: 3px solid rgba(128, 128, 128, 0.4);
+            border-radius: 0 8px 8px 0;
+            background: rgba(128, 128, 128, 0.04);
+          }
+          .about-quote p {
+            margin: 0 0 0.4rem;
+            font-style: italic;
+            font-size: 1.05rem;
+            opacity: 0.9;
+          }
+          .about-quote cite {
+            font-size: 0.8rem;
+            opacity: 0.5;
+            font-style: normal;
+          }
+          .about-section {
+            margin-bottom: 2.5rem;
+          }
+          .about-section h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            opacity: 0.45;
+            margin: 0 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(128, 128, 128, 0.15);
+          }
+          .about-section p {
+            margin: 0 0 0.85rem;
+            opacity: 0.88;
+          }
+          .about-focus-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+          }
+          .about-focus-card {
+            padding: 1rem 1.2rem;
+            border-radius: 10px;
+            background: rgba(128, 128, 128, 0.06);
+            border: 1px solid rgba(128, 128, 128, 0.1);
+            transition: border-color 0.2s;
+          }
+          .about-focus-card:hover {
+            border-color: rgba(128, 128, 128, 0.3);
+          }
+          .about-focus-card strong {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 0.35rem;
+          }
+          .about-focus-card span {
+            font-size: 0.8rem;
+            opacity: 0.6;
+          }
+          .about-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+          }
+          .about-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.9rem;
+            padding: 0.4rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(128, 128, 128, 0.2);
+            text-decoration: none;
+            opacity: 0.75;
+            transition: opacity 0.2s, border-color 0.2s;
+          }
+          .about-link:hover {
+            opacity: 1;
+            border-color: rgba(128, 128, 128, 0.45);
+            text-decoration: none;
+          }
+          @media (max-width: 520px) {
+            .about-profile { flex-direction: column; text-align: center; }
+            .about-tags { justify-content: center; }
+          }
+        </style>
+    </head>
+    <body data-header-desktop="{{ .Site.Params.header.desktopMode }}" data-header-mobile="{{ .Site.Params.header.mobileMode }}">
+        {{- $theme := .Site.Params.defaulttheme -}}
+        <script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || '{{ $theme }}';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div>
+        <div class="wrapper">
+            {{- partial "header.html" . -}}
+            <main class="main">
+                <div class="container">
+                  <article class="about-wrap">
+
+                    <div class="about-profile">
+                      <img class="about-avatar" src="/assets/images/avatar.jpeg" alt="Harry">
+                      <div class="about-identity">
+                        <h1>Harry</h1>
+                        <p>华中科技大学 · 后端工程师 → 全栈 → AI Agent</p>
+                        <div class="about-tags">
+                          <span class="about-tag">Go</span>
+                          <span class="about-tag">分布式系统</span>
+                          <span class="about-tag">AI Agent</span>
+                          <span class="about-tag">《三体》迷</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="about-quote">
+                      <p>给岁月以文明，而不是给文明以岁月。</p>
+                      <cite>—《三体·死神永生》</cite>
+                    </div>
+
+                    <div class="about-section">
+                      <h2>关于我</h2>
+                      <p>入行以来一直做后端，写过的服务从单机跑到分布式，也见过系统在流量洪峰前扛住又崩掉的瞬间。这些经历让我相信：好的系统不只是跑得快，而是在混乱中依然可预期——就像三体世界里，真正的生存策略从来不是靠蛮力，而是靠对规律的深刻理解。</p>
+                      <p>近几年开始转向全栈，不再把前后端当成两个世界，而是把它们看作同一个用户体验的不同切面。</p>
+                      <p>当下最让我着迷的方向是 <strong>AI Agent</strong> —— 不是把 LLM 嵌进代码里当个聪明的补全工具，而是让模型真正学会拆解任务、调用工具、从反馈中修正自己。</p>
+                      <p>我对"把事情做对"有一种执念，也喜欢把复杂的系统讲得让人听懂。这个博客是我思考的外化，也是我与同道中人对话的地方。</p>
+                    </div>
+
+                    <div class="about-section">
+                      <h2>关注方向</h2>
+                      <div class="about-focus-grid">
+                        <div class="about-focus-card">
+                          <strong>后端与分布式系统</strong>
+                          <span>高并发、微服务治理、可观测性</span>
+                        </div>
+                        <div class="about-focus-card">
+                          <strong>全栈工程</strong>
+                          <span>从数据层到用户界面，端到端地思考问题</span>
+                        </div>
+                        <div class="about-focus-card">
+                          <strong>AI Agent</strong>
+                          <span>多步推理、工具调用、框架设计与工程落地</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="about-section">
+                      <h2>此刻在做什么</h2>
+                      <p>当下的 AI 竞争格局有几分《三体》里黑暗森林的意味——每个模型都在快速进化，谁也无法确定下一个"猎人"从哪里冒出来。在这种环境下，我认为把精力放在如何让 Agent 在真实的复杂任务中稳定、可靠地工作，沉淀不会被模型提升所淘汰的复利工程才是关键。</p>
+                      <p>近期沉迷 Vibe Coding，被 Claude Code 叹服——原来"让机器干活，人来把方向"这件事，已经可以做到这种程度了。</p>
+                    </div>
+
+                    <div class="about-section">
+                      <h2>欢迎交流</h2>
+                      <div class="about-links">
+                        <a class="about-link" href="https://github.com/harryzhz" target="_blank" rel="noopener">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                          GitHub
+                        </a>
+                        <a class="about-link" href="https://harryzhang.cn" target="_blank" rel="noopener">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                          Blog
+                        </a>
+                      </div>
+                    </div>
+
+                  </article>
+                </div>
+            </main>
+            {{- partial "footer.html" . -}}
+        </div>
+
+        <div id="fixed-buttons">
+            <a href="#" id="back-to-top" class="fixed-button" title="{{ T `backToTop` }}">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+        <div id="fixed-buttons-hidden">
+            <a href="#" id="view-comments" class="fixed-button" title="{{ T `viewComments` }}">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        {{- partial "assets.html" . -}}
+    </body>
+</html>
