@@ -262,33 +262,45 @@ In short:
 - generic best practices can be retained, but they must not replace tool-specific substance
 - if a reader finishes the article without learning how to use the named tool better, the draft is incomplete
 
-## Blog Formatting Rules
+## References and Citations
 
-- Every post must begin with valid front matter.
-- Front matter should follow the repository’s existing blog pattern.
-- At minimum, include:
-  - `title`
-  - `slug`
-  - `date`
-  - `categories`
-  - `tags`
-  - `resources` for cover images
-- Use [archetypes/post-front-matter.md](/Users/bytedance/Workspace/gits/harryzhz/harryzhz.github.io/archetypes/post-front-matter.md) as the front matter reference template.
-- Cover image resources should normally include:
-  - `featured-image`
-  - `featured-image-preview`
-- If creating a new post directory, ensure the matching cover image files exist and the resource names match the front matter exactly.
-- Use clear `##` and `###` heading hierarchy.
-- Avoid overly flat heading structures. If an article has a numbered series such as “最佳实践 1~7” or “技巧 1~10”, group them under a parent section instead of making every item a top-level `##` heading.
-- Prefer this pattern for long practical articles:
-  - `##` for major sections
-  - `###` for numbered practices / techniques
-  - `####` for examples, anti-patterns, templates, or local subpoints under one practice
-- Keep paragraphs reasonably short.
-- Prefer bullets for lists of criteria, pitfalls, or takeaways.
-- Prefer tables for structured comparison.
-- Prefer fenced code blocks with language identifiers.
-- Use Mermaid blocks for architecture and flow diagrams when useful.
+Every technical blog post must include a "延伸阅读" or "参考文献" section at the end, listing the primary sources that informed the article.
+
+### Requirements
+
+- Include at least 2–5 references for a typical article.
+- Every reference must be a clickable markdown link: `[title](url)`.
+- Links must point to real, verifiable URLs — official documentation, published papers, authoritative blog posts, or GitHub repositories.
+- Do not fabricate URLs. If you cannot verify a URL is valid, omit the link and note the source by name and author only.
+- Do not use placeholder or generic URLs (e.g., `https://example.com`).
+
+### What to cite
+
+- Official documentation or guides from the tool/framework being discussed.
+- Research papers (use arxiv.org, ACL Anthology, or publisher URLs).
+- Authoritative engineering blog posts (from the organization that built the technology).
+- GitHub repositories for open-source tools mentioned in the article.
+- Conference talks or recorded presentations, when relevant.
+
+### Format
+
+Use a bullet list at the end of the article:
+
+```markdown
+## 延伸阅读
+**以下内容仅作为示例，需要替换成实际的引用**：
+
+- [Building Effective Agents](https://www.anthropic.com/research/building-effective-agents) — Anthropic 官方 Agent 设计指南
+- [SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering](https://arxiv.org/abs/2405.15793) — ACI 概念的原始论文
+- [LangGraph Documentation](https://langchain-ai.github.io/langgraph/) — 图状态机 Agent 框架
+```
+
+### What NOT to do
+
+- Do not list references without URLs unless the URL genuinely cannot be found.
+- Do not cite sources you did not actually use or consult.
+- Do not include references purely for decoration — every citation should correspond to a claim or concept in the article.
+- Do not link to paywalled content without noting it.
 
 ## Quality Bar Before Finalizing
 
@@ -324,3 +336,31 @@ A finished article should make the reader feel:
 - “I could apply this in practice.”
 
 If the article does not achieve that, keep improving it.
+
+## Blog Formatting Rules
+
+- Every post must begin with valid front matter.
+- Front matter should follow the repository’s existing blog pattern.
+- At minimum, include:
+  - `title`
+  - `slug`
+  - `date`
+  - `categories`
+  - `tags`
+  - `resources` for cover images
+- Use [archetypes/post-front-matter.md](/Users/bytedance/Workspace/gits/harryzhz/harryzhz.github.io/archetypes/post-front-matter.md) as the front matter reference template.
+- Cover image resources should normally include:
+  - `featured-image`
+  - `featured-image-preview`
+- If creating a new post directory, ensure the matching cover image files exist and the resource names match the front matter exactly.
+- Use clear `##` and `###` heading hierarchy.
+- Avoid overly flat heading structures. If an article has a numbered series such as “最佳实践 1~7” or “技巧 1~10”, group them under a parent section instead of making every item a top-level `##` heading.
+- Prefer this pattern for long practical articles:
+  - `##` for major sections
+  - `###` for numbered practices / techniques
+  - `####` for examples, anti-patterns, templates, or local subpoints under one practice
+- Keep paragraphs reasonably short.
+- Prefer bullets for lists of criteria, pitfalls, or takeaways.
+- Prefer tables for structured comparison.
+- Prefer fenced code blocks with language identifiers.
+- Use Mermaid blocks for architecture and flow diagrams when useful.
