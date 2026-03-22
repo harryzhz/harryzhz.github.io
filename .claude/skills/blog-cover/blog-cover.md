@@ -1,6 +1,6 @@
 ---
 name: blog-cover
-description: 为博客文章生成深色科技风封面图，并将所有封面图压缩转换为 WebP 格式
+description: 为博客文章生成对应的封面图，并将所有封面图压缩转换为 WebP 格式，当博客内容创建完成时使用。
 user_invocable: true
 ---
 
@@ -27,7 +27,7 @@ user_invocable: true
 python3 .claude/skills/blog-cover/scripts/compress-covers.py
 
 # 仅处理指定文章目录
-python3 .claude/skills/blog-cover/scripts/compress-covers.py content/posts/2026/03/20260321-xxx/
+python3 .claude/skills/blog-cover/scripts/compress-covers.py content/posts/$year/$month/YYYYMMDD-xxx/
 ```
 
 脚本行为：
@@ -168,9 +168,9 @@ def generate_cover(post_dir: str, title: str, tags: list):
 
 ```python
 generate_cover(
-    post_dir="content/posts/2026/03/20260321-agent-sandbox-isolation-security",
-    title="Sandbox 在 AI Agent 中的应用",
-    tags=["AI Agent", "Sandbox", "安全隔离", "MicroVM"],
+    post_dir="content/posts/{blog_real_dir}",
+    title="{blog tilte}",
+    tags=["{tag1}", "{tag2}", ...],
 )
 ```
 
