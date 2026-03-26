@@ -1,7 +1,7 @@
 ---
 title: Claude Code 中把操作系统运用到极致的艺术
 slug: claude-code-os-art
-date: 2026-03-26 10:00:00
+date: 2026-03-26T00:00:00+08:00
 categories:
 - AI
 tags:
