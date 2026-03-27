@@ -1,5 +1,5 @@
 ---
-title: Claude Code 中把操作系统运用到极致的艺术
+title: 一切皆文件：Claude Code Agent 架构中的 Unix 内核
 slug: claude-code-os-art
 date: 2026-03-26T00:00:00+08:00
 categories:
