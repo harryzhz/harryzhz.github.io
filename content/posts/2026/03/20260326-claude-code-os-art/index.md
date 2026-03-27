@@ -33,7 +33,7 @@ draft: false
 
 ### 三条黄金法则
 
-1978 年，Doug McIlroy 在 Bell System Technical Journal 上写下了 Unix 哲学的三条核心法则：
+1978 年，Douglas McIlroy 在 Bell System Technical Journal 上写下了 Unix 哲学的三条核心法则：
 
 1. **Write programs that do one thing and do it well.**
 2. **Write programs to work together.**
