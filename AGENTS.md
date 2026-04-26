@@ -290,6 +290,15 @@ In short:
 - Prefer fenced code blocks with language identifiers.
 - Use Mermaid blocks for architecture and flow diagrams when useful.
 
+## Cover Image Rules
+
+- Every published post should include both `featured-image.webp` and `featured-image-preview.webp`.
+- Use `1200x630` for `featured-image.webp` and `800x420` for `featured-image-preview.webp`.
+- Technical blog covers should use text-free thematic visual metaphors rather than screenshots full of UI details.
+- Prefer a bright, clean, modern technical editorial style with enough visual distinction for the article topic.
+- Do not include readable text, company or product logos, watermarks, internal system screenshots, sensitive interfaces, or private data.
+- After generating or replacing cover images, verify image dimensions, front matter resource references, and a successful Hugo build.
+
 ## Quality Bar Before Finalizing
 
 Before considering a technical article done, verify:
