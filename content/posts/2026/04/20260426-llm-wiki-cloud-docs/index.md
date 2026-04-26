@@ -1,5 +1,5 @@
 ---
-title: "LLM Wiki：把一次性问答变成可积累的云文档知识库"
+title: "LLM Wiki by LarkDoc：把一次性问答变成可积累的云文档知识库"
 slug: llm-wiki-cloud-docs
 date: 2026-04-26T00:00:00+08:00
 categories:
