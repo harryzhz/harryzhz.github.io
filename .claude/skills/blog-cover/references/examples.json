@@ -1,0 +1,356 @@
+{
+  "_note": "2026 年各篇文章的封面 spec 记录。seed 固定为 slug，重跑可复现同一张图。新增文章时追加一条。",
+  "ai-agent-intro-to-practice": {
+    "bg": "sage",
+    "seed": "ai-agent-intro-to-practice",
+    "_meta": "入门到实践 → 阶梯 + 打圈上爬的线",
+    "ops": [
+      {
+        "m": "p_stairs",
+        "x": 24,
+        "y": 30,
+        "w": 54,
+        "h": 48,
+        "steps": 3
+      },
+      {
+        "m": "i_loopy",
+        "points": [
+          [
+            10,
+            56
+          ],
+          [
+            24,
+            44
+          ],
+          [
+            38,
+            36
+          ],
+          [
+            54,
+            22
+          ],
+          [
+            74,
+            10
+          ]
+        ],
+        "loops": 3,
+        "r": 5.5,
+        "w": 3.6
+      }
+    ]
+  },
+  "ai-agent-skills-deep-dive": {
+    "bg": "clay",
+    "seed": "ai-agent-skills-deep-dive",
+    "_meta": "可插拔的能力包 → 一叠卡片被“手”取用",
+    "ops": [
+      {
+        "m": "p_stack",
+        "x": 22,
+        "y": 34,
+        "w": 42,
+        "h": 34,
+        "n": 2,
+        "dx": 9,
+        "dy": 9
+      },
+      {
+        "m": "i_coil",
+        "x": 44,
+        "y": 12,
+        "w": 28,
+        "h": 26,
+        "loops": 4,
+        "tail": [
+          16,
+          -10
+        ],
+        "flip": true
+      }
+    ]
+  },
+  "claude-code-best-practices": {
+    "bg": "blue",
+    "seed": "claude-code-best-practices",
+    "_meta": "编码工作台 → 窗口 + </>",
+    "ops": [
+      {
+        "m": "p_rect",
+        "x": 18,
+        "y": 26,
+        "w": 54,
+        "h": 44
+      },
+      {
+        "m": "i_frame",
+        "x": 26,
+        "y": 34,
+        "w": 54,
+        "h": 44,
+        "sw": 3.4
+      },
+      {
+        "m": "i_chevrons",
+        "cx": 49,
+        "cy": 52,
+        "size": 14
+      }
+    ]
+  },
+  "agent-sandbox-isolation-security": {
+    "bg": "iris",
+    "seed": "agent-sandbox-isolation-security",
+    "_meta": "隔离与边界 → 边界框内的封闭盒子 + 锁孔",
+    "ops": [
+      {
+        "m": "p_square",
+        "x": 28,
+        "y": 28,
+        "size": 44
+      },
+      {
+        "m": "i_frame",
+        "x": 22,
+        "y": 22,
+        "w": 58,
+        "h": 58,
+        "sw": 3.2,
+        "over": 3
+      },
+      {
+        "m": "i_keyhole",
+        "cx": 50,
+        "cy": 46,
+        "r": 7,
+        "stem": 14
+      }
+    ]
+  },
+  "harness-engineering": {
+    "bg": "clay",
+    "seed": "harness-engineering",
+    "_meta": "把模型装进可控的工程外壳 → 方括号夹住内部的执行回路",
+    "ops": [
+      {
+        "m": "p_square",
+        "x": 32,
+        "y": 30,
+        "size": 36
+      },
+      {
+        "m": "i_bracket",
+        "x": 30,
+        "y": 22,
+        "h": 54,
+        "w_arm": 9,
+        "w_stroke": 3.6
+      },
+      {
+        "m": "i_bracket",
+        "x": 70,
+        "y": 22,
+        "h": 54,
+        "w_arm": 9,
+        "w_stroke": 3.6,
+        "flip": true
+      },
+      {
+        "m": "i_arrow",
+        "points": [
+          [
+            40,
+            42
+          ],
+          [
+            58,
+            40
+          ],
+          [
+            60,
+            54
+          ],
+          [
+            46,
+            60
+          ],
+          [
+            39,
+            51
+          ]
+        ],
+        "w": 3.2,
+        "head": 7
+      }
+    ]
+  },
+  "claude-code-os-art": {
+    "bg": "sage",
+    "seed": "claude-code-os-art",
+    "_meta": "一切皆文件 → 一份文件向外辐射出所有能力",
+    "ops": [
+      {
+        "m": "p_rect",
+        "x": 16,
+        "y": 28,
+        "w": 36,
+        "h": 46
+      },
+      {
+        "m": "i_scribble",
+        "x": 23,
+        "y": 42,
+        "w": 22,
+        "rows": 3,
+        "gap": 8,
+        "w_stroke": 2.8
+      },
+      {
+        "m": "i_burst",
+        "cx": 52,
+        "cy": 51,
+        "r": 26,
+        "n": 4,
+        "a0": -60,
+        "spread": 120,
+        "dot_r": 3.2,
+        "w": 3.2
+      }
+    ]
+  },
+  "multi-agent-ai-coding-workflow": {
+    "bg": "blue",
+    "seed": "multi-agent-ai-coding-workflow",
+    "_meta": "多个 Agent 协作 → 节点网络 + 手",
+    "ops": [
+      {
+        "m": "p_circle",
+        "cx": 28,
+        "cy": 28,
+        "r": 12
+      },
+      {
+        "m": "p_square",
+        "x": 54,
+        "y": 44,
+        "size": 28
+      },
+      {
+        "m": "i_nodes",
+        "points": [
+          [
+            28,
+            28
+          ],
+          [
+            64,
+            52
+          ]
+        ],
+        "r": 3.6
+      },
+      {
+        "m": "i_nodes",
+        "points": [
+          [
+            64,
+            52
+          ],
+          [
+            86,
+            28
+          ]
+        ],
+        "r": 3.6
+      },
+      {
+        "m": "i_coil",
+        "x": 16,
+        "y": 36,
+        "w": 26,
+        "h": 26,
+        "loops": 4,
+        "tail": [
+          -6,
+          16
+        ]
+      }
+    ]
+  },
+  "llm-wiki-cloud-docs": {
+    "bg": "iris",
+    "seed": "llm-wiki-cloud-docs",
+    "_meta": "一次性问答沉淀成知识库 → 散乱的螺旋收进层叠文档",
+    "ops": [
+      {
+        "m": "p_stack",
+        "x": 34,
+        "y": 30,
+        "w": 42,
+        "h": 38,
+        "n": 3,
+        "dx": 5,
+        "dy": 5
+      },
+      {
+        "m": "i_scribble",
+        "x": 41,
+        "y": 42,
+        "w": 28,
+        "rows": 3,
+        "gap": 8,
+        "w_stroke": 2.8
+      },
+      {
+        "m": "i_spiral",
+        "cx": 26,
+        "cy": 30,
+        "r0": 2,
+        "r1": 16,
+        "turns": 2.2,
+        "w": 3.4
+      }
+    ]
+  },
+  "claude-code-context-token-efficiency": {
+    "bg": "clay",
+    "seed": "claude-code-context-token-efficiency",
+    "_meta": "把 token 花在刀刃上 → 逐级下降的成本柱 + 下行箭头",
+    "ops": [
+      {
+        "m": "p_bars",
+        "x": 22,
+        "y": 30,
+        "w": 48,
+        "h": 46,
+        "heights": [
+          1.0,
+          0.66,
+          0.36
+        ]
+      },
+      {
+        "m": "i_arrow",
+        "points": [
+          [
+            16,
+            24
+          ],
+          [
+            46,
+            44
+          ],
+          [
+            78,
+            64
+          ]
+        ],
+        "w": 3.4,
+        "head": 9
+      }
+    ]
+  }
+}
