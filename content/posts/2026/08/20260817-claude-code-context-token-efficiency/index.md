@@ -65,21 +65,57 @@ draft: false
 
 ## Context 里到底装了什么
 
-理解了计价，第二步是理解 context 窗口的构成。每一次请求，Claude Code 发给模型的不只是你刚才打的那句话，而是整个前缀：
+理解了计价，第二步是理解 context 窗口的构成。每一次请求，Claude Code 发给模型的不只是你刚才打的那句话，而是整个前缀——而且这个前缀逐轮累积、只增不减：
 
-```mermaid
-flowchart TD
-    A[System Prompt + 工具定义] --> E[完整请求]
-    B[CLAUDE.md] --> E
-    C[MCP 工具清单] --> E
-    D[历史对话 全部轮次] --> E
-    E --> F{命中 Prompt Cache?}
-    F -- 是, 0.1x 价格 --> G[发送给模型]
-    F -- 否, 全价重算 --> G
-    G --> H[模型生成回复 + 工具调用]
-    H --> I[工具输出写回 context]
-    I --> D
-```
+<figure class="post-diagram">
+<svg viewBox="0 0 720 280" role="img" aria-label="同一会话连续三轮请求的输入构成：前缀逐轮累积，未变的部分缓存命中 0.1x，新增的工具输出全价计入">
+  <!-- 顶部段标签（基础前缀，三轮共有） -->
+  <g font-size="11" fill="currentColor" opacity="0.6" text-anchor="middle">
+    <text x="180" y="44">系统提示 + 工具定义</text>
+    <text x="286" y="44">CLAUDE.md</text>
+    <text x="356" y="44">消息</text>
+  </g>
+  <!-- 左侧行标签 -->
+  <g font-size="13" fill="currentColor" text-anchor="end">
+    <text x="100" y="77">第 1 轮</text>
+    <text x="100" y="145">第 2 轮</text>
+    <text x="100" y="213">第 3 轮</text>
+  </g>
+  <!-- 第 1 轮：基础前缀 -->
+  <g stroke="currentColor" stroke-opacity="0.25">
+    <rect x="116" y="56" width="128" height="32" rx="4" fill="#8b7ec8" fill-opacity="0.30"/>
+    <rect x="246" y="56" width="80" height="32" rx="4" fill="#8b7ec8" fill-opacity="0.30"/>
+    <rect x="328" y="56" width="56" height="32" rx="4" fill="#5b8dc9" fill-opacity="0.30"/>
+  </g>
+  <!-- 第 2 轮：基础前缀 + Read 读到的文件 -->
+  <g stroke="currentColor" stroke-opacity="0.25">
+    <rect x="116" y="124" width="128" height="32" rx="4" fill="#8b7ec8" fill-opacity="0.30"/>
+    <rect x="246" y="124" width="80" height="32" rx="4" fill="#8b7ec8" fill-opacity="0.30"/>
+    <rect x="328" y="124" width="56" height="32" rx="4" fill="#5b8dc9" fill-opacity="0.30"/>
+    <rect x="386" y="124" width="96" height="32" rx="4" fill="#5b8dc9" fill-opacity="0.30"/>
+  </g>
+  <text x="434" y="172" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.6">Read 读到的文件</text>
+  <!-- 第 3 轮：前两轮全部内容 + 测试日志 -->
+  <g stroke="currentColor" stroke-opacity="0.25">
+    <rect x="116" y="192" width="128" height="32" rx="4" fill="#8b7ec8" fill-opacity="0.30"/>
+    <rect x="246" y="192" width="80" height="32" rx="4" fill="#8b7ec8" fill-opacity="0.30"/>
+    <rect x="328" y="192" width="56" height="32" rx="4" fill="#5b8dc9" fill-opacity="0.30"/>
+    <rect x="386" y="192" width="96" height="32" rx="4" fill="#5b8dc9" fill-opacity="0.30"/>
+    <rect x="484" y="192" width="148" height="32" rx="4" fill="#e8a34c" fill-opacity="0.38"/>
+  </g>
+  <text x="558" y="213" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.75">测试日志（全量）</text>
+  <!-- 第 3 轮的计价标注 -->
+  <g stroke="currentColor" stroke-opacity="0.35" fill="none">
+    <polyline points="116,236 116,244 482,244 482,236" stroke-dasharray="3 3"/>
+    <polyline points="486,236 486,244 632,244 632,236"/>
+  </g>
+  <g font-size="11" font-style="italic" fill="currentColor" opacity="0.6" text-anchor="middle">
+    <text x="299" y="262">前缀与上一轮相同：缓存命中，0.1x</text>
+    <text x="559" y="262">本轮新增：全价</text>
+  </g>
+</svg>
+<figcaption>同一会话内连续三轮请求的输入构成：工具输出一旦写入 context，就成为后续每一轮的固定成本。</figcaption>
+</figure>
 
 几个容易被忽视的细节：
 
@@ -214,12 +250,37 @@ fi
 
 如果只能优化一件事，应该先看哪个？官方建议的优先级顺序，本质上是按"对总成本的边际影响"从大到小排列：
 
-```mermaid
-flowchart LR
-    A[会话长度 / Context 累积] --> B[模型与 Effort 是否稳定]
-    B --> C[文件读取方式]
-    C --> D[命令输出体积]
-```
+<figure class="post-diagram">
+<svg viewBox="0 0 720 120" role="img" aria-label="成本排查优先级：会话长度、模型与 Effort 稳定性、文件读取方式、命令输出体积，边际影响从大到小">
+  <defs>
+    <marker id="arrow-p" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
+  <!-- 方向标注 -->
+  <text x="356" y="16" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">对总成本的边际影响：从大到小</text>
+  <line x1="24" y1="26" x2="688" y2="26" stroke="currentColor" stroke-opacity="0.35" stroke-width="1" marker-end="url(#arrow-p)"/>
+  <!-- 优先级链条：颜色深浅对应影响大小 -->
+  <g stroke="currentColor" stroke-opacity="0.25">
+    <rect x="24" y="48" width="140" height="36" rx="6" fill="#d97757" fill-opacity="0.32"/>
+    <rect x="200" y="48" width="140" height="36" rx="6" fill="#e8a34c" fill-opacity="0.38"/>
+    <rect x="376" y="48" width="140" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30"/>
+    <rect x="552" y="48" width="140" height="36" rx="6" fill="currentColor" fill-opacity="0.07"/>
+  </g>
+  <g font-size="13" fill="currentColor" text-anchor="middle">
+    <text x="94" y="71">会话长度与累积</text>
+    <text x="270" y="71">模型与 Effort</text>
+    <text x="446" y="71">文件读取方式</text>
+    <text x="622" y="71">命令输出体积</text>
+  </g>
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="164" y1="66" x2="194" y2="66" marker-end="url(#arrow-p)"/>
+    <line x1="340" y1="66" x2="370" y2="66" marker-end="url(#arrow-p)"/>
+    <line x1="516" y1="66" x2="546" y2="66" marker-end="url(#arrow-p)"/>
+  </g>
+</svg>
+<figcaption>排查顺序：先看会话生命周期，再看模型与 effort 是否稳定，最后才是单条命令的输出细节。</figcaption>
+</figure>
 
 - **第一位是会话长度**：一个开了一整天、塞满无关任务的会话，是最大的隐性成本来源，`/clear`、`/rename`、按任务拆分会话，收益最直接。
 - **第二位是模型与 effort 的稳定性**：避免中途切换打断缓存，收益是即时且确定的。

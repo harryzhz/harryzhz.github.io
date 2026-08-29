@@ -630,15 +630,47 @@ while true:
 
 Context window 是 LLM Agent 最稀缺的资源，类比操作系统中的物理内存（RAM）。Claude Code 的 context 管理策略几乎完整复刻了虚拟内存系统：
 
-```mermaid
-graph LR
-    A[Context Window<br/>200K-1M tokens] -->|热数据| B[最近的对话轮次]
-    A -->|温数据| C[早期对话被压缩]
-    A -->|冷数据| D[会话文件<br/>JSONL on disk]
+<figure class="post-diagram">
+<svg viewBox="0 0 640 248" role="img" aria-label="Context window 的三级换出：最近轮次原样常驻、早期对话压缩为摘要、完整历史只留在磁盘的 jsonl 文件里">
+  <defs>
+    <marker id="arrow-1" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
 
-    E["/compact 命令"] -->|主动触发| C
-    F["自动压缩<br/>~33K tokens 阈值"] -->|被动触发| C
-```
+  <rect x="144" y="32" width="328" height="136" rx="8" fill="none"
+        stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="4 4"/>
+  <text x="472" y="24" text-anchor="end" font-size="11" font-style="italic"
+        fill="currentColor" opacity="0.6">Context window（≈ RAM）</text>
+
+  <!-- 热：常驻 -->
+  <text x="136" y="73" text-anchor="end" font-size="13" fill="currentColor">常驻</text>
+  <rect x="152" y="48" width="312" height="40" rx="6" fill="#e8a34c" fill-opacity="0.38" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="308" y="73" text-anchor="middle" font-size="13" fill="currentColor">最近若干轮对话</text>
+  <text x="488" y="73" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">≈ 常驻内存页</text>
+
+  <!-- 温：压缩 -->
+  <text x="136" y="145" text-anchor="end" font-size="13" fill="currentColor">压缩</text>
+  <rect x="152" y="120" width="312" height="40" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="308" y="145" text-anchor="middle" font-size="13" fill="currentColor">早期对话的摘要</text>
+  <text x="488" y="145" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">≈ 压缩 page cache</text>
+
+  <!-- 冷：落盘 -->
+  <text x="136" y="217" text-anchor="end" font-size="13" fill="currentColor">落盘</text>
+  <rect x="152" y="192" width="312" height="40" rx="6" fill="#8b7ec8" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="308" y="217" text-anchor="middle" font-size="13" fill="currentColor">session.jsonl · 完整历史</text>
+  <text x="488" y="217" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">≈ swap 换出</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="216" y1="88"  x2="216" y2="116" marker-end="url(#arrow-1)"/>
+    <line x1="216" y1="160" x2="216" y2="188" marker-end="url(#arrow-1)"/>
+  </g>
+  <text x="232" y="101" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">轮次变旧，自动压缩</text>
+  <text x="232" y="113" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">（剩余 ≈33K 缓冲时触发，或 /compact）</text>
+  <text x="232" y="178" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">退出 context，只剩磁盘上的行</text>
+</svg>
+<figcaption>换出是单向的：轮次越旧，在 context 里占的位置越少，最后只剩 jsonl 文件里的原始记录。Agent 感觉自己有无限工作记忆，靠的是这条压缩链而不是更大的窗口。</figcaption>
+</figure>
 
 具体机制：
 
@@ -653,17 +685,47 @@ graph LR
 
 通过 `Agent` 工具生成子 Agent，每个子 Agent 获得独立的 context window（200K-1M tokens）：
 
-```mermaid
-sequenceDiagram
-    participant Parent as 父 Agent
-    participant Child as 子 Agent
+<figure class="post-diagram">
+<svg viewBox="0 0 720 272" role="img" aria-label="子 Agent 在独立 context window 中跑完多轮工具调用，只把结果摘要回传给父 Agent，中间的工具输出不进入父 context">
+  <defs>
+    <marker id="arrow-2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
 
-    Parent->>Child: Agent(prompt="研究认证方案")
-    Note over Child: 独立 context window<br/>继承父 Agent 的 prompt
-    Child->>Child: Grep → Read → Read → ...
-    Child-->>Parent: 压缩后的结果返回
-    Note over Parent: 继续在自己的 context 中工作
-```
+  <rect x="240" y="32" width="336" height="192" rx="8" fill="none"
+        stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="4 4"/>
+  <text x="576" y="24" text-anchor="end" font-size="11" font-style="italic"
+        fill="currentColor" opacity="0.6">子 Agent · 独立 context window</text>
+
+  <rect x="24" y="56" width="136" height="36" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="92" y="79" text-anchor="middle" font-size="13" fill="currentColor">父 Agent</text>
+
+  <rect x="264" y="56" width="136" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="332" y="79" text-anchor="middle" font-size="13" fill="currentColor">继承 prompt 描述</text>
+
+  <rect x="264" y="112" width="288" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="408" y="135" text-anchor="middle" font-size="13" fill="currentColor">工具循环：Grep → Read → Edit</text>
+
+  <rect x="416" y="168" width="136" height="36" rx="6" fill="#e8a34c" fill-opacity="0.38" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="484" y="191" text-anchor="middle" font-size="13" fill="currentColor">结果摘要</text>
+
+  <text x="328" y="190" text-anchor="middle" font-size="11" font-style="italic"
+        fill="currentColor" opacity="0.6">禁止二次派生</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="160" y1="74" x2="236" y2="74" marker-end="url(#arrow-2)"/>
+    <line x1="332" y1="92" x2="332" y2="108" marker-end="url(#arrow-2)"/>
+    <line x1="484" y1="148" x2="484" y2="164" marker-end="url(#arrow-2)"/>
+    <polyline points="552,186 600,186 600,248 92,248 92,96" marker-end="url(#arrow-2)"/>
+  </g>
+  <text x="198" y="66" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">派生</text>
+  <text x="344" y="104" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">全新 context</text>
+  <text x="472" y="160" text-anchor="end" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">收敛为摘要</text>
+  <text x="340" y="244" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">只回传摘要，几十轮工具输出留在子 context 里</text>
+</svg>
+<figcaption>要看的是最下面那条回传边：子 Agent 烧掉的 token 全部留在它自己的地址空间里，父 Agent 只收到一份摘要。这也是单层派生限制的理由——允许递归就等于允许 fork bomb。</figcaption>
+</figure>
 
 子 Agent 的行为几乎完美映射 Unix 的 `fork()`：
 
@@ -706,25 +768,49 @@ Git worktree：Agent 看到独立的工作目录，但共享底层 .git 仓库
 
 Agent Teams 是 Claude Code 最复杂的多 Agent 协调机制，但它的实现惊人地简单——完全基于文件系统。
 
-```mermaid
-sequenceDiagram
-    participant L as Leader Agent
-    participant FS as 文件系统
-    participant A as Teammate A
-    participant B as Teammate B
+<figure class="post-diagram">
+<svg viewBox="0 0 720 288" role="img" aria-label="Leader 与 Teammate 之间除了最初的派生没有任何直接通道，任务认领和消息传递都退化为对 tasks 与 inboxes 文件的写入和轮询">
+  <defs>
+    <marker id="arrow-3" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
 
-    L->>FS: TeamCreate → mkdir teams/frontend/
-    L->>A: Agent(prompt="实现登录页面")
-    L->>B: Agent(prompt="实现 API 认证")
-    L->>FS: TaskCreate → write tasks/frontend/task-001.json
-    L->>FS: TaskCreate → write tasks/frontend/task-002.json
-    A->>FS: TaskUpdate → 认领 task-001
-    B->>FS: TaskUpdate → 认领 task-002
-    L->>FS: SendMessage → append to inboxes/teammate-a.json
-    A->>FS: 轮询 inbox → 读取新消息
-    A->>FS: TaskUpdate → task-001 完成
-    B->>FS: TaskUpdate → task-002 完成
-```
+  <rect x="24" y="48" width="160" height="44" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="104" y="76" text-anchor="middle" font-size="13" fill="currentColor">Leader Agent</text>
+
+  <rect x="536" y="48" width="160" height="44" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="616" y="76" text-anchor="middle" font-size="13" fill="currentColor">Teammate Agent</text>
+
+  <rect x="232" y="128" width="256" height="136" rx="8" fill="none"
+        stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="4 4"/>
+  <text x="488" y="120" text-anchor="end" font-size="11" font-style="italic"
+        fill="currentColor" opacity="0.6">~/.claude/ 下的普通文件</text>
+
+  <rect x="256" y="152" width="208" height="40" rx="6" fill="#8b7ec8" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="177" text-anchor="middle" font-size="12" fill="currentColor">tasks/task-*.json</text>
+
+  <rect x="256" y="208" width="208" height="40" rx="6" fill="#8b7ec8" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="233" text-anchor="middle" font-size="12" fill="currentColor">inboxes/{agent}.json</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="184" y1="70" x2="532" y2="70" marker-end="url(#arrow-3)"/>
+    <line x1="104" y1="92" x2="104" y2="228"/>
+    <line x1="104" y1="172" x2="252" y2="172" marker-end="url(#arrow-3)"/>
+    <line x1="104" y1="228" x2="252" y2="228" marker-end="url(#arrow-3)"/>
+    <polyline points="600,92 600,172 468,172" marker-end="url(#arrow-3)"/>
+    <polyline points="468,228 632,228 632,96" marker-end="url(#arrow-3)"/>
+  </g>
+
+  <text x="358" y="62" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">Agent() 派生 · 唯一的直接边</text>
+  <text x="358" y="112" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">之后两侧从不直接通信</text>
+  <text x="116" y="164" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">TaskCreate 写文件</text>
+  <text x="116" y="220" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">SendMessage 追加</text>
+  <text x="588" y="164" text-anchor="end" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">TaskUpdate 认领</text>
+  <text x="620" y="220" text-anchor="end" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">每轮循环轮询</text>
+</svg>
+<figcaption>Leader 不是协调服务，只是先派生了 Teammate 的普通会话。之后所有协调都塌缩成两个文件上的写与轮询——透明、可 <code>cat</code>、崩溃后还在，代价是消息有轮询延迟、并发只能靠 <code>.locks/</code> 兜底。</figcaption>
+</figure>
 
 **完全去中心化**：Leader 不是一个特殊的协调服务——它只是一个拥有额外工具（`TeamCreate`、`SendMessage`、`TaskCreate`）的普通 Claude 会话。Teammate 也是普通的 Claude 会话，只是多了 `TaskUpdate` 和 `SendMessage` 工具。
 

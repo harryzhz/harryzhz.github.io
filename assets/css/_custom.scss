@@ -1,0 +1,26 @@
+// 文章内手绘 SVG 插图（blog-diagram skill 配套样式）
+// 用法：<figure class="post-diagram">…<svg>…</svg><figcaption>…</figcaption></figure>
+.post-diagram {
+  margin: 2rem 0;
+  padding: 2rem 1.5rem;
+  border-radius: 12px;
+  background: #f8f7f2;
+  text-align: center;
+
+  [theme=dark] & {
+    background: #252627;
+  }
+
+  svg {
+    max-width: 100%;
+    height: auto;
+    font-family: inherit;
+  }
+
+  figcaption {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    font-style: italic;
+    opacity: 0.65;
+  }
+}

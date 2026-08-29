@@ -112,19 +112,63 @@ knowledge-base/
 
 一个实用的 LLM Wiki 工作流通常包含五个操作：`init`、`import`、`ingest`、`query`、`lint`。
 
-```mermaid
-flowchart LR
-    A[init<br/>创建目录和规则] --> B[import<br/>导入原始材料]
-    B --> C[ingest<br/>编译为 Wiki 页面]
-    C --> D[query<br/>基于 Wiki 回答]
-    D --> E{答案有长期价值?}
-    E -- 是 --> F[写回 comparisons / overviews]
-    E -- 否 --> G[只返回答案]
-    C --> H[lint<br/>检查健康度]
-    F --> H
-    H --> I[补充材料或修正规则]
-    I --> B
-```
+<figure class="post-diagram">
+<svg viewBox="0 0 720 216" role="img" aria-label="五个操作构成闭环：ingest 把原始材料编译成 Wiki 页面，query 的高价值答案回写为新页面，lint 的检查结果又回到 import 和规则层">
+  <defs>
+    <marker id="arrow-llmwiki" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
+
+  <!-- 主链：init 24-104 / import 144-256 / ingest 296-392 / query 432-528 / 写回 568-696，间距统一 40 -->
+  <rect x="24" y="48" width="80" height="48" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="64" y="68" text-anchor="middle" font-size="13" fill="currentColor">init</text>
+  <text x="64" y="84" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.6">目录 + 规则</text>
+
+  <rect x="144" y="48" width="112" height="48" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="200" y="68" text-anchor="middle" font-size="13" fill="currentColor">import</text>
+  <text x="200" y="84" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.6">原样存入 raw/</text>
+
+  <rect x="296" y="48" width="96" height="48" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="344" y="68" text-anchor="middle" font-size="13" fill="currentColor">ingest</text>
+  <text x="344" y="84" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.6">编译成 wiki 页</text>
+
+  <rect x="432" y="48" width="96" height="48" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="480" y="68" text-anchor="middle" font-size="13" fill="currentColor">query</text>
+  <text x="480" y="84" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.6">带引用作答</text>
+
+  <rect x="568" y="48" width="128" height="48" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="632" y="68" text-anchor="middle" font-size="13" fill="currentColor">写回 Wiki</text>
+  <text x="632" y="84" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.6">沉淀为新页面</text>
+
+  <!-- lint：主链之下，同时接收 ingest 与写回的产物 -->
+  <rect x="288" y="152" width="112" height="48" rx="6" fill="#e8a34c" fill-opacity="0.38" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="344" y="172" text-anchor="middle" font-size="13" fill="currentColor">lint</text>
+  <text x="344" y="188" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.6">健康度检查</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="104" y1="72" x2="140" y2="72" marker-end="url(#arrow-llmwiki)"/>
+    <line x1="256" y1="72" x2="292" y2="72" marker-end="url(#arrow-llmwiki)"/>
+    <line x1="392" y1="72" x2="428" y2="72" marker-end="url(#arrow-llmwiki)"/>
+    <line x1="528" y1="72" x2="564" y2="72" marker-end="url(#arrow-llmwiki)"/>
+    <line x1="344" y1="96" x2="344" y2="148" marker-end="url(#arrow-llmwiki)"/>
+    <polyline points="632,96 632,176 404,176" marker-end="url(#arrow-llmwiki)"/>
+    <polyline points="280,176 200,176 200,100" marker-end="url(#arrow-llmwiki)"/>
+  </g>
+
+  <g font-size="11" font-style="italic" fill="currentColor" opacity="0.6">
+    <text x="120" y="40" text-anchor="middle">落地 Schema</text>
+    <text x="276" y="40" text-anchor="middle">新材料</text>
+    <text x="412" y="40" text-anchor="middle">查 INDEX.md</text>
+    <text x="548" y="40" text-anchor="middle">有长期价值</text>
+    <text x="352" y="124">校验结构</text>
+    <text x="556" y="124" text-anchor="middle">否则只返回答案</text>
+    <text x="516" y="168" text-anchor="middle">新页面纳入检查</text>
+    <text x="192" y="144" text-anchor="end">补材料 / 改规则</text>
+  </g>
+</svg>
+<figcaption>五个操作不是一条直线：query 的高价值答案要回写成新页面，lint 的检查结果又反向推动补材料和改规则。知识库靠这两条回边持续增长，而不是靠一次性导入。</figcaption>
+</figure>
 
 ### Init：让知识库有一个稳定骨架
 

@@ -81,19 +81,67 @@ AI Agent 是一个以大模型为推理核心、以工具调用为行动能力�
 
 ### 一个最小可用架构
 
-```mermaid
-flowchart LR
-    U[用户目标] --> P[感知层: 输入解析 / 上下文注入]
-    E[外部环境: 网页 / API / 数据库 / 文件系统] --> P
-    P --> B[推理与规划层: LLM / Planner]
-    B --> M[记忆层: 短期上下文 / 长期记忆]
-    B --> X[执行层: Tool Router / Executor]
-    M --> B
-    X --> T[工具集: Search / DB / API / Code]
-    T --> O[观察结果]
-    O --> B
-    B --> R[最终响应 / 结果交付]
-```
+<figure class="post-diagram">
+<svg viewBox="0 0 720 304" role="img" aria-label="Agent 最小架构：感知层汇集用户目标与外部环境，推理与规划层读写记忆并驱动执行层调用工具，工具返回的观察结果必须回流到推理层，验收通过后才输出最终响应">
+  <defs>
+    <marker id="arrow-1" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
+
+  <!-- 记忆层（紫，跨轮次状态） -->
+  <rect x="304" y="40" width="144" height="36" rx="6" fill="#8b7ec8" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="376" y="63" text-anchor="middle" font-size="13" fill="currentColor">记忆层</text>
+
+  <!-- 主行 y=120：输入 → 感知 → 推理 → 响应 -->
+  <rect x="16" y="120" width="104" height="36" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="68" y="143" text-anchor="middle" font-size="13" fill="currentColor">用户目标</text>
+
+  <rect x="160" y="120" width="104" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="212" y="143" text-anchor="middle" font-size="13" fill="currentColor">感知层</text>
+
+  <rect x="304" y="120" width="144" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="376" y="143" text-anchor="middle" font-size="13" fill="currentColor">推理与规划</text>
+
+  <rect x="592" y="120" width="112" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="648" y="143" text-anchor="middle" font-size="13" fill="currentColor">最终响应</text>
+
+  <!-- 下行 y=208：外部环境 / 执行 / 工具 -->
+  <rect x="16" y="208" width="104" height="36" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="68" y="231" text-anchor="middle" font-size="13" fill="currentColor">外部环境</text>
+  <text x="68" y="260" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">网页 / API / 数据库</text>
+
+  <rect x="440" y="208" width="112" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="496" y="231" text-anchor="middle" font-size="13" fill="currentColor">执行层</text>
+
+  <rect x="592" y="208" width="112" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="648" y="231" text-anchor="middle" font-size="13" fill="currentColor">工具集</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="120" y1="138" x2="156" y2="138" marker-end="url(#arrow-1)"/>
+    <line x1="264" y1="138" x2="300" y2="138" marker-end="url(#arrow-1)"/>
+    <line x1="448" y1="138" x2="588" y2="138" marker-end="url(#arrow-1)"/>
+    <line x1="352" y1="120" x2="352" y2="80" marker-end="url(#arrow-1)"/>
+    <line x1="400" y1="80" x2="400" y2="116" marker-end="url(#arrow-1)"/>
+    <line x1="552" y1="226" x2="588" y2="226" marker-end="url(#arrow-1)"/>
+    <polyline points="68,208 68,184 212,184 212,160" marker-end="url(#arrow-1)"/>
+    <polyline points="416,156 416,184 496,184 496,204" marker-end="url(#arrow-1)"/>
+    <polyline points="648,244 648,280 376,280 376,160" marker-end="url(#arrow-1)"/>
+  </g>
+
+  <g font-size="11" font-style="italic" fill="currentColor" opacity="0.6">
+    <text x="138" y="112" text-anchor="middle">任务目标</text>
+    <text x="282" y="112" text-anchor="middle">结构化输入</text>
+    <text x="518" y="112" text-anchor="middle">验收通过</text>
+    <text x="456" y="102">读写状态</text>
+    <text x="128" y="176">环境上下文</text>
+    <text x="424" y="176">动作 + 参数</text>
+    <text x="570" y="204" text-anchor="middle">调用</text>
+    <text x="512" y="272" text-anchor="middle">观察结果</text>
+  </g>
+</svg>
+<figcaption>推理与规划层是整个系统里唯一的决策点：工具返回的结果必须绕回它重新判断，才算完成一次动作；记忆层是唯一跨轮次保留的状态，其余组件都是无状态的通道。</figcaption>
+</figure>
 
 ### 这几个组件分别做什么
 
@@ -110,17 +158,62 @@ flowchart LR
 
 很多文章会把 Agent 的行为概括成“感知-规划-行动”，这是对的，但在工程上更准确的理解应该是一个持续运行的反馈环。
 
-```mermaid
-flowchart TD
-    A[Perception: 感知输入与环境] --> B[Planning: 拆解任务与选择策略]
-    B --> C[Action: 调用工具或执行步骤]
-    C --> D[Observation: 读取工具结果与系统状态]
-    D --> E{是否达到目标?}
-    E -- 否 --> B
-    E -- 是 --> F[输出结果]
-    D --> G[记录记忆 / 更新状态]
-    G --> B
-```
+<figure class="post-diagram">
+<svg viewBox="0 0 720 272" role="img" aria-label="PPA 闭环：观察结果同时用于判定是否达标和写回记忆，判定未达标时带着更新后的状态重新规划，只有达标才输出结果">
+  <defs>
+    <marker id="arrow-2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
+
+  <!-- 主链 y=56 -->
+  <rect x="16" y="56" width="128" height="36" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="80" y="79" text-anchor="middle" font-size="13" fill="currentColor">Perception 感知</text>
+
+  <rect x="192" y="56" width="128" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="256" y="79" text-anchor="middle" font-size="13" fill="currentColor">Planning 规划</text>
+
+  <rect x="368" y="56" width="128" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="432" y="79" text-anchor="middle" font-size="13" fill="currentColor">Action 行动</text>
+
+  <rect x="544" y="56" width="128" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="608" y="79" text-anchor="middle" font-size="13" fill="currentColor">Observation 观察</text>
+
+  <!-- 记忆（紫） -->
+  <rect x="192" y="136" width="176" height="36" rx="6" fill="#8b7ec8" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="280" y="159" text-anchor="middle" font-size="13" fill="currentColor">记录记忆 / 更新状态</text>
+
+  <!-- 判定菱形 -->
+  <path d="M608,120 L672,152 L608,184 L544,152 z" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="608" y="157" text-anchor="middle" font-size="13" fill="currentColor">达标?</text>
+
+  <rect x="544" y="216" width="128" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="608" y="239" text-anchor="middle" font-size="13" fill="currentColor">输出结果</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="144" y1="74" x2="188" y2="74" marker-end="url(#arrow-2)"/>
+    <line x1="320" y1="74" x2="364" y2="74" marker-end="url(#arrow-2)"/>
+    <line x1="496" y1="74" x2="540" y2="74" marker-end="url(#arrow-2)"/>
+    <line x1="608" y1="92" x2="608" y2="116" marker-end="url(#arrow-2)"/>
+    <line x1="608" y1="184" x2="608" y2="212" marker-end="url(#arrow-2)"/>
+    <line x1="544" y1="152" x2="372" y2="152" marker-end="url(#arrow-2)"/>
+    <line x1="256" y1="136" x2="256" y2="96" marker-end="url(#arrow-2)"/>
+    <polyline points="560,92 560,112 352,112 352,132" marker-end="url(#arrow-2)"/>
+  </g>
+
+  <g font-size="11" font-style="italic" fill="currentColor" opacity="0.6">
+    <text x="166" y="44" text-anchor="middle">目标 + 上下文</text>
+    <text x="342" y="44" text-anchor="middle">下一步动作</text>
+    <text x="518" y="44" text-anchor="middle">工具结果</text>
+    <text x="456" y="104" text-anchor="middle">轨迹 / 结果</text>
+    <text x="616" y="108">对照验收标准</text>
+    <text x="458" y="144" text-anchor="middle">否，信息不足</text>
+    <text x="264" y="120">状态回灌</text>
+    <text x="616" y="202">是</text>
+  </g>
+</svg>
+<figcaption>PPA 不是走一遍就结束的三步，而是带退出条件的循环：观察结果既喂给达标判定，也写回记忆；判定为否时，规划拿到的是更新后的状态而不是原始输入，这一点决定了重试能不能收敛。</figcaption>
+</figure>
 
 ### 在工程里，PPA 循环通常会变成 6 个问题
 
@@ -145,14 +238,47 @@ Agent 不只是“会调工具”，它还需要一种决策模式。不同框�
 
 ReAct 把推理和行动交替起来：先想，再做，再看结果，再继续想。只要任务依赖实时信息、外部工具、环境反馈，ReAct 就比纯 CoT 更实用。
 
-```mermaid
-flowchart LR
-    Q[问题] --> T[Thought]
-    T --> A[Action]
-    A --> O[Observation]
-    O --> T
-    O --> S[Stop when enough evidence]
-```
+<figure class="post-diagram">
+<svg viewBox="0 0 720 224" role="img" aria-label="ReAct 循环：Thought 决定动作，Observation 后重新判断证据是否足够，不足则带着新证据回到 Thought，足够才停下来交付答案">
+  <defs>
+    <marker id="arrow-3" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
+
+  <rect x="16" y="72" width="104" height="36" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="68" y="95" text-anchor="middle" font-size="13" fill="currentColor">问题</text>
+
+  <rect x="176" y="72" width="112" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="232" y="95" text-anchor="middle" font-size="13" fill="currentColor">Thought</text>
+
+  <rect x="344" y="72" width="112" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="400" y="95" text-anchor="middle" font-size="13" fill="currentColor">Action</text>
+
+  <rect x="512" y="72" width="128" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="576" y="95" text-anchor="middle" font-size="13" fill="currentColor">Observation</text>
+
+  <rect x="560" y="176" width="144" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="632" y="199" text-anchor="middle" font-size="13" fill="currentColor">交付答案</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="120" y1="90" x2="172" y2="90" marker-end="url(#arrow-3)"/>
+    <line x1="288" y1="90" x2="340" y2="90" marker-end="url(#arrow-3)"/>
+    <line x1="456" y1="90" x2="508" y2="90" marker-end="url(#arrow-3)"/>
+    <line x1="608" y1="108" x2="608" y2="172" marker-end="url(#arrow-3)"/>
+    <polyline points="560,108 560,152 232,152 232,112" marker-end="url(#arrow-3)"/>
+  </g>
+
+  <g font-size="11" font-style="italic" fill="currentColor" opacity="0.6">
+    <text x="146" y="60" text-anchor="middle">目标</text>
+    <text x="314" y="60" text-anchor="middle">选工具 + 参数</text>
+    <text x="482" y="60" text-anchor="middle">执行</text>
+    <text x="396" y="144" text-anchor="middle">证据不足，继续想</text>
+    <text x="616" y="144">证据充分</text>
+  </g>
+</svg>
+<figcaption>ReAct 的关键不在于“会调工具”，而在于每次 Observation 之后都要重新评估证据够不够：不够就把新证据带回 Thought 重想一轮，够了才退出循环。缺少这个停止判据，轨迹就会一直发散。</figcaption>
+</figure>
 
 ### 3. Plan-and-Execute：适合长流程、强约束任务
 

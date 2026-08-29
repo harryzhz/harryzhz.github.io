@@ -54,19 +54,51 @@ Claude Code 并不是对所有任务都同样高效。下面这张表更接近�
 
 如果把一次高质量协作抽象成流程，大致是下面这样：
 
-```mermaid
-flowchart TD
-    A[定义任务目标] --> B[补齐代码上下文]
-    B --> C[约束改动范围]
-    C --> D[让 Claude Code 先分析再动手]
-    D --> E[小步修改]
-    E --> F[运行测试和静态检查]
-    F --> G{结果符合预期?}
-    G -- 否 --> H[补充上下文或缩小任务]
-    H --> D
-    G -- 是 --> I[人工审查关键改动]
-    I --> J[合并或继续下一步]
-```
+<figure class="post-diagram">
+<svg viewBox="0 0 720 232" role="img" aria-label="高质量协作是一个双层可纠偏闭环：测试未通过退回只读分析，方向判断失误则退回目标与边界">
+  <defs>
+    <marker id="arrow-1" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
+
+  <!-- 主链路：x = 8 / 144 / 264 / 384 / 512 / 632，间距统一 24 -->
+  <rect x="8"   y="56" width="112" height="40" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="64"  y="81" text-anchor="middle" font-size="13" fill="currentColor">定义目标与边界</text>
+
+  <rect x="144" y="56" width="96" height="40" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="192" y="81" text-anchor="middle" font-size="13" fill="currentColor">只读分析</text>
+
+  <rect x="264" y="56" width="96" height="40" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="312" y="81" text-anchor="middle" font-size="13" fill="currentColor">小步修改</text>
+
+  <rect x="384" y="56" width="104" height="40" rx="6" fill="#e8a34c" fill-opacity="0.38" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="436" y="81" text-anchor="middle" font-size="13" fill="currentColor">测试与检查</text>
+
+  <rect x="512" y="56" width="96" height="40" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="560" y="81" text-anchor="middle" font-size="13" fill="currentColor">人工审查</text>
+
+  <rect x="632" y="56" width="80" height="40" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="672" y="81" text-anchor="middle" font-size="13" fill="currentColor">合并</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="120" y1="76" x2="140" y2="76" marker-end="url(#arrow-1)"/>
+    <line x1="240" y1="76" x2="260" y2="76" marker-end="url(#arrow-1)"/>
+    <line x1="360" y1="76" x2="380" y2="76" marker-end="url(#arrow-1)"/>
+    <line x1="488" y1="76" x2="508" y2="76" marker-end="url(#arrow-1)"/>
+    <line x1="608" y1="76" x2="628" y2="76" marker-end="url(#arrow-1)"/>
+    <!-- 内层回路：测试没过，退回只读分析 -->
+    <polyline points="436,96 436,160 192,160 192,100" marker-end="url(#arrow-1)"/>
+    <!-- 外层回路：人工审查发现方向问题，退回目标与边界 -->
+    <polyline points="560,96 560,208 64,208 64,100" marker-end="url(#arrow-1)"/>
+  </g>
+
+  <text x="498" y="46" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">通过</text>
+  <text x="314" y="154" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">未通过：先解释失败原因</text>
+  <text x="312" y="202" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">方向偏了：补上下文或缩小任务</text>
+</svg>
+<figcaption>绿色是人主导的环节，蓝色是 Claude Code 主导的环节，橙色是验证关口。两条回路是重点：测试没过就退回分析，人工审查发现方向偏了就退回重定边界——都不是在原地继续改。</figcaption>
+</figure>
 
 关键不是“让它一次做完”，而是形成一个可纠偏的闭环。
 
@@ -204,14 +236,68 @@ Claude Code 需要上下文，但不是越多越好。有效上下文应该服�
 
 #### 更合理的闭环
 
-```mermaid
-flowchart LR
-    A[问题定义] --> B[指定验证方式]
-    B --> C[Claude Code 实施修改]
-    C --> D[执行测试/检查]
-    D --> E[解释失败原因]
-    E --> F[继续修复或停止]
-```
+<figure class="post-diagram">
+<svg viewBox="0 0 720 288" role="img" aria-label="验证方式放在修改之前还是之后，决定了测试失败时是盲改还是先解释原因">
+  <defs>
+    <marker id="arrow-2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
+
+  <!-- 上排：常见顺序，验证在最后才出现 -->
+  <text x="88" y="81" text-anchor="end" font-size="12" fill="currentColor" opacity="0.75">常见顺序</text>
+
+  <rect x="112" y="56" width="112" height="40" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="168" y="81" text-anchor="middle" font-size="13" fill="currentColor">问题定义</text>
+
+  <rect x="248" y="56" width="112" height="40" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="304" y="81" text-anchor="middle" font-size="13" fill="currentColor">实施修改</text>
+
+  <rect x="384" y="56" width="112" height="40" rx="6" fill="#e8a34c" fill-opacity="0.38" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="440" y="81" text-anchor="middle" font-size="13" fill="currentColor">顺手跑测试</text>
+
+  <rect x="520" y="56" width="112" height="40" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="576" y="81" text-anchor="middle" font-size="13" fill="currentColor">绿了就合并</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="224" y1="76" x2="244" y2="76" marker-end="url(#arrow-2)"/>
+    <line x1="360" y1="76" x2="380" y2="76" marker-end="url(#arrow-2)"/>
+    <line x1="496" y1="76" x2="516" y2="76" marker-end="url(#arrow-2)"/>
+    <polyline points="440,96 440,128 304,128 304,100" marker-end="url(#arrow-2)"/>
+  </g>
+  <text x="372" y="122" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">红了就再改一遍，不问原因</text>
+
+  <line x1="8" y1="152" x2="712" y2="152" stroke="currentColor" stroke-opacity="0.15" stroke-width="1"/>
+
+  <!-- 下排：验证方式前置到任务定义里 -->
+  <text x="88" y="209" text-anchor="end" font-size="12" fill="currentColor" opacity="0.75">推荐顺序</text>
+
+  <rect x="112" y="184" width="96" height="40" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="160" y="209" text-anchor="middle" font-size="13" fill="currentColor">问题定义</text>
+
+  <rect x="232" y="184" width="112" height="40" rx="6" fill="#e8a34c" fill-opacity="0.38" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="288" y="209" text-anchor="middle" font-size="13" fill="currentColor">先定验证方式</text>
+
+  <rect x="368" y="184" width="96" height="40" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="416" y="209" text-anchor="middle" font-size="13" fill="currentColor">实施修改</text>
+
+  <rect x="488" y="184" width="96" height="40" rx="6" fill="#e8a34c" fill-opacity="0.38" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="536" y="209" text-anchor="middle" font-size="13" fill="currentColor">执行测试</text>
+
+  <rect x="608" y="184" width="104" height="40" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="660" y="209" text-anchor="middle" font-size="13" fill="currentColor">解释后再决定</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="208" y1="204" x2="228" y2="204" marker-end="url(#arrow-2)"/>
+    <line x1="344" y1="204" x2="364" y2="204" marker-end="url(#arrow-2)"/>
+    <line x1="464" y1="204" x2="484" y2="204" marker-end="url(#arrow-2)"/>
+    <line x1="584" y1="204" x2="604" y2="204" marker-end="url(#arrow-2)"/>
+    <polyline points="660,224 660,264 416,264 416,228" marker-end="url(#arrow-2)"/>
+  </g>
+  <text x="538" y="258" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">失败：先给原因，再决定修还是停</text>
+</svg>
+<figcaption>两条链路只差一个位置：橙色的验证环节是在修改之后补上，还是在修改之前就定下来。前置之后，失败会先进入“解释原因”，而不是直接绕回修改。</figcaption>
+</figure>
 
 #### 实践建议
 
@@ -460,19 +546,66 @@ Claude Code 有一类很容易被忽略的指令：不是底层工具控制，�
 
 如果把前面的内容合起来看，一个更接近实战的 Claude Code 工作流通常是这样的：
 
-```mermaid
-flowchart TD
-    A[定义目标和边界] --> B[让 Claude Code 搜索并建立导航视图]
-    B --> C[只读分析：调用链 文件列表 风险点]
-    C --> D[确认最小改动方案]
-    D --> E[分小步实施修改]
-    E --> F[按文件审查 diff]
-    F --> G[执行明确的测试命令]
-    G --> H{测试是否通过}
-    H -- 否 --> I[先解释失败 再决定是否继续修改]
-    I --> D
-    H -- 是 --> J[人工审查关键业务语义]
-```
+<figure class="post-diagram">
+<svg viewBox="0 0 720 384" role="img" aria-label="实战工作流分为只读阶段和写入验证阶段，测试失败退回最小改动方案，通过后才进入人工语义审查">
+  <defs>
+    <marker id="arrow-3" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
+
+  <!-- 阶段一：只读，不落盘 -->
+  <rect x="8" y="48" width="704" height="80" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="4 4"/>
+  <text x="696" y="40" text-anchor="end" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">只读阶段：不落盘</text>
+
+  <rect x="24"  y="72" width="192" height="40" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="120" y="97" text-anchor="middle" font-size="13" fill="currentColor">定义目标与边界</text>
+
+  <rect x="264" y="72" width="192" height="40" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="97" text-anchor="middle" font-size="13" fill="currentColor">搜索并建立导航视图</text>
+
+  <rect x="504" y="72" width="192" height="40" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="600" y="97" text-anchor="middle" font-size="13" fill="currentColor">分析调用链与风险点</text>
+
+  <!-- 阶段二：写入与验证 -->
+  <rect x="8" y="184" width="704" height="72" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="4 4"/>
+  <text x="696" y="176" text-anchor="end" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">写入与验证阶段</text>
+
+  <rect x="24"  y="200" width="144" height="40" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="96"  y="225" text-anchor="middle" font-size="13" fill="currentColor">确认最小方案</text>
+
+  <rect x="200" y="200" width="144" height="40" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="272" y="225" text-anchor="middle" font-size="13" fill="currentColor">分小步实施修改</text>
+
+  <rect x="376" y="200" width="144" height="40" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="448" y="225" text-anchor="middle" font-size="13" fill="currentColor">按文件审查 diff</text>
+
+  <rect x="552" y="200" width="144" height="40" rx="6" fill="#e8a34c" fill-opacity="0.38" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="624" y="225" text-anchor="middle" font-size="13" fill="currentColor">执行测试命令</text>
+
+  <rect x="272" y="320" width="176" height="40" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="345" text-anchor="middle" font-size="13" fill="currentColor">人工审查业务语义</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="216" y1="92" x2="260" y2="92" marker-end="url(#arrow-3)"/>
+    <line x1="456" y1="92" x2="500" y2="92" marker-end="url(#arrow-3)"/>
+    <!-- 只读结论落到写入计划 -->
+    <polyline points="600,112 600,152 96,152 96,196" marker-end="url(#arrow-3)"/>
+    <line x1="168" y1="220" x2="196" y2="220" marker-end="url(#arrow-3)"/>
+    <line x1="344" y1="220" x2="372" y2="220" marker-end="url(#arrow-3)"/>
+    <line x1="520" y1="220" x2="548" y2="220" marker-end="url(#arrow-3)"/>
+    <!-- 测试未通过：退回方案，而不是继续改 -->
+    <polyline points="592,240 592,280 96,280 96,244" marker-end="url(#arrow-3)"/>
+    <!-- 测试通过：交人工做语义审查 -->
+    <polyline points="656,240 656,340 452,340" marker-end="url(#arrow-3)"/>
+  </g>
+
+  <text x="344" y="144" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">只读结论 → 写入计划</text>
+  <text x="344" y="274" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">未通过：先解释失败，再决定是否继续</text>
+  <text x="672" y="300" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">通过</text>
+</svg>
+<figcaption>实战工作流被一条虚线切成两半：上半段全部只读，产出的是方案而不是 diff；下半段才允许写入，测试未通过时退回的是方案本身。最后一道关口是人工看业务语义，机器测试替代不了。</figcaption>
+</figure>
 
 前半段的通用原则解决的是“协作不要跑偏”，后半段的工具技巧解决的是“Claude Code 在终端里到底该怎么用”。两者缺一不可。
 

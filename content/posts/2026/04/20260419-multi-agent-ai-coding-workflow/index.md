@@ -91,16 +91,43 @@ Context-Centric Decomposition 反过来问：**"一个完整任务单元真正�
 
 **机制**：Generator 产出初始输出，Verifier 按**显式标准**评估，通过则完成，失败则带着具体反馈返回 Generator，循环直到通过或触顶。Generator 本身可以是一个完整的 orchestrator，Verifier 可以是更轻量的 Agent。
 
-```mermaid
-flowchart LR
-    Task[任务] --> G[Generator Agent]
-    G --> V{Verifier Agent<br/>按显式标准评估}
-    V -- 通过 --> Done[输出]
-    V -- 失败+具体反馈 --> G
+<figure class="post-diagram">
+<svg viewBox="0 0 720 208" role="img" aria-label="Generator-Verifier：Verifier 按显式标准打回并附具体反馈，循环直到通过；必须用最大迭代数兜底，否则会原地震荡">
+  <defs>
+    <marker id="arrow-1" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
 
-    style V fill:#fff3e0,stroke:#f57c00
-    style Done fill:#e8f5e9
-```
+  <rect x="24" y="56" width="88" height="44" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="68" y="82" text-anchor="middle" font-size="13" fill="currentColor">任务</text>
+
+  <rect x="176" y="56" width="144" height="44" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="248" y="82" text-anchor="middle" font-size="13" fill="currentColor">Generator</text>
+
+  <rect x="384" y="56" width="144" height="44" rx="6" fill="#e8a34c" fill-opacity="0.38" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="456" y="74" text-anchor="middle" font-size="13" fill="currentColor">Verifier</text>
+  <text x="456" y="90" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">按显式标准评估</text>
+
+  <rect x="592" y="56" width="104" height="44" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="644" y="82" text-anchor="middle" font-size="13" fill="currentColor">输出</text>
+
+  <rect x="528" y="152" width="176" height="36" rx="6" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="4 4"/>
+  <text x="616" y="175" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.75">达到最大迭代 → 人工</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="112" y1="78" x2="172" y2="78" marker-end="url(#arrow-1)"/>
+    <line x1="320" y1="78" x2="380" y2="78" marker-end="url(#arrow-1)"/>
+    <line x1="528" y1="78" x2="588" y2="78" marker-end="url(#arrow-1)"/>
+    <polyline points="416,100 416,136 248,136 248,104" marker-end="url(#arrow-1)"/>
+    <polyline points="496,100 496,170 524,170" stroke-dasharray="4 4" marker-end="url(#arrow-1)"/>
+  </g>
+
+  <text x="558" y="70" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">通过</text>
+  <text x="332" y="130" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">未通过：带具体反馈打回</text>
+</svg>
+<figcaption>Verifier 的价值全在"显式标准"四个字上：没有可验证的标准，回边就退化成橡皮图章；没有虚线那条兜底路径，循环可能永不收敛。</figcaption>
+</figure>
 
 **适用**：质量关键且评估标准能被写下来的任务——代码生成 + 测试、事实核查、rubric 评分、合规审查、客服邮件生成。
 
@@ -114,20 +141,69 @@ flowchart LR
 
 **机制**：Orchestrator 接收任务、规划分解、一部分自己做，另一部分派发给 specialized subagent。Subagent 在**独立 context** 中工作，完成后把**浓缩结果**返回 orchestrator，不与其他 subagent 直接通信。Orchestrator 综合所有结果。
 
-```mermaid
-flowchart TB
-    User[用户任务] --> O["Orchestrator<br/>规划 · 分派 · 综合"]
-    O --> S1["Subagent 1<br/>代码搜索"]
-    O --> S2["Subagent 2<br/>文档调研"]
-    O --> S3["Subagent 3<br/>依赖分析"]
-    S1 -. 浓缩结果 .-> O
-    S2 -. 浓缩结果 .-> O
-    S3 -. 浓缩结果 .-> O
-    O --> Out[最终输出]
+<figure class="post-diagram">
+<svg viewBox="0 0 720 296" role="img" aria-label="Orchestrator-Subagent：subagent 在独立 context 中工作、只回传浓缩结果，彼此之间没有通信通道，所有跨子任务的依赖都必须由 Orchestrator 识别并中转">
+  <defs>
+    <marker id="arrow-2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
 
-    style O fill:#e3f2fd,stroke:#1976d2
-    style Out fill:#e8f5e9
-```
+  <rect x="40" y="16" width="120" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="100" y="39" text-anchor="middle" font-size="13" fill="currentColor">用户任务</text>
+
+  <rect x="560" y="16" width="120" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="620" y="39" text-anchor="middle" font-size="13" fill="currentColor">最终输出</text>
+
+  <rect x="272" y="88" width="176" height="56" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="112" text-anchor="middle" font-size="13" fill="currentColor">Orchestrator</text>
+  <text x="360" y="130" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">规划 · 分派 · 综合</text>
+
+  <rect x="32" y="200" width="152" height="48" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="108" y="222" text-anchor="middle" font-size="13" fill="currentColor">Subagent A</text>
+  <text x="108" y="238" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">代码搜索</text>
+
+  <rect x="284" y="200" width="152" height="48" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="222" text-anchor="middle" font-size="13" fill="currentColor">Subagent B</text>
+  <text x="360" y="238" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">文档调研</text>
+
+  <rect x="536" y="200" width="152" height="48" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="612" y="222" text-anchor="middle" font-size="13" fill="currentColor">Subagent C</text>
+  <text x="612" y="238" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">依赖分析</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <polyline points="100,52 100,72 292,72 292,84" marker-end="url(#arrow-2)"/>
+    <polyline points="428,88 428,72 620,72 620,56" marker-end="url(#arrow-2)"/>
+    <line x1="344" y1="144" x2="344" y2="172"/>
+    <line x1="108" y1="176" x2="612" y2="176"/>
+    <line x1="108" y1="176" x2="108" y2="196" marker-end="url(#arrow-2)"/>
+    <line x1="344" y1="176" x2="344" y2="196" marker-end="url(#arrow-2)"/>
+    <line x1="612" y1="176" x2="612" y2="196" marker-end="url(#arrow-2)"/>
+  </g>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none" stroke-dasharray="4 4">
+    <polyline points="32,224 16,224 16,116 268,116" marker-end="url(#arrow-2)"/>
+    <polyline points="688,224 704,224 704,116 452,116" marker-end="url(#arrow-2)"/>
+    <line x1="392" y1="200" x2="392" y2="148" marker-end="url(#arrow-2)"/>
+  </g>
+
+  <g stroke="currentColor" stroke-opacity="0.3" stroke-width="1.2" fill="none">
+    <line x1="192" y1="224" x2="276" y2="224" stroke-dasharray="4 4"/>
+    <line x1="228" y1="218" x2="240" y2="230"/>
+    <line x1="240" y1="218" x2="228" y2="230"/>
+    <line x1="444" y1="224" x2="528" y2="224" stroke-dasharray="4 4"/>
+    <line x1="480" y1="218" x2="492" y2="230"/>
+    <line x1="492" y1="218" x2="480" y2="230"/>
+  </g>
+
+  <text x="196" y="66" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">任务</text>
+  <text x="524" y="66" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">综合结果</text>
+  <text x="224" y="168" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">分派 · 各自独立 context</text>
+  <text x="140" y="110" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">只回传浓缩结果</text>
+  <text x="360" y="276" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">subagent 之间不通信，发现只能经 Orchestrator 中转</text>
+</svg>
+<figcaption>注意底部被划掉的两条边：横向通信不存在，所以"A 的发现会影响 B 的分析"必须由 Orchestrator 主动识别——这是该模式认知负载最高、也最容易丢信息的一环。</figcaption>
+</figure>
 
 **适用**：任务分解清晰、子任务间依赖最小、每个子任务**一次调用**即可返回确定结果（bounded invocation）。
 
@@ -143,19 +219,60 @@ flowchart TB
 
 **机制**：Coordinator 启动多个独立进程的 **长期存活 worker**（teammate）。Teammate 从共享任务队列中认领任务，自主跨多步完成，**在任务之间持续存活**，累积领域 context 和专业化能力。
 
-```mermaid
-flowchart TB
-    C[Coordinator] --> Q[(任务队列)]
-    Q -.认领.-> T1["Teammate A<br/>长期负责服务 X"]
-    Q -.认领.-> T2["Teammate B<br/>长期负责服务 Y"]
-    Q -.认领.-> T3["Teammate C<br/>长期负责服务 Z"]
-    T1 --> R[汇总]
-    T2 --> R
-    T3 --> R
-    R --> C
+<figure class="post-diagram">
+<svg viewBox="0 0 720 344" role="img" aria-label="Agent Teams：teammate 从共享队列自主认领任务，并在任务之间持续存活、累积各自领域的 context，coordinator 只负责入队与处理不均匀的完成时间">
+  <defs>
+    <marker id="arrow-3" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
 
-    style C fill:#fff3e0,stroke:#f57c00
-```
+  <rect x="280" y="24" width="160" height="44" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="51" text-anchor="middle" font-size="13" fill="currentColor">Coordinator</text>
+
+  <rect x="272" y="104" width="176" height="44" rx="6" fill="#8b7ec8" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="124" text-anchor="middle" font-size="13" fill="currentColor">任务队列</text>
+  <text x="360" y="140" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">共享任务池</text>
+
+  <rect x="24" y="192" width="176" height="56" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="112" y="214" text-anchor="middle" font-size="13" fill="currentColor">Teammate A</text>
+  <text x="112" y="232" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">长期负责服务 X</text>
+
+  <rect x="272" y="192" width="176" height="56" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="214" text-anchor="middle" font-size="13" fill="currentColor">Teammate B</text>
+  <text x="360" y="232" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">长期负责服务 Y</text>
+
+  <rect x="520" y="192" width="176" height="56" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="608" y="214" text-anchor="middle" font-size="13" fill="currentColor">Teammate C</text>
+  <text x="608" y="232" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">长期负责服务 Z</text>
+
+  <rect x="248" y="276" width="224" height="40" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="301" text-anchor="middle" font-size="13" fill="currentColor">汇总 · 支持部分完成</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="360" y1="68" x2="360" y2="100" marker-end="url(#arrow-3)"/>
+    <line x1="112" y1="168" x2="608" y2="168"/>
+    <line x1="344" y1="148" x2="344" y2="188" marker-end="url(#arrow-3)"/>
+    <line x1="112" y1="168" x2="112" y2="188" marker-end="url(#arrow-3)"/>
+    <line x1="608" y1="168" x2="608" y2="188" marker-end="url(#arrow-3)"/>
+    <path d="M200,206 q20,14 0,28" marker-end="url(#arrow-3)"/>
+    <path d="M448,206 q20,14 0,28" marker-end="url(#arrow-3)"/>
+    <path d="M696,206 q20,14 0,28" marker-end="url(#arrow-3)"/>
+    <line x1="112" y1="248" x2="112" y2="264"/>
+    <line x1="360" y1="248" x2="360" y2="264"/>
+    <line x1="608" y1="248" x2="608" y2="264"/>
+    <line x1="112" y1="264" x2="608" y2="264"/>
+    <line x1="360" y1="264" x2="360" y2="272" marker-end="url(#arrow-3)"/>
+    <polyline points="248,296 16,296 16,46 276,46" stroke-dasharray="4 4" marker-end="url(#arrow-3)"/>
+  </g>
+
+  <text x="376" y="88" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">入队</text>
+  <text x="232" y="162" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">自主认领</text>
+  <text x="140" y="290" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">回报进度</text>
+  <text x="704" y="332" text-anchor="end" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">↺ teammate 跨任务存活，持续累积各自领域的 context</text>
+</svg>
+<figcaption>和 Orchestrator-Subagent 的差别就在那三个自旋箭头：subagent 每次重新生成，teammate 不销毁，反复操作同一服务后逐渐掌握它的依赖图和测试模式。代价是耗时高度不均，汇总必须能处理部分完成。</figcaption>
+</figure>
 
 **与 Orchestrator-Subagent 的关键差异**：subagent 是**一次性**的，完成一个有界子任务后终止，下次任务重新生成干净的；teammate 是**长期存活**的，跨多次分派累积对自己领域的熟悉度（依赖图、测试模式、部署配置），这种累积在 one-shot 调度下无法复现。
 
@@ -171,18 +288,62 @@ flowchart TB
 
 **机制**：Agent 之间通过两个原语通信——**publish**（发布事件到主题）和 **subscribe**（订阅感兴趣的主题）。中央 router 把匹配的消息投递给对应 Agent。新的 Agent 类型可以在不改动既有连接的情况下加入生态，只需声明它订阅哪些主题。工作流从实际事件中**涌现**，而非预定义顺序。
 
-```mermaid
-flowchart LR
-    E1[告警源] -->|publish| Bus[(Message Bus / Router)]
-    E2[Issue 系统] -->|publish| Bus
-    Bus -->|subscribe: 高危告警| A1[Triage Agent]
-    Bus -->|subscribe: 身份告警| A2[Identity Agent]
-    Bus -->|subscribe: 证据请求| A3[Context Agent]
-    A1 -->|publish| Bus
-    A2 -->|publish| Bus
+<figure class="post-diagram">
+<svg viewBox="0 0 720 288" role="img" aria-label="Message Bus：Agent 只声明订阅哪些主题，router 按主题投递；Agent 处理后又把新事件 publish 回总线，工作流从实际事件中涌现而非预先编排">
+  <defs>
+    <marker id="arrow-4" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
 
-    style Bus fill:#f3e5f5,stroke:#7b1fa2
-```
+  <rect x="24" y="64" width="120" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="84" y="87" text-anchor="middle" font-size="13" fill="currentColor">告警源</text>
+
+  <rect x="24" y="136" width="120" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="84" y="159" text-anchor="middle" font-size="13" fill="currentColor">Issue 系统</text>
+
+  <rect x="248" y="56" width="160" height="144" rx="6" fill="#8b7ec8" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="328" y="122" text-anchor="middle" font-size="13" fill="currentColor">Message Bus</text>
+  <text x="328" y="140" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">topic router</text>
+
+  <rect x="520" y="32" width="176" height="44" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="608" y="52" text-anchor="middle" font-size="13" fill="currentColor">Triage Agent</text>
+  <text x="608" y="68" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">订阅：高危告警</text>
+
+  <rect x="520" y="104" width="176" height="44" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="608" y="124" text-anchor="middle" font-size="13" fill="currentColor">Identity Agent</text>
+  <text x="608" y="140" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">订阅：身份告警</text>
+
+  <rect x="520" y="176" width="176" height="44" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="608" y="196" text-anchor="middle" font-size="13" fill="currentColor">Context Agent</text>
+  <text x="608" y="212" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">订阅：证据请求</text>
+
+  <rect x="24" y="224" width="200" height="40" rx="6" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="4 4"/>
+  <text x="124" y="249" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.75">新 Agent：声明订阅即接入</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="144" y1="82" x2="244" y2="82" marker-end="url(#arrow-4)"/>
+    <line x1="144" y1="154" x2="244" y2="154" marker-end="url(#arrow-4)"/>
+    <polyline points="408,80 464,80 464,54 516,54" marker-end="url(#arrow-4)"/>
+    <line x1="408" y1="126" x2="516" y2="126" marker-end="url(#arrow-4)"/>
+    <polyline points="408,172 464,172 464,198 516,198" marker-end="url(#arrow-4)"/>
+    <polyline points="288,200 288,244 228,244" marker-end="url(#arrow-4)" stroke-dasharray="4 4"/>
+  </g>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none" stroke-dasharray="4 4">
+    <line x1="696" y1="54" x2="708" y2="54"/>
+    <line x1="696" y1="126" x2="708" y2="126"/>
+    <line x1="696" y1="198" x2="708" y2="198"/>
+    <polyline points="708,54 708,240 336,240 336,204" marker-end="url(#arrow-4)"/>
+  </g>
+
+  <text x="194" y="74" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">publish</text>
+  <text x="194" y="146" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">publish</text>
+  <text x="462" y="116" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">按主题投递</text>
+  <text x="520" y="234" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">Agent 也可 publish 新事件</text>
+</svg>
+<figcaption>没有人预先规定"高危告警之后该做什么"：路径由事件和订阅关系共同决定。扩展成本极低（虚线框那样加一个订阅者即可），代价是一次级联穿过多少个 Agent 只能靠 correlation ID 事后重建。</figcaption>
+</figure>
 
 **适用**：事件驱动管道，路径由发生的事件动态决定；Agent 生态预期会持续增长；多个团队希望独立开发、独立部署各自的 Agent。
 
@@ -198,18 +359,49 @@ flowchart LR
 
 **机制**：**去中心化**——Agent 不经过 orchestrator 或 router，直接通过所有成员都可读写的持久化 store（数据库、文件系统、共享文档）协作。每个 Agent 自主读取相关信息、行动、把发现写回。从"写入种子问题"开始，到满足终止条件（时间预算、收敛阈值、专职"终止裁决"Agent）时结束。
 
-```mermaid
-flowchart TB
-    Store[(Shared Store<br/>数据库 · 文件 · 文档)]
-    A1[文献 Agent] <-->|读写| Store
-    A2[行业 Agent] <-->|读写| Store
-    A3[专利 Agent] <-->|读写| Store
-    A4[新闻 Agent] <-->|读写| Store
-    Term[终止裁决 Agent] -->|判定停止| Store
+<figure class="post-diagram">
+<svg viewBox="0 0 720 304" role="img" aria-label="Shared State：Agent 直接读写同一个 store、没有中心协调者，彼此的写入会互相触发，因此终止条件必须作为一等公民由专职裁决 Agent 承担">
+  <defs>
+    <marker id="arrow-5" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
 
-    style Store fill:#e8f5e9,stroke:#2e7d32
-    style Term fill:#fff3e0,stroke:#f57c00
-```
+  <rect x="272" y="112" width="176" height="72" rx="6" fill="#8b7ec8" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="142" text-anchor="middle" font-size="13" fill="currentColor">Shared Store</text>
+  <text x="360" y="160" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">数据库 · 文件 · 文档</text>
+
+  <rect x="32" y="56" width="144" height="40" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="104" y="81" text-anchor="middle" font-size="13" fill="currentColor">文献 Agent</text>
+
+  <rect x="32" y="200" width="144" height="40" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="104" y="225" text-anchor="middle" font-size="13" fill="currentColor">行业 Agent</text>
+
+  <rect x="544" y="56" width="144" height="40" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="616" y="81" text-anchor="middle" font-size="13" fill="currentColor">专利 Agent</text>
+
+  <rect x="544" y="200" width="144" height="40" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="616" y="225" text-anchor="middle" font-size="13" fill="currentColor">新闻 Agent</text>
+
+  <rect x="272" y="248" width="176" height="44" rx="6" fill="#e8a34c" fill-opacity="0.38" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="268" text-anchor="middle" font-size="13" fill="currentColor">终止裁决 Agent</text>
+  <text x="360" y="284" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">时间预算 · 收敛阈值</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="176" y1="80" x2="268" y2="124" marker-start="url(#arrow-5)" marker-end="url(#arrow-5)"/>
+    <line x1="176" y1="216" x2="268" y2="172" marker-start="url(#arrow-5)" marker-end="url(#arrow-5)"/>
+    <line x1="544" y1="80" x2="452" y2="124" marker-start="url(#arrow-5)" marker-end="url(#arrow-5)"/>
+    <line x1="544" y1="216" x2="452" y2="172" marker-start="url(#arrow-5)" marker-end="url(#arrow-5)"/>
+    <line x1="360" y1="248" x2="360" y2="190" marker-end="url(#arrow-5)"/>
+    <polyline points="104,56 104,32 616,32 616,56" stroke-dasharray="4 4" marker-start="url(#arrow-5)" marker-end="url(#arrow-5)"/>
+  </g>
+
+  <text x="360" y="24" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">写入互相触发 → 反应式循环风险</text>
+  <text x="360" y="100" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">各自读写，无中心协调</text>
+  <text x="376" y="220" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">判定停止</text>
+</svg>
+<figcaption>顶部那条虚线不是通信通道，而是耦合本身：A 的写入被 B 读到、B 的续写又惊动 A。这是行为层问题，锁和分区解决不了，只能靠橙色那个裁决 Agent 从一开始就设计进去。</figcaption>
+</figure>
 
 **适用**：协作研究——Agent 的工作需要**实时基于彼此发现调整**；需要消除协调者作为单点故障；Store 本身就应成为不断积累的知识库。
 
@@ -391,31 +583,59 @@ A2A 的核心三件事：
 
 MCP 和 A2A 其实是互补关系——一个管 Agent 对工具、一个管 Agent 对 Agent：
 
-```mermaid
-flowchart LR
-    subgraph Client[客户端 Agent]
-        C1[主 Agent]
-    end
-    subgraph Remote[远端 Agent 服务]
-        R1[研究 Agent]
-        R2[合规 Agent]
-    end
-    subgraph Tools[工具生态]
-        T1[GitHub MCP]
-        T2[数据库 MCP]
-        T3[浏览器 MCP]
-    end
+<figure class="post-diagram">
+<svg viewBox="0 0 720 296" role="img" aria-label="MCP 与 A2A 是正交的两层：A2A 横向连接不同组织的 Agent，MCP 纵向连接 Agent 与工具，远端 Agent 自己也用 MCP 接工具">
+  <defs>
+    <marker id="arrow-6" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
 
-    C1 -. A2A .-> R1
-    C1 -. A2A .-> R2
-    C1 -- MCP --> T1
-    C1 -- MCP --> T2
-    R1 -- MCP --> T3
+  <rect x="432" y="24" width="232" height="136" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="4 4"/>
+  <text x="656" y="18" text-anchor="end" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">远端 Agent 服务</text>
 
-    style Client fill:#e3f2fd
-    style Remote fill:#fff3e0
-    style Tools fill:#f1f8e9
-```
+  <rect x="24" y="192" width="616" height="80" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="4 4"/>
+  <text x="632" y="186" text-anchor="end" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">工具生态（MCP Server）</text>
+
+  <rect x="48" y="48" width="160" height="48" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="128" y="70" text-anchor="middle" font-size="13" fill="currentColor">主 Agent</text>
+  <text x="128" y="86" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">客户端</text>
+
+  <rect x="456" y="40" width="176" height="44" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="544" y="67" text-anchor="middle" font-size="13" fill="currentColor">研究 Agent</text>
+
+  <rect x="456" y="100" width="176" height="44" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="544" y="127" text-anchor="middle" font-size="13" fill="currentColor">合规 Agent</text>
+
+  <rect x="48" y="216" width="160" height="40" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="128" y="241" text-anchor="middle" font-size="13" fill="currentColor">GitHub MCP</text>
+
+  <rect x="240" y="216" width="160" height="40" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="320" y="241" text-anchor="middle" font-size="13" fill="currentColor">数据库 MCP</text>
+
+  <rect x="432" y="216" width="160" height="40" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="512" y="241" text-anchor="middle" font-size="13" fill="currentColor">浏览器 MCP</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none" stroke-dasharray="4 4">
+    <line x1="208" y1="64" x2="452" y2="64" marker-start="url(#arrow-6)" marker-end="url(#arrow-6)"/>
+    <line x1="208" y1="84" x2="452" y2="122" marker-start="url(#arrow-6)" marker-end="url(#arrow-6)"/>
+  </g>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="112" y1="96" x2="112" y2="212" marker-end="url(#arrow-6)"/>
+    <polyline points="160,96 160,176 320,176 320,212" marker-end="url(#arrow-6)"/>
+    <polyline points="632,62 688,62 688,184 512,184 512,212" marker-end="url(#arrow-6)"/>
+  </g>
+
+  <text x="330" y="56" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">A2A：任务 + Agent Card</text>
+  <text x="316" y="96" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">A2A</text>
+  <text x="118" y="150" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">MCP</text>
+  <text x="240" y="170" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">MCP</text>
+  <text x="600" y="178" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">MCP</text>
+  <text x="360" y="288" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">A2A 连 Agent 与 Agent，MCP 连 Agent 与工具，两者不重叠</text>
+</svg>
+<figcaption>两条虚线是横向的（跨组织、以"任务"为单位），三条实线是纵向的（同一进程内调工具）。研究 Agent 自己也接 MCP，说明这两层可以任意嵌套——远端 Agent 内部长什么样，调用方并不需要知道。</figcaption>
+</figure>
 
 到 2026 年，A2A 已经聚集了 50+ 企业合作伙伴，包括 Atlassian、Box、Salesforce、ServiceNow 等。这意味着一件事：**Multi-Agent 的未来不会是所有 Agent 都跑在同一个框架里，而是各家 Agent 通过标准协议互联**。
 
@@ -455,22 +675,64 @@ Addy Osmani 在 [《Conductors to Orchestrators》](https://addyosmani.com/blog/
 
 这是最容易立刻见效的用法。一个完整的 Code Review 本质上是多个正交维度的检查，天然适合并行：
 
-```mermaid
-flowchart LR
-    PR[PR / Branch Diff] --> M[Main Agent]
-    M -->|并行分发| A[静态分析 Agent]
-    M -->|并行分发| B[安全审查 Agent]
-    M -->|并行分发| C[测试覆盖 Agent]
-    M -->|并行分发| D[性能 Agent]
-    M -->|并行分发| E[文档一致性 Agent]
-    A --> R[汇总报告]
-    B --> R
-    C --> R
-    D --> R
-    E --> R
+<figure class="post-diagram">
+<svg viewBox="0 0 720 320" role="img" aria-label="并行 Code Review：同一份 diff 被五个职责互不重叠、只有只读权限的 subagent 同时审查，主 Agent 只负责分发与按严重度合并">
+  <defs>
+    <marker id="arrow-7" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
 
-    style R fill:#e8f5e9
-```
+  <rect x="16" y="136" width="112" height="40" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="72" y="161" text-anchor="middle" font-size="13" fill="currentColor">Branch Diff</text>
+
+  <rect x="160" y="128" width="136" height="56" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="228" y="152" text-anchor="middle" font-size="13" fill="currentColor">Main Agent</text>
+  <text x="228" y="170" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">分发 · 合并</text>
+
+  <rect x="352" y="24" width="168" height="40" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="436" y="49" text-anchor="middle" font-size="13" fill="currentColor">静态分析 Agent</text>
+
+  <rect x="352" y="80" width="168" height="40" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="436" y="105" text-anchor="middle" font-size="13" fill="currentColor">安全审查 Agent</text>
+
+  <rect x="352" y="136" width="168" height="40" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="436" y="161" text-anchor="middle" font-size="13" fill="currentColor">测试覆盖 Agent</text>
+
+  <rect x="352" y="192" width="168" height="40" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="436" y="217" text-anchor="middle" font-size="13" fill="currentColor">性能分析 Agent</text>
+
+  <rect x="352" y="248" width="168" height="40" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="436" y="273" text-anchor="middle" font-size="13" fill="currentColor">文档一致 Agent</text>
+
+  <rect x="576" y="128" width="128" height="56" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="640" y="152" text-anchor="middle" font-size="13" fill="currentColor">汇总报告</text>
+  <text x="640" y="170" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">按严重度排序</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="128" y1="156" x2="156" y2="156" marker-end="url(#arrow-7)"/>
+    <line x1="296" y1="156" x2="324" y2="156"/>
+    <line x1="324" y1="44" x2="324" y2="268"/>
+    <line x1="324" y1="44" x2="348" y2="44" marker-end="url(#arrow-7)"/>
+    <line x1="324" y1="100" x2="348" y2="100" marker-end="url(#arrow-7)"/>
+    <line x1="324" y1="156" x2="348" y2="156" marker-end="url(#arrow-7)"/>
+    <line x1="324" y1="212" x2="348" y2="212" marker-end="url(#arrow-7)"/>
+    <line x1="324" y1="268" x2="348" y2="268" marker-end="url(#arrow-7)"/>
+    <line x1="520" y1="44" x2="548" y2="44"/>
+    <line x1="520" y1="100" x2="548" y2="100"/>
+    <line x1="520" y1="156" x2="548" y2="156"/>
+    <line x1="520" y1="212" x2="548" y2="212"/>
+    <line x1="520" y1="268" x2="548" y2="268"/>
+    <line x1="548" y1="44" x2="548" y2="268"/>
+    <line x1="548" y1="156" x2="572" y2="156" marker-end="url(#arrow-7)"/>
+  </g>
+
+  <text x="324" y="16" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">并行分发</text>
+  <text x="548" y="16" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">合并去重</text>
+  <text x="436" y="308" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">审查类 subagent 只给只读工具，不给 Write 权限</text>
+</svg>
+<figcaption>Code Review 是天然可并行的读任务：五个维度互不依赖，各自开一份干净 context 反而比一个 Agent 顺序扫完噪声更低。关键纪律是职责越窄越好，且一律不给写权限——不留"顺手改一下"的机会。</figcaption>
+</figure>
 
 在 Claude Code 里可以通过 subagents 配置来实现。一个 `security-reviewer` subagent 的定义文件大致长这样：
 
@@ -527,23 +789,76 @@ perf-reviewer, doc-consistency-reviewer
 
 这是 Anthropic 研究系统的直接移植，对写复杂新功能特别有效：
 
-```mermaid
-flowchart TB
-    Start[需求描述] --> Plan[Planner Agent]
-    Plan --> Research1[Research Agent 1<br/>现有代码结构]
-    Plan --> Research2[Research Agent 2<br/>相关 API 文档]
-    Plan --> Research3[Research Agent 3<br/>类似 PR 历史]
-    Research1 --> Synthesizer[Synthesizer Agent<br/>综合调研结果 + 设计方案]
-    Research2 --> Synthesizer
-    Research3 --> Synthesizer
-    Synthesizer --> Reviewer[Human Review Gate]
-    Reviewer --> Coder[Single Coder Agent<br/>一个 Agent 一致性写]
-    Coder --> Tests[Test Runner Agent]
-    Tests --> Done[完成]
+<figure class="post-diagram">
+<svg viewBox="0 0 720 424" role="img" aria-label="研究-实现分离：读任务用多个 Agent 并行调研，人工闸门放行后，写任务收敛到唯一一个 Coder Agent，避免多方对同一份代码做出相反假设">
+  <defs>
+    <marker id="arrow-8" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
 
-    style Reviewer fill:#fff3e0,stroke:#f57c00
-    style Coder fill:#e3f2fd,stroke:#1976d2
-```
+  <rect x="272" y="16" width="176" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="39" text-anchor="middle" font-size="13" fill="currentColor">需求描述</text>
+
+  <rect x="272" y="80" width="176" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="103" text-anchor="middle" font-size="13" fill="currentColor">Planner Agent</text>
+
+  <rect x="24" y="152" width="192" height="48" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="120" y="174" text-anchor="middle" font-size="13" fill="currentColor">Research 1</text>
+  <text x="120" y="190" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">现有代码结构</text>
+
+  <rect x="264" y="152" width="192" height="48" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="174" text-anchor="middle" font-size="13" fill="currentColor">Research 2</text>
+  <text x="360" y="190" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">相关 API 文档</text>
+
+  <rect x="504" y="152" width="192" height="48" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="600" y="174" text-anchor="middle" font-size="13" fill="currentColor">Research 3</text>
+  <text x="600" y="190" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">类似 PR 历史</text>
+
+  <rect x="264" y="232" width="192" height="48" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="254" text-anchor="middle" font-size="13" fill="currentColor">Synthesizer</text>
+  <text x="360" y="270" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">综合调研 + 出设计方案</text>
+
+  <rect x="24" y="336" width="160" height="48" rx="6" fill="none" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <text x="104" y="358" text-anchor="middle" font-size="13" fill="currentColor">人工 Review 闸门</text>
+  <text x="104" y="374" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">放行才进入实现</text>
+
+  <rect x="224" y="336" width="176" height="48" rx="6" fill="#d97757" fill-opacity="0.32" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="312" y="358" text-anchor="middle" font-size="13" fill="currentColor">Coder Agent</text>
+  <text x="312" y="374" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">单 Agent 一致性写</text>
+
+  <rect x="440" y="336" width="152" height="48" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="516" y="358" text-anchor="middle" font-size="13" fill="currentColor">Test Runner</text>
+  <text x="516" y="374" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">跑测试验证</text>
+
+  <rect x="632" y="336" width="72" height="48" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="668" y="364" text-anchor="middle" font-size="13" fill="currentColor">完成</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="360" y1="52" x2="360" y2="76" marker-end="url(#arrow-8)"/>
+    <line x1="360" y1="116" x2="360" y2="132"/>
+    <line x1="120" y1="132" x2="600" y2="132"/>
+    <line x1="120" y1="132" x2="120" y2="148" marker-end="url(#arrow-8)"/>
+    <line x1="360" y1="132" x2="360" y2="148" marker-end="url(#arrow-8)"/>
+    <line x1="600" y1="132" x2="600" y2="148" marker-end="url(#arrow-8)"/>
+    <line x1="120" y1="200" x2="120" y2="216"/>
+    <line x1="360" y1="200" x2="360" y2="216"/>
+    <line x1="600" y1="200" x2="600" y2="216"/>
+    <line x1="120" y1="216" x2="600" y2="216"/>
+    <line x1="360" y1="216" x2="360" y2="228" marker-end="url(#arrow-8)"/>
+    <polyline points="360,280 360,312 104,312 104,332" marker-end="url(#arrow-8)"/>
+    <line x1="184" y1="360" x2="220" y2="360" marker-end="url(#arrow-8)"/>
+    <line x1="400" y1="360" x2="436" y2="360" marker-end="url(#arrow-8)"/>
+    <line x1="592" y1="360" x2="628" y2="360" marker-end="url(#arrow-8)"/>
+    <polyline points="516,384 516,404 312,404 312,388" marker-end="url(#arrow-8)"/>
+  </g>
+
+  <text x="232" y="126" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">并行调研（读任务）</text>
+  <text x="232" y="300" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">方案交人工把关</text>
+  <text x="414" y="398" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">测试失败：回到同一个 Coder</text>
+</svg>
+<figcaption>上半张图是多 Agent 并行（读任务，Anthropic 验证过质量收益），下半张图刻意收敛成一条单线（写任务，Cognition 警告的冲突区）。中间那个虚线框是人工闸门——目前多 Agent 最实用的安全阀。</figcaption>
+</figure>
 
 几个关键设计：
 

@@ -138,17 +138,48 @@ Use this skill when the user asks for code review, PR audit, or change risk asse
 
 如果把所有技能内容一次性塞进上下文，大模型很快会被撑爆，成本和噪音也会同步上升。Skills 真正重要的设计点，在于“按需加载”。
 
-```mermaid
-flowchart TD
-    A[Agent 启动] --> B[仅加载 Skill 元数据: name / description]
-    B --> C{当前任务是否命中触发条件?}
-    C -- 否 --> D[继续使用其他技能或默认推理]
-    C -- 是 --> E[读取 SKILL.md 主体]
-    E --> F{是否需要额外材料?}
-    F -- 是 --> G[按需读取 docs / scripts / examples / assets]
-    F -- 否 --> H[直接执行]
-    G --> H[执行任务并输出]
-```
+<figure class="post-diagram">
+<svg viewBox="0 0 640 296" role="img" aria-label="渐进式披露的三层加载：技能默认只有元数据常驻，命中触发后才读 SKILL.md 主体，附加材料再按需读取，上下文占用逐层放大">
+  <defs>
+    <marker id="arrow-1" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
+
+  <!-- 顶部：宽度表示上下文占用 -->
+  <line x1="152" y1="44" x2="520" y2="44" stroke="currentColor" stroke-opacity="0.35" stroke-width="1" marker-end="url(#arrow-1)"/>
+  <text x="336" y="32" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">上下文占用（宽度为示意）</text>
+
+  <!-- Tier 0：常驻元数据 -->
+  <text x="120" y="99" text-anchor="end" font-size="12" fill="currentColor">Tier 0 · 常驻</text>
+  <rect x="152" y="72" width="144" height="44" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="224" y="99" text-anchor="middle" font-size="13" fill="currentColor">name + description</text>
+  <text x="312" y="99" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">未命中的技能停在这一层</text>
+
+  <line x1="176" y1="116" x2="176" y2="148" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" marker-end="url(#arrow-1)"/>
+  <text x="192" y="138" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">description 与当前任务匹配</text>
+
+  <!-- Tier 1：命中后读主体 -->
+  <text x="120" y="179" text-anchor="end" font-size="12" fill="currentColor">Tier 1 · 命中后</text>
+  <rect x="152" y="152" width="288" height="44" rx="6" fill="#8b7ec8" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="296" y="179" text-anchor="middle" font-size="13" fill="currentColor">SKILL.md 主体：流程与边界</text>
+  <text x="456" y="179" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">一次读完</text>
+
+  <line x1="176" y1="196" x2="176" y2="228" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" marker-end="url(#arrow-1)"/>
+  <text x="192" y="218" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">流程中被引用到才读</text>
+
+  <!-- Tier 2：按需材料 -->
+  <text x="120" y="259" text-anchor="end" font-size="12" fill="currentColor">Tier 2 · 按需</text>
+  <rect x="152" y="232" width="112" height="44" rx="6" fill="#8b7ec8" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="208" y="259" text-anchor="middle" font-size="13" fill="currentColor">docs/</text>
+  <rect x="280" y="232" width="112" height="44" rx="6" fill="#8b7ec8" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="336" y="259" text-anchor="middle" font-size="13" fill="currentColor">scripts/</text>
+  <rect x="408" y="232" width="112" height="44" rx="6" fill="#8b7ec8" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="464" y="259" text-anchor="middle" font-size="13" fill="currentColor">examples/</text>
+  <text x="536" y="259" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">可能永不加载</text>
+</svg>
+<figcaption>渐进式披露把技能拆成三层：只有元数据是常驻成本，正文和附加材料都要有触发条件才进入上下文。技能库规模因此可以远大于上下文窗口。</figcaption>
+</figure>
 
 这种“渐进式披露”有三个直接收益：
 
@@ -180,17 +211,57 @@ flowchart TD
 
 MCP 让 Agent 能够访问外部世界，例如代码仓库、数据库、浏览器、内部系统；Skills 则负责补上“领域方法论”，避免 Agent 拿到工具后仍然凭感觉乱做事。
 
-```mermaid
-flowchart LR
-    U[用户任务] --> A[Agent]
-    A --> S[Skills: 领域规范 / SOP / 模板]
-    A --> M[MCP Client]
-    M --> T[外部工具与数据源: GitHub / DB / Search / CRM]
-    S --> D[决策与约束]
-    T --> O[外部观察结果]
-    D --> A
-    O --> A
-```
+<figure class="post-diagram">
+<svg viewBox="0 0 640 320" role="img" aria-label="Agent 同时依赖两条回路：向上问 Skills 拿方法与边界，向下经 MCP 拿外部系统的观察结果，两者缺一不可">
+  <defs>
+    <marker id="arrow-2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
+
+  <!-- 上：Skills 提供方法论 -->
+  <rect x="232" y="32" width="224" height="40" rx="6" fill="#8b7ec8" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="344" y="57" text-anchor="middle" font-size="13" fill="currentColor">Skills · 规范 / SOP / 模板</text>
+
+  <!-- 中：Agent 与用户任务 -->
+  <rect x="48" y="144" width="112" height="40" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="104" y="169" text-anchor="middle" font-size="13" fill="currentColor">用户任务</text>
+
+  <rect x="272" y="136" width="144" height="56" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="344" y="170" text-anchor="middle" font-size="13" fill="currentColor">Agent</text>
+
+  <!-- 下：MCP 与外部系统 -->
+  <rect x="176" y="248" width="176" height="40" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="264" y="273" text-anchor="middle" font-size="13" fill="currentColor">MCP Client</text>
+
+  <rect x="400" y="248" width="208" height="40" rx="6" fill="#e8a34c" fill-opacity="0.38" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="504" y="273" text-anchor="middle" font-size="13" fill="currentColor">GitHub / DB / 浏览器</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="160" y1="164" x2="264" y2="164" marker-end="url(#arrow-2)"/>
+    <!-- 上行回路 -->
+    <line x1="296" y1="136" x2="296" y2="76" marker-end="url(#arrow-2)"/>
+    <line x1="328" y1="76" x2="328" y2="132" marker-end="url(#arrow-2)"/>
+    <!-- 下行回路 -->
+    <line x1="296" y1="192" x2="296" y2="244" marker-end="url(#arrow-2)"/>
+    <line x1="328" y1="244" x2="328" y2="196" marker-end="url(#arrow-2)"/>
+    <!-- MCP 与外部系统 -->
+    <line x1="352" y1="260" x2="396" y2="260" marker-end="url(#arrow-2)"/>
+    <line x1="396" y1="276" x2="352" y2="276" marker-end="url(#arrow-2)"/>
+  </g>
+
+  <g font-size="11" font-style="italic" fill="currentColor" opacity="0.6">
+    <text x="212" y="156" text-anchor="middle">任务</text>
+    <text x="288" y="108" text-anchor="end">命中触发</text>
+    <text x="336" y="108">方法与边界</text>
+    <text x="288" y="220" text-anchor="end">发起调用</text>
+    <text x="336" y="220">观察结果</text>
+    <text x="374" y="252" text-anchor="middle">调用</text>
+    <text x="374" y="296" text-anchor="middle">返回</text>
+  </g>
+</svg>
+<figcaption>Skills 与 MCP 分别补上 Agent 的两块短板：上行回路回答“怎么做才算合格”，下行回路回答“现实是什么样”。只有一条回路时，Agent 要么伸不出手，要么做得不对。</figcaption>
+</figure>
 
 ### 一个更形象的比喻
 
@@ -232,17 +303,52 @@ Agent 知道这家团队要求：
 3. Agent 按 Skill 规定的格式输出 findings
 4. 必要时再读取 `docs/review-rubric.md` 做更细颗粒度判断
 
-```mermaid
-flowchart TD
-    A[用户: 帮我 review 这个 PR] --> B[命中 Code Review Skill]
-    B --> C[加载 SKILL.md 核心流程]
-    C --> D[通过 MCP 获取 diff / 文件 / 测试结果]
-    D --> E[按规范分析正确性 安全性 回归风险]
-    E --> F{证据是否充分?}
-    F -- 否 --> G[补充读取 docs 或继续拉取上下文]
-    G --> E
-    F -- 是 --> H[输出 Findings / Open Questions / Summary]
-```
+<figure class="post-diagram">
+<svg viewBox="0 0 720 240" role="img" aria-label="代码审查闭环：Skill 规定流程，MCP 取回 diff 与测试结果，证据不足时回到取证环节，充分后才按规范格式输出">
+  <defs>
+    <marker id="arrow-3" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
+
+  <rect x="8" y="72" width="96" height="40" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="56" y="97" text-anchor="middle" font-size="13" fill="currentColor">审查请求</text>
+
+  <rect x="136" y="72" width="136" height="40" rx="6" fill="#8b7ec8" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="204" y="97" text-anchor="middle" font-size="12" fill="currentColor">Code Review Skill</text>
+
+  <rect x="304" y="72" width="136" height="40" rx="6" fill="#e8a34c" fill-opacity="0.38" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="372" y="97" text-anchor="middle" font-size="12" fill="currentColor">MCP 取 diff / 测试</text>
+
+  <rect x="472" y="72" width="104" height="40" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="524" y="97" text-anchor="middle" font-size="12" fill="currentColor">对照规范分析</text>
+
+  <path d="M656,56 L704,92 L656,128 L608,92 z" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="656" y="96" text-anchor="middle" font-size="11" fill="currentColor">证据充分?</text>
+
+  <rect x="440" y="176" width="264" height="40" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="572" y="201" text-anchor="middle" font-size="12" fill="currentColor">Findings / Open Questions / Summary</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="104" y1="92" x2="132" y2="92" marker-end="url(#arrow-3)"/>
+    <line x1="272" y1="92" x2="300" y2="92" marker-end="url(#arrow-3)"/>
+    <line x1="440" y1="92" x2="468" y2="92" marker-end="url(#arrow-3)"/>
+    <line x1="576" y1="92" x2="604" y2="92" marker-end="url(#arrow-3)"/>
+    <line x1="656" y1="128" x2="656" y2="172" marker-end="url(#arrow-3)"/>
+    <polyline points="632,110 632,144 372,144 372,116" marker-end="url(#arrow-3)"/>
+  </g>
+
+  <g font-size="11" font-style="italic" fill="currentColor" opacity="0.6">
+    <text x="118" y="84" text-anchor="middle">触发</text>
+    <text x="286" y="84" text-anchor="middle">按流程</text>
+    <text x="454" y="84" text-anchor="middle">证据</text>
+    <text x="590" y="84" text-anchor="middle">结论</text>
+    <text x="668" y="156">是</text>
+    <text x="500" y="160" text-anchor="middle">否：补读 docs，继续取证</text>
+  </g>
+</svg>
+<figcaption>Skills + MCP 的价值不在拼装两个概念，而在闭环：规范决定看什么、按什么顺序看，MCP 负责把证据取回来，证据不足就退回取证而不是猜。</figcaption>
+</figure>
 
 这一模式的本质，不是“把两个概念拼一起”，而是把“方法论”和“执行能力”真正闭环起来。
 

@@ -54,30 +54,76 @@ Harness 不是模型的一部分，但它直接决定模型的行为。它包括
 
 一个完整的 agent harness 包含七个层次：
 
-```mermaid
-graph TB
-    subgraph Harness["Agent Harness"]
-        SP["系统提示层\n(System Prompt Layer)\n身份 / 约束 / 行为规范"]
-        TR["工具注册层\n(Tool Registry)\n工具定义 / 权限分级 / 参数 Schema"]
-        CM["上下文管理层\n(Context Manager)\n动态注入 / 摘要 / 相关性排序"]
-        ML["模型调用层\n(Model API Call)"]
-        RP["响应解析层\n(Response Parser)\n文本输出 / Tool Call 路由"]
-        TE["工具执行层\n(Tool Executor)\n沙箱隔离 / 权限校验 / 结果格式化"]
-        MEM["记忆与状态层\n(Memory & State)\n上下文内状态 / 外部持久化"]
-    end
+<figure class="post-diagram">
+<svg viewBox="0 0 720 288" role="img" aria-label="Agent harness 的七层结构：只有模型调用层由 LLM 承担，其余六层由 harness 实现，工具执行结果经记忆层回流到上下文管理层形成闭环">
+  <defs>
+    <marker id="arrow-1" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
 
-    Task["任务输入"] --> SP
-    SP --> CM
-    TR --> CM
-    CM --> ML
-    ML --> RP
-    RP -->|"tool_use"| TE
-    TE --> MEM
-    MEM --> CM
-    RP -->|"text / task_complete"| Result["任务输出"]
+  <rect x="136" y="32" width="448" height="232" rx="8" fill="none"
+        stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="4 4"/>
+  <text x="576" y="24" text-anchor="end" font-size="11" font-style="italic"
+        fill="currentColor" opacity="0.6">Agent Harness</text>
 
-    style Harness fill:#f0f4ff,stroke:#4a6cf7
-```
+  <!-- 端点：任务输入 / 任务输出 -->
+  <rect x="16" y="136" width="104" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="68" y="159" text-anchor="middle" font-size="13" fill="currentColor">任务输入</text>
+
+  <rect x="608" y="224" width="104" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="660" y="247" text-anchor="middle" font-size="13" fill="currentColor">任务输出</text>
+
+  <!-- 第一排 y=48：配置层 -->
+  <rect x="152" y="48" width="112" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="208" y="71" text-anchor="middle" font-size="13" fill="currentColor">系统提示层</text>
+
+  <rect x="304" y="48" width="112" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="71" text-anchor="middle" font-size="13" fill="currentColor">工具注册层</text>
+
+  <!-- 第二排 y=136：主链路 -->
+  <rect x="152" y="136" width="112" height="36" rx="6" fill="#8b7ec8" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="208" y="159" text-anchor="middle" font-size="13" fill="currentColor">上下文管理层</text>
+
+  <rect x="304" y="136" width="112" height="36" rx="6" fill="#e8a34c" fill-opacity="0.38" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="159" text-anchor="middle" font-size="13" fill="currentColor">模型调用层</text>
+
+  <rect x="456" y="136" width="112" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="512" y="159" text-anchor="middle" font-size="13" fill="currentColor">响应解析层</text>
+
+  <!-- 第三排 y=224：执行与回流 -->
+  <rect x="152" y="224" width="112" height="36" rx="6" fill="#8b7ec8" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="208" y="247" text-anchor="middle" font-size="13" fill="currentColor">记忆与状态</text>
+
+  <rect x="304" y="224" width="112" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="247" text-anchor="middle" font-size="13" fill="currentColor">工具执行层</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="120" y1="154" x2="148" y2="154" marker-end="url(#arrow-1)"/>
+    <line x1="208" y1="84"  x2="208" y2="132" marker-end="url(#arrow-1)"/>
+    <line x1="360" y1="84"  x2="360" y2="132" marker-end="url(#arrow-1)"/>
+    <line x1="264" y1="154" x2="300" y2="154" marker-end="url(#arrow-1)"/>
+    <line x1="416" y1="154" x2="452" y2="154" marker-end="url(#arrow-1)"/>
+    <polyline points="496,172 496,200 360,200 360,220" marker-end="url(#arrow-1)"/>
+    <polyline points="536,172 536,242 604,242" marker-end="url(#arrow-1)"/>
+    <line x1="304" y1="242" x2="268" y2="242" marker-end="url(#arrow-1)"/>
+    <line x1="208" y1="224" x2="208" y2="176" marker-end="url(#arrow-1)"/>
+  </g>
+
+  <g font-size="11" font-style="italic" fill="currentColor" opacity="0.6">
+    <text x="134" y="146" text-anchor="middle">任务</text>
+    <text x="216" y="112">身份 / 约束</text>
+    <text x="368" y="112">工具 schema</text>
+    <text x="282" y="146" text-anchor="middle">prompt</text>
+    <text x="434" y="146" text-anchor="middle">响应</text>
+    <text x="428" y="194" text-anchor="middle">tool_use</text>
+    <text x="544" y="204">text</text>
+    <text x="286" y="234" text-anchor="middle">结果</text>
+    <text x="216" y="204">回流</text>
+  </g>
+</svg>
+<figcaption>七层里只有橙色的模型调用层由 LLM 承担，其余六层都是 harness 的工程责任；工具执行结果经记忆与状态层回流到上下文管理层，闭环由此形成。</figcaption>
+</figure>
 
 ### 系统提示层
 
@@ -157,30 +203,86 @@ Anthropic 的文档里把系统提示的作用描述为"operator layer"：它位
 
 执行循环是 harness 的骨架，决定模型输出如何转化为下一轮输入。以下是一个典型的 agentic loop：
 
-```mermaid
-flowchart TD
-    A["任务初始化\n加载系统提示 + 上下文 + 工具定义"] --> B["调用模型 API"]
-    B --> C{"解析响应类型"}
-    C -->|"text only"| D{"是否完成任务?"}
-    C -->|"tool_use"| E["权限检查"]
-    D -->|"是"| Z["返回结果"]
-    D -->|"否"| F{"达到最大轮次?"}
-    F -->|"是"| G["超时终止 / 升级人工"]
-    F -->|"否"| B
-    E -->|"拒绝"| H["注入拒绝信息，继续循环"]
-    E -->|"需要确认"| I["暂停，等待人工确认"]
-    E -->|"允许"| J["在沙箱中执行工具"]
-    I -->|"用户批准"| J
-    I -->|"用户拒绝"| H
-    J --> K["格式化工具结果"]
-    K --> L["更新状态 / 触发上下文管理"]
-    L --> B
-    H --> B
+<figure class="post-diagram">
+<svg viewBox="0 0 720 416" role="img" aria-label="Agentic loop：模型只产出一次响应，harness 负责解析类型、执行权限三分支判定、沙箱执行工具，并把结果重新注入下一轮">
+  <defs>
+    <marker id="arrow-2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
 
-    style A fill:#e8f5e9
-    style Z fill:#e8f5e9
-    style G fill:#fce4ec
-```
+  <!-- 第一排 y=56：初始化 → 模型 → 解析 → 完成判定 -->
+  <rect x="40" y="56" width="112" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="96" y="79" text-anchor="middle" font-size="13" fill="currentColor">任务初始化</text>
+
+  <rect x="192" y="56" width="128" height="36" rx="6" fill="#e8a34c" fill-opacity="0.38" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="256" y="79" text-anchor="middle" font-size="13" fill="currentColor">调用模型 API</text>
+
+  <rect x="360" y="56" width="128" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="424" y="79" text-anchor="middle" font-size="13" fill="currentColor">解析响应类型</text>
+
+  <rect x="528" y="56" width="112" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="584" y="79" text-anchor="middle" font-size="13" fill="currentColor">是否完成</text>
+
+  <!-- 第二排 y=144 -->
+  <rect x="360" y="144" width="128" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="424" y="167" text-anchor="middle" font-size="13" fill="currentColor">权限检查</text>
+
+  <rect x="528" y="144" width="112" height="36" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="584" y="167" text-anchor="middle" font-size="13" fill="currentColor">返回结果</text>
+
+  <!-- 第三排 y=232：权限的三种结局 -->
+  <rect x="48" y="232" width="112" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="104" y="255" text-anchor="middle" font-size="13" fill="currentColor">注入拒绝信息</text>
+
+  <rect x="208" y="232" width="112" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="264" y="255" text-anchor="middle" font-size="13" fill="currentColor">等待人工确认</text>
+
+  <rect x="368" y="232" width="112" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="424" y="255" text-anchor="middle" font-size="13" fill="currentColor">沙箱执行工具</text>
+
+  <!-- 第四排 y=320 -->
+  <rect x="344" y="320" width="160" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="424" y="343" text-anchor="middle" font-size="13" fill="currentColor">格式化结果 / 更新状态</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="152" y1="74" x2="188" y2="74" marker-end="url(#arrow-2)"/>
+    <line x1="320" y1="74" x2="356" y2="74" marker-end="url(#arrow-2)"/>
+    <line x1="488" y1="74" x2="524" y2="74" marker-end="url(#arrow-2)"/>
+    <line x1="424" y1="92" x2="424" y2="140" marker-end="url(#arrow-2)"/>
+    <line x1="584" y1="92" x2="584" y2="140" marker-end="url(#arrow-2)"/>
+    <polyline points="384,180 384,204 104,204 104,228" marker-end="url(#arrow-2)"/>
+    <polyline points="400,180 400,216 264,216 264,228" marker-end="url(#arrow-2)"/>
+    <line x1="440" y1="180" x2="440" y2="228" marker-end="url(#arrow-2)"/>
+    <line x1="320" y1="250" x2="364" y2="250" marker-end="url(#arrow-2)"/>
+    <line x1="208" y1="250" x2="164" y2="250" marker-end="url(#arrow-2)"/>
+    <line x1="424" y1="268" x2="424" y2="316" marker-end="url(#arrow-2)"/>
+    <!-- 结果与拒绝信息汇入回流总线 -->
+    <line x1="424" y1="356" x2="424" y2="384"/>
+    <line x1="104" y1="268" x2="104" y2="384"/>
+    <!-- 回流总线：未完成 → 重新入循环 -->
+    <polyline points="640,74 680,74 680,384 16,384 16,24 256,24 256,52" marker-end="url(#arrow-2)"/>
+  </g>
+
+  <g font-size="11" font-style="italic" fill="currentColor" opacity="0.6">
+    <text x="170" y="66" text-anchor="middle">prompt</text>
+    <text x="338" y="66" text-anchor="middle">响应</text>
+    <text x="506" y="66" text-anchor="middle">text</text>
+    <text x="660" y="66" text-anchor="middle">否</text>
+    <text x="432" y="120">tool_use</text>
+    <text x="592" y="120">是</text>
+    <text x="244" y="198" text-anchor="middle">拒绝</text>
+    <text x="332" y="210" text-anchor="middle">需确认</text>
+    <text x="448" y="208">允许</text>
+    <text x="342" y="242" text-anchor="middle">批准</text>
+    <text x="186" y="242" text-anchor="middle">驳回</text>
+    <text x="432" y="296">工具结果</text>
+    <text x="400" y="378" text-anchor="middle">重新注入下一轮（受最大轮次限制）</text>
+    <text x="256" y="116" text-anchor="middle">模型只负责这一步</text>
+  </g>
+</svg>
+<figcaption>循环控制权始终在 harness 手里：模型只完成橙色的那一格，解析响应类型、权限三分支判定（拒绝 / 待确认 / 允许）、沙箱执行与结果回注都由 harness 驱动。</figcaption>
+</figure>
 
 关键点：**harness 负责循环的每一步，模型只负责 step B**。模型输出 `tool_use`，harness 去执行；模型输出文本，harness 判断是继续还是终止。让模型自己决定循环控制逻辑，是很多 harness 设计的问题根源。
 

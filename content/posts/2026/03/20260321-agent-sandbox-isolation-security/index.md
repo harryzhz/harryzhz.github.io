@@ -36,20 +36,68 @@ Sandbox（沙箱）是解决这个问题的核心机制。它在 Agent 的执行
 
 一个具备代码执行能力的 Agent，其执行链大致如下：
 
-```mermaid
-flowchart LR
-    U[用户输入] --> LLM[LLM 推理]
-    EXT[外部数据\n网页/文档/API] --> LLM
-    LLM --> PLAN[任务规划]
-    PLAN --> TOOL[工具调用\nCode / Shell / File]
-    TOOL --> EXEC[代码执行]
-    EXEC --> ENV[宿主环境\n文件系统 / 网络 / 进程]
-    EXEC --> OUT[执行结果]
-    OUT --> LLM
+<figure class="post-diagram">
+<svg viewBox="0 0 720 312" role="img" aria-label="Agent 的执行链上有三个可注入环节，它们最终都汇聚到同一个代码执行动作，直接作用于宿主环境">
+  <defs>
+    <marker id="arrow-1" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
 
-    style ENV fill:#ff6b6b,color:#fff
-    style EXEC fill:#ffa94d,color:#fff
-```
+  <!-- 输入层：两个注入点 -->
+  <rect x="16" y="48" width="112" height="36" rx="6" fill="#e8a34c" fill-opacity="0.38" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="72" y="71" text-anchor="middle" font-size="13" fill="currentColor">用户输入</text>
+
+  <rect x="16" y="120" width="112" height="36" rx="6" fill="#e8a34c" fill-opacity="0.38" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="72" y="143" text-anchor="middle" font-size="13" fill="currentColor">外部数据</text>
+  <text x="72" y="172" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">网页 / 文档 / API</text>
+
+  <!-- 推理与规划 -->
+  <rect x="200" y="84" width="112" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="256" y="107" text-anchor="middle" font-size="13" fill="currentColor">LLM 推理</text>
+
+  <rect x="376" y="84" width="112" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="432" y="107" text-anchor="middle" font-size="13" fill="currentColor">任务规划</text>
+
+  <rect x="552" y="84" width="136" height="36" rx="6" fill="#e8a34c" fill-opacity="0.38" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="620" y="107" text-anchor="middle" font-size="13" fill="currentColor">工具调用</text>
+
+  <!-- 执行与落点 -->
+  <rect x="552" y="176" width="136" height="36" rx="6" fill="#e8a34c" fill-opacity="0.38" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="620" y="199" text-anchor="middle" font-size="13" fill="currentColor">代码执行</text>
+
+  <rect x="552" y="248" width="136" height="36" rx="6" fill="#d97757" fill-opacity="0.32" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="620" y="271" text-anchor="middle" font-size="13" fill="currentColor">宿主环境</text>
+  <text x="620" y="300" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">文件系统 / 网络 / 进程</text>
+
+  <rect x="232" y="176" width="112" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="288" y="199" text-anchor="middle" font-size="13" fill="currentColor">执行结果</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="128" y1="66" x2="196" y2="92" marker-end="url(#arrow-1)"/>
+    <line x1="128" y1="138" x2="196" y2="112" marker-end="url(#arrow-1)"/>
+    <line x1="312" y1="102" x2="372" y2="102" marker-end="url(#arrow-1)"/>
+    <line x1="488" y1="102" x2="548" y2="102" marker-end="url(#arrow-1)"/>
+    <line x1="620" y1="120" x2="620" y2="172" marker-end="url(#arrow-1)"/>
+    <line x1="620" y1="212" x2="620" y2="244" marker-end="url(#arrow-1)"/>
+    <line x1="548" y1="194" x2="348" y2="194" marker-end="url(#arrow-1)"/>
+    <line x1="288" y1="172" x2="288" y2="124" marker-end="url(#arrow-1)"/>
+  </g>
+
+  <g font-size="11" font-style="italic" fill="currentColor" opacity="0.6">
+    <text x="162" y="62" text-anchor="middle">直接指令</text>
+    <text x="162" y="146" text-anchor="middle">间接注入</text>
+    <text x="342" y="94" text-anchor="middle">规划</text>
+    <text x="518" y="94" text-anchor="middle">选工具</text>
+    <text x="628" y="150">生成代码</text>
+    <text x="628" y="232">syscall / IO</text>
+    <text x="448" y="186" text-anchor="middle">stdout</text>
+    <text x="296" y="150">回灌上下文</text>
+    <text x="16" y="300">橙色 = 可被注入或滥用的环节</text>
+  </g>
+</svg>
+<figcaption>注入可以发生在用户输入、外部数据、工具调用三处，但它们都收敛到同一个代码执行动作；没有沙箱时，这一步直接落在宿主环境上。</figcaption>
+</figure>
 
 攻击者的目标是控制 `EXEC` 节点的行为，而注入点可以出现在链条的多个位置：
 
@@ -84,21 +132,45 @@ Linux 容器通过两个核心机制实现隔离：
 
 **关键限制**：容器与宿主共享同一个 Linux 内核。这意味着如果内核存在漏洞（如 CVE-2022-0185 等容器逃逸漏洞），攻击者仍有可能突破隔离。
 
-```mermaid
-graph TB
-    subgraph 宿主机
-        KERNEL[Linux Kernel]
-        subgraph 容器A
-            PA[进程 A]
-        end
-        subgraph 容器B
-            PB[进程 B]
-        end
-        PA -->|syscall| KERNEL
-        PB -->|syscall| KERNEL
-    end
-    style KERNEL fill:#ff6b6b,color:#fff
-```
+<figure class="post-diagram">
+<svg viewBox="0 0 560 288" role="img" aria-label="容器隔离下所有容器的 syscall 都落到同一个宿主内核，内核是唯一的隔离边界">
+  <defs>
+    <marker id="arrow-2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
+
+  <rect x="16" y="24" width="528" height="224" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="4 4"/>
+  <text x="528" y="16" text-anchor="end" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">宿主机</text>
+
+  <rect x="48" y="56" width="176" height="80" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="4 4"/>
+  <text x="56" y="48" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">容器 A</text>
+  <rect x="72" y="72" width="128" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="136" y="95" text-anchor="middle" font-size="13" fill="currentColor">进程 A</text>
+
+  <rect x="336" y="56" width="176" height="80" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="4 4"/>
+  <text x="344" y="48" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">容器 B</text>
+  <rect x="360" y="72" width="128" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="424" y="95" text-anchor="middle" font-size="13" fill="currentColor">进程 B</text>
+
+  <rect x="136" y="184" width="288" height="40" rx="6" fill="#d97757" fill-opacity="0.32" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="280" y="209" text-anchor="middle" font-size="13" fill="currentColor">Linux Kernel（宿主共享）</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="136" y1="108" x2="216" y2="180" marker-end="url(#arrow-2)"/>
+    <line x1="424" y1="108" x2="344" y2="180" marker-end="url(#arrow-2)"/>
+    <line x1="424" y1="204" x2="536" y2="204" stroke-dasharray="4 4" marker-end="url(#arrow-2)"/>
+  </g>
+
+  <g font-size="11" font-style="italic" fill="currentColor" opacity="0.6">
+    <text x="152" y="152">syscall</text>
+    <text x="408" y="152" text-anchor="end">syscall</text>
+    <text x="480" y="196" text-anchor="middle">提权后 = 宿主 root</text>
+    <text x="280" y="272" text-anchor="middle">内核漏洞一旦被利用，两个容器的边界同时失效</text>
+  </g>
+</svg>
+<figcaption>容器隔离只有一道边界：所有容器的 syscall 都进入同一个宿主内核，因此内核提权类漏洞可以一次性击穿全部容器。</figcaption>
+</figure>
 
 容器隔离的攻击面集中在 **共享内核的 syscall 接口**。
 
@@ -115,25 +187,51 @@ MicroVM 给每个执行环境分配独立的内核实例，依赖硬件虚拟化
 - 设备模型极简（仅 virtio 网络和块设备），攻击面小
 - 已在 AWS 大规模生产部署（数百万并发 VM）
 
-```mermaid
-graph TB
-    subgraph 宿主机
-        KVM[KVM 硬件虚拟化]
-        subgraph MicroVM A
-            KA[Guest Kernel A]
-            PA[进程 A]
-            PA --> KA
-        end
-        subgraph MicroVM B
-            KB[Guest Kernel B]
-            PB[进程 B]
-            PB --> KB
-        end
-        KA -->|VM Exit| KVM
-        KB -->|VM Exit| KVM
-    end
-    style KVM fill:#4dabf7,color:#fff
-```
+<figure class="post-diagram">
+<svg viewBox="0 0 560 296" role="img" aria-label="MicroVM 给每个执行环境配一份独立 Guest Kernel，syscall 不再直达宿主，只剩下窄得多的 VM Exit 接口">
+  <defs>
+    <marker id="arrow-3" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
+
+  <rect x="16" y="24" width="528" height="248" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="4 4"/>
+  <text x="528" y="16" text-anchor="end" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">宿主机</text>
+
+  <rect x="48" y="48" width="176" height="128" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="4 4"/>
+  <text x="56" y="40" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">MicroVM A</text>
+  <rect x="72" y="64" width="128" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="136" y="87" text-anchor="middle" font-size="13" fill="currentColor">进程 A</text>
+  <rect x="72" y="128" width="128" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="136" y="151" text-anchor="middle" font-size="13" fill="currentColor">Guest Kernel A</text>
+
+  <rect x="336" y="48" width="176" height="128" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="4 4"/>
+  <text x="344" y="40" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">MicroVM B</text>
+  <rect x="360" y="64" width="128" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="424" y="87" text-anchor="middle" font-size="13" fill="currentColor">进程 B</text>
+  <rect x="360" y="128" width="128" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="424" y="151" text-anchor="middle" font-size="13" fill="currentColor">Guest Kernel B</text>
+
+  <rect x="136" y="208" width="288" height="40" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="280" y="233" text-anchor="middle" font-size="13" fill="currentColor">KVM 硬件虚拟化</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="136" y1="100" x2="136" y2="124" marker-end="url(#arrow-3)"/>
+    <line x1="424" y1="100" x2="424" y2="124" marker-end="url(#arrow-3)"/>
+    <line x1="136" y1="164" x2="216" y2="204" marker-end="url(#arrow-3)"/>
+    <line x1="424" y1="164" x2="344" y2="204" marker-end="url(#arrow-3)"/>
+  </g>
+
+  <g font-size="11" font-style="italic" fill="currentColor" opacity="0.6">
+    <text x="144" y="116">syscall</text>
+    <text x="432" y="116">syscall</text>
+    <text x="160" y="184">VM Exit</text>
+    <text x="400" y="184" text-anchor="end">VM Exit</text>
+    <text x="280" y="288" text-anchor="middle">宿主暴露面收窄到虚拟化接口，容器逃逸类内核漏洞不再通用</text>
+  </g>
+</svg>
+<figcaption>每个 microVM 自带一份 Guest Kernel，进程的 syscall 止步于 Guest；能触达宿主的只有窄接口 VM Exit，这正是它比容器强的地方。</figcaption>
+</figure>
 
 每个 VM 有独立内核，容器逃逸漏洞对 microVM 无效。代价是更高的资源开销和额外的启动延迟。
 
@@ -147,20 +245,42 @@ gVisor 是 Google 开源的沙箱运行时，核心思路是在用户态实现�
 - 容器的 syscall 先到 Sentry，Sentry 再用少数几个受控 syscall 与宿主交互
 - 兼容 OCI 容器接口（`runsc` 作为 containerd 的 runtime）
 
-```mermaid
-graph TB
-    subgraph 宿主机
-        HOST_KERNEL[Host Kernel]
-        subgraph gVisor 沙箱
-            SENTRY[Sentry\n用户态内核]
-            APP[应用进程]
-            APP -->|syscall| SENTRY
-        end
-        SENTRY -->|受限 syscall| HOST_KERNEL
-    end
-    style SENTRY fill:#69db7c,color:#fff
-    style HOST_KERNEL fill:#4dabf7,color:#fff
-```
+<figure class="post-diagram">
+<svg viewBox="0 0 560 296" role="img" aria-label="gVisor 用用户态内核 Sentry 接管应用的 syscall，只把少数受限调用转发给宿主内核">
+  <defs>
+    <marker id="arrow-4" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
+
+  <rect x="16" y="24" width="528" height="232" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="4 4"/>
+  <text x="528" y="16" text-anchor="end" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">宿主机</text>
+
+  <rect x="104" y="48" width="352" height="128" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-dasharray="4 4"/>
+  <text x="112" y="40" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">gVisor 沙箱（runsc）</text>
+
+  <rect x="152" y="64" width="256" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="280" y="87" text-anchor="middle" font-size="13" fill="currentColor">应用进程</text>
+
+  <rect x="152" y="128" width="256" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="280" y="151" text-anchor="middle" font-size="13" fill="currentColor">Sentry（用户态内核）</text>
+
+  <rect x="152" y="208" width="256" height="36" rx="6" fill="#d97757" fill-opacity="0.32" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="280" y="231" text-anchor="middle" font-size="13" fill="currentColor">Host Kernel</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="280" y1="100" x2="280" y2="124" marker-end="url(#arrow-4)"/>
+    <line x1="280" y1="164" x2="280" y2="204" marker-end="url(#arrow-4)"/>
+  </g>
+
+  <g font-size="11" font-style="italic" fill="currentColor" opacity="0.6">
+    <text x="288" y="116">全部 syscall（约 200 个被实现）</text>
+    <text x="288" y="188">少数受限 syscall</text>
+    <text x="280" y="288" text-anchor="middle">宿主内核的暴露面被收窄，但 Sentry 自身仍是可被攻击的组件</text>
+  </g>
+</svg>
+<figcaption>gVisor 把宿主内核的暴露面从完整 syscall 表压缩到少数受限调用；代价是未实现的 syscall 会让部分应用跑不起来，且 Sentry 本身成为新的攻击目标。</figcaption>
+</figure>
 
 **缺陷**：
 - 约 20% 的 syscall 未实现，部分应用（特别是依赖特殊内核特性的）无法运行
@@ -373,20 +493,56 @@ Anthropic 在 Claude 平台提供的 Artifacts 运行环境，用于执行 Claud
 
 沙箱在 Agent 架构中处于工具执行层，是 Agent 调用"代码执行"工具时的底层基础设施：
 
-```mermaid
-flowchart TB
-    USER[用户] --> ORCH[Agent Orchestrator\n任务规划 / 上下文管理]
-    ORCH --> TOOL_ROUTER[工具路由器]
-    TOOL_ROUTER --> SEARCH[搜索工具]
-    TOOL_ROUTER --> FILE[文件工具]
-    TOOL_ROUTER --> CODE[代码执行工具]
-    CODE --> SANDBOX[Sandbox 执行层\nFirecracker / gVisor / E2B]
-    SANDBOX --> RESULT[执行结果\nstdout / stderr / 文件]
-    RESULT --> ORCH
+<figure class="post-diagram">
+<svg viewBox="0 0 720 352" role="img" aria-label="沙箱位于工具执行层之下，只有代码执行这一条工具路径需要穿过它，结果再回灌给 Orchestrator">
+  <defs>
+    <marker id="arrow-5" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
 
-    style SANDBOX fill:#4dabf7,color:#fff
-    style CODE fill:#69db7c,color:#fff
-```
+  <rect x="304" y="16" width="112" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="39" text-anchor="middle" font-size="13" fill="currentColor">用户</text>
+
+  <rect x="272" y="80" width="176" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="103" text-anchor="middle" font-size="13" fill="currentColor">Agent Orchestrator</text>
+
+  <rect x="288" y="144" width="144" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="167" text-anchor="middle" font-size="13" fill="currentColor">工具路由器</text>
+
+  <rect x="32" y="208" width="160" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="112" y="231" text-anchor="middle" font-size="13" fill="currentColor">搜索工具</text>
+
+  <rect x="240" y="208" width="160" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="320" y="231" text-anchor="middle" font-size="13" fill="currentColor">文件工具</text>
+
+  <rect x="448" y="208" width="160" height="36" rx="6" fill="#e8a34c" fill-opacity="0.38" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="528" y="231" text-anchor="middle" font-size="13" fill="currentColor">代码执行工具</text>
+
+  <rect x="448" y="280" width="160" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="528" y="303" text-anchor="middle" font-size="13" fill="currentColor">Sandbox 执行层</text>
+  <text x="528" y="336" text-anchor="middle" font-size="11" font-style="italic" fill="currentColor" opacity="0.6">Firecracker / gVisor / E2B</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="360" y1="52" x2="360" y2="76" marker-end="url(#arrow-5)"/>
+    <line x1="360" y1="116" x2="360" y2="140" marker-end="url(#arrow-5)"/>
+    <line x1="360" y1="180" x2="360" y2="192"/>
+    <line x1="112" y1="192" x2="528" y2="192"/>
+    <line x1="112" y1="192" x2="112" y2="204" marker-end="url(#arrow-5)"/>
+    <line x1="320" y1="192" x2="320" y2="204" marker-end="url(#arrow-5)"/>
+    <line x1="528" y1="192" x2="528" y2="204" marker-end="url(#arrow-5)"/>
+    <line x1="528" y1="244" x2="528" y2="276" marker-end="url(#arrow-5)"/>
+    <polyline points="448,298 24,298 24,98 268,98" marker-end="url(#arrow-5)"/>
+  </g>
+
+  <g font-size="11" font-style="italic" fill="currentColor" opacity="0.6">
+    <text x="368" y="132">任务规划</text>
+    <text x="536" y="264">不可信代码</text>
+    <text x="236" y="290" text-anchor="middle">stdout / stderr / 文件</text>
+  </g>
+</svg>
+<figcaption>沙箱不是 Agent 的旁路组件，而是代码执行工具的底座：三条工具路径里只有它需要穿过隔离层，结果再以受控形式回灌给 Orchestrator。</figcaption>
+</figure>
 
 ### 三种集成模式
 
@@ -499,22 +655,86 @@ SANDBOX_LIMITS = {
 
 ### 决策框架
 
-```mermaid
-flowchart TD
-    A[需要代码执行沙箱] --> B{是否需要自托管?}
-    B -->|否| C{是否需要 GPU?}
-    B -->|是| D{安全等级要求?}
+<figure class="post-diagram">
+<svg viewBox="0 0 720 400" role="img" aria-label="沙箱选型由三个问题决定：是否自托管、是否需要 GPU、安全等级，自托管高安全分支再按有无 K8s 分流">
+  <defs>
+    <marker id="arrow-6" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
 
-    C -->|是| MODAL[Modal\nGPU 支持]
-    C -->|否| E2B_SAAS[E2B SaaS\n快速接入]
+  <rect x="280" y="16" width="160" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="39" text-anchor="middle" font-size="13" fill="currentColor">需要代码执行沙箱</text>
 
-    D -->|高 / 多租户| F{是否有 K8s?}
-    D -->|中等| GVISOR[gVisor\n存量容器改造]
-    D -->|低 / 内部工具| DOCKER[标准 Docker\n加资源限制]
+  <rect x="272" y="88" width="176" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="360" y="111" text-anchor="middle" font-size="13" fill="currentColor">是否需要自托管？</text>
 
-    F -->|是| KATA[Kata Containers\nK8s 强隔离]
-    F -->|否| FIRECRACKER[自建 Firecracker\n或 E2B 自托管]
-```
+  <rect x="64" y="168" width="144" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="136" y="191" text-anchor="middle" font-size="13" fill="currentColor">是否需要 GPU？</text>
+
+  <rect x="496" y="168" width="160" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="576" y="191" text-anchor="middle" font-size="13" fill="currentColor">安全等级要求？</text>
+
+  <rect x="16" y="248" width="112" height="36" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="72" y="271" text-anchor="middle" font-size="13" fill="currentColor">Modal</text>
+
+  <rect x="152" y="248" width="128" height="36" rx="6" fill="#6a9b5e" fill-opacity="0.28" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="216" y="271" text-anchor="middle" font-size="13" fill="currentColor">E2B SaaS</text>
+
+  <rect x="336" y="248" width="128" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="400" y="271" text-anchor="middle" font-size="13" fill="currentColor">是否有 K8s？</text>
+
+  <rect x="488" y="248" width="104" height="36" rx="6" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="540" y="271" text-anchor="middle" font-size="13" fill="currentColor">gVisor</text>
+
+  <rect x="608" y="248" width="112" height="36" rx="6" fill="#e8a34c" fill-opacity="0.38" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="664" y="271" text-anchor="middle" font-size="13" fill="currentColor">标准 Docker</text>
+
+  <rect x="176" y="328" width="152" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="252" y="351" text-anchor="middle" font-size="13" fill="currentColor">自建 Firecracker</text>
+
+  <rect x="376" y="328" width="152" height="36" rx="6" fill="#5b8dc9" fill-opacity="0.30" stroke="currentColor" stroke-opacity="0.25"/>
+  <text x="452" y="351" text-anchor="middle" font-size="13" fill="currentColor">Kata Containers</text>
+
+  <g stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" fill="none">
+    <line x1="360" y1="52" x2="360" y2="84" marker-end="url(#arrow-6)"/>
+    <line x1="360" y1="124" x2="360" y2="144"/>
+    <line x1="136" y1="144" x2="576" y2="144"/>
+    <line x1="136" y1="144" x2="136" y2="164" marker-end="url(#arrow-6)"/>
+    <line x1="576" y1="144" x2="576" y2="164" marker-end="url(#arrow-6)"/>
+
+    <line x1="136" y1="204" x2="136" y2="224"/>
+    <line x1="72" y1="224" x2="216" y2="224"/>
+    <line x1="72" y1="224" x2="72" y2="244" marker-end="url(#arrow-6)"/>
+    <line x1="216" y1="224" x2="216" y2="244" marker-end="url(#arrow-6)"/>
+
+    <line x1="576" y1="204" x2="576" y2="224"/>
+    <line x1="400" y1="224" x2="664" y2="224"/>
+    <line x1="400" y1="224" x2="400" y2="244" marker-end="url(#arrow-6)"/>
+    <line x1="540" y1="224" x2="540" y2="244" marker-end="url(#arrow-6)"/>
+    <line x1="664" y1="224" x2="664" y2="244" marker-end="url(#arrow-6)"/>
+
+    <line x1="400" y1="284" x2="400" y2="304"/>
+    <line x1="252" y1="304" x2="452" y2="304"/>
+    <line x1="252" y1="304" x2="252" y2="324" marker-end="url(#arrow-6)"/>
+    <line x1="452" y1="304" x2="452" y2="324" marker-end="url(#arrow-6)"/>
+  </g>
+
+  <g font-size="11" font-style="italic" fill="currentColor" opacity="0.6">
+    <text x="128" y="136" text-anchor="end">否</text>
+    <text x="584" y="136">是</text>
+    <text x="80" y="240">是</text>
+    <text x="224" y="240">否</text>
+    <text x="408" y="240">高 / 多租户</text>
+    <text x="548" y="240">中等</text>
+    <text x="656" y="240" text-anchor="end">低</text>
+    <text x="244" y="320" text-anchor="end">否</text>
+    <text x="460" y="320">是</text>
+    <text x="360" y="388" text-anchor="middle">橙色分支只适合内部可信代码；蓝色为强隔离方案</text>
+  </g>
+</svg>
+<figcaption>选型的分歧点不是"哪个沙箱更好"，而是三个约束：能否用托管服务、是否需要 GPU、要多强的隔离。标准 Docker 只是低威胁场景下的降级选项。</figcaption>
+</figure>
 
 ### 关键指标对比
 
